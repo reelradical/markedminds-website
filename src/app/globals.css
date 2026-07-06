@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Marked Minds brand tokens */
+  --color-mm-black: #0a0a0b;
+  --color-mm-charcoal: #232326;
+  --color-mm-silver: #e7e7ea;
+  --color-mm-mist: #f6f6f7;
+  --color-mm-white: #ffffff;
+  --color-mm-orange: #ff7700;
+  --color-mm-orange-dark: #e56600;
+
+  /* Focus + FLEX Academy sub-brand token (used only within Academy scope) */
+  --color-academy-purple: #6b46c1;
+  --color-academy-purple-dark: #55348f;
+
+  --background: var(--color-mm-white);
+  --foreground: var(--color-mm-black);
+
+  --radius: 0.75rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-ink: var(--color-mm-black);
+  --color-charcoal: var(--color-mm-charcoal);
+  --color-silver: var(--color-mm-silver);
+  --color-mist: var(--color-mm-mist);
+  --color-brand-orange: var(--color-mm-orange);
+  --color-brand-orange-dark: var(--color-mm-orange-dark);
+
+  --color-academy-purple: var(--color-academy-purple);
+  --color-academy-purple-dark: var(--color-academy-purple-dark);
+
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --radius-sm: calc(var(--radius) - 0.35rem);
+  --radius-md: calc(var(--radius) - 0.15rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.35rem);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-marquee: marquee 32s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-mm-orange);
+  color: var(--color-mm-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-mm-orange);
+  outline-offset: 3px;
+}
+
+/* Academy scope: purple accents are only ever referenced by components
+   rendered inside this wrapper (see src/app/focus-flex). */
+.academy-scope {
+  --accent: var(--color-academy-purple);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
