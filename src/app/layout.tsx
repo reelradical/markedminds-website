@@ -54,11 +54,20 @@ export const metadata: Metadata = {
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
     locale: "en_US",
+    images: [
+      {
+        url: "/social/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${site.name} — ${site.tagline}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.name} | ${site.tagline}`,
     description: site.description,
+    images: ["/social/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -85,7 +94,7 @@ const organizationJsonLd = {
   name: site.legalName,
   alternateName: site.name,
   url: site.url,
-  logo: `${site.url}/opengraph-image`,
+  logo: `${site.url}/logos/marked-minds-logo-white-black-orange.svg`,
   description: site.description,
   email: site.email,
   sameAs: [site.social.instagram, site.social.facebook, site.social.linkedin],
