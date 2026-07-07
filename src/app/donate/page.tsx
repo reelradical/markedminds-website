@@ -62,7 +62,7 @@ export default function DonatePage() {
         description="Every dollar directly supports scholarships, meals, enrichment, technology, and community programming for students and families."
       >
         <div className="mt-10">
-          <Button asChild size="lg">
+          <Button asChild size="lg" variant="academy">
             <a href={site.donationUrl} target="_blank" rel="noopener noreferrer">
               Donate Now
               <ArrowRight className="size-4" />

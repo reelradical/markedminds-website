@@ -23,6 +23,8 @@ const buttonVariants = cva(
           "bg-academy-purple text-white hover:bg-academy-purple-dark",
         "academy-outline":
           "border border-academy-purple/40 text-academy-purple hover:bg-academy-purple hover:text-white",
+        orange:
+          "bg-brand-orange text-white hover:bg-brand-orange-dark",
       },
       size: {
         default: "h-12 px-7 has-[>svg]:px-6",

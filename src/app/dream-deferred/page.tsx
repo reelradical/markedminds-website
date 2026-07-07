@@ -268,7 +268,7 @@ export default function DreamDeferredPage() {
             improve production quality, and create new opportunities for
             meaningful storytelling.
           </p>
-          <Button asChild size="lg">
+          <Button asChild size="lg" variant="orange">
             {supporterUrl ? (
               <a href={supporterUrl} target="_blank" rel="noopener noreferrer">
                 Become a Supporter — $4.99/month
