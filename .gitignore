@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# licensed font source files — not for public distribution via /public
+/public/fonts/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

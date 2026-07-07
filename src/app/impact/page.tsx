@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { Quote } from "lucide-react";
+
 import { metrics } from "@/lib/data/metrics";
-import { testimonials } from "@/lib/data/testimonials";
 import { galleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
-import { MetricCard } from "@/components/shared/metric-card";
-import { TestimonialCard } from "@/components/shared/testimonial-card";
+import { MetricsPanel } from "@/components/shared/metrics-panel";
 import { GalleryGrid } from "@/components/shared/gallery-grid";
 import { Button } from "@/components/ui/button";
 import { CtaSection } from "@/components/home/cta-section";
@@ -32,35 +32,26 @@ export default function ImpactPage() {
 
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-3">
-            {metrics.map((metric, i) => (
-              <AnimatedSection key={metric.label} delay={i * 0.05}>
-                <MetricCard metric={metric} />
-              </AnimatedSection>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-sm text-charcoal/50">
-            Figures marked &ldquo;Coming soon&rdquo; will be added once
-            confirmed from program records.
-          </p>
+          <MetricsPanel metrics={metrics} />
         </div>
       </section>
 
       <section className="bg-mist py-24 sm:py-28">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl px-6 text-center lg:px-8">
           <SectionHeading
             eyebrow="In Their Words"
-            title="What families and partners are saying."
+            title="Stories from families and partners are on their way."
             align="center"
             className="mx-auto"
           />
-          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {testimonials.map((testimonial, i) => (
-              <AnimatedSection key={testimonial.name} delay={i * 0.08}>
-                <TestimonialCard testimonial={testimonial} />
-              </AnimatedSection>
-            ))}
-          </div>
+          <AnimatedSection className="mt-10 rounded-2xl border border-dashed border-ink/15 bg-white p-10">
+            <Quote className="mx-auto size-8 text-brand-orange/30" aria-hidden="true" />
+            <p className="mt-4 text-charcoal/70">
+              We&apos;re collecting real stories from the families,
+              partners, and educators we work with. This section will
+              grow as those conversations come in.
+            </p>
+          </AnimatedSection>
         </div>
       </section>
 
