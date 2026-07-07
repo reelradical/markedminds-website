@@ -5,6 +5,8 @@ import "./globals.css";
 import { site } from "@/lib/data/site";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { Analytics } from "@vercel/analytics/next";
+
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
 
@@ -124,6 +126,7 @@ export default function RootLayout({
         <Footer />
         {gaId && <GoogleAnalytics gaId={gaId} />}
         {clarityId && <MicrosoftClarity clarityId={clarityId} />}
+        <Analytics />
       </body>
     </html>
   );
