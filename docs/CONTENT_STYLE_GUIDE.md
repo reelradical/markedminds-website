@@ -45,6 +45,20 @@ Avoid:
 - **Marked Minds** vs **Marked Minds LLC** — use "Marked Minds LLC" for
   legal/formal contexts (schema.org data, footer copyright, founder
   section); "Marked Minds" everywhere else.
+- **Dani Cummings** — permanent decision, confirmed directly by the
+  founder. Use "Dani," never "Danielle," anywhere on the site (About/
+  Founder section, code comments, future bios). This applies across the
+  entire Marked Minds ecosystem, not just this site.
+
+## No Dead Links
+
+Don't link to a domain or profile that isn't live yet, even if you know
+the eventual URL. Show it as plain text (e.g. "coming soon at
+example.com") instead of an `<a href>`, and re-enable the link once it
+resolves. This is why `DaniCummings.com` appears as plain text in the
+About page's Founder section rather than a clickable link — same
+principle as the honest-placeholder rule below, applied to navigation
+rather than content.
 
 ## The No-Fabrication Rule
 

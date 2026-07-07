@@ -1,5 +1,49 @@
 # Changelog
 
+## 2026-07-07 — Favicon, Dream Deferred real assets, founder naming decision
+
+**Added**
+
+- Full favicon set: `favicon.ico`, `icon.svg`, `icon-32.png`,
+  `icon-192.png`, `icon-512.png`, `apple-icon.png`/`apple-touch-icon.png`.
+  Befitting brush "M" throughout — full glyph at large sizes, a
+  simplified cropped/thickened derivative of the same glyph at
+  16x16/32x32 where the full glyph's slant stopped reading as a letter —
+  see `BRAND_GUIDE.md` → Favicon (Permanent Decision). Wired in via
+  Next.js file-convention icons, explicit `metadata.icons`, and a new
+  `manifest.ts`.
+- Dream Deferred real platform links and embeds: Spotify, Apple Podcasts
+  (embedded player), Spreaker (featured "Listen Now" player), YouTube,
+  Metacast, Instagram (styled link card), X (`@deferredpodcast`), a real
+  Spreaker Supporter link, and the kg.codes.social Facebook post embed in
+  "The Conversation Continues."
+- Verified public stats on `/dream-deferred`: 32 episodes, 3,641 lifetime
+  downloads (internal-only "Live Plays" figure kept out of public view).
+- "Get Involved" section on `/dream-deferred` with five concrete calls to
+  action.
+
+**Changed**
+
+- Navbar logo sized up (`h-10` → `h-14`) per direct feedback that it read
+  too small.
+- Founder referred to as **Dani Cummings**, not Danielle — permanent,
+  ecosystem-wide decision (see `CONTENT_STYLE_GUIDE.md` → Naming
+  Conventions).
+- `DaniCummings.com` link removed from the About page (not live yet);
+  shown as plain "coming soon" text instead — see `CONTENT_STYLE_GUIDE.md`
+  → No Dead Links.
+- Dream Deferred page reordered end-to-end: Hero → Verified Stats →
+  Featured Spreaker Player → Origin → Conversation Continues → Instagram
+  Preview → Get Involved → Support Independent Storytelling → Listen
+  Wherever You Stream Podcasts (Spotify/Apple/YouTube/Metacast only) →
+  Apple Podcasts embed (last).
+
+**Deferred**
+
+- A Brand Sprint (typography and iconography, including refining the
+  simplified small-size favicon mark) is scheduled for after Focus + FLEX
+  Academy Session II.
+
 ## 2026-07-06 — Brand repositioning: Marked Minds as creative innovation studio
 
 Repositioned the site from "education company" to "creative innovation

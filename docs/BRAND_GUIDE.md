@@ -84,13 +84,36 @@ Real logo files live in `public/logos/` (SVG + PNG, multiple color
 variants). `src/components/shared/logo.tsx` uses
 `marked-minds-logo-white-black-orange.svg` — a clean, transparent-
 background vector wordmark (black script + orange "WE CURATE CULTURE"
-tagline) — for light contexts (navbar, mobile menu).
+tagline) — for light contexts (navbar, mobile menu), rendered at `h-14`
+(sized up from an earlier `h-10` pass per direct feedback that it read too
+small in the header).
 
 Dark contexts (the Footer) still use the text-based fallback (orange dot +
 "Marked Minds") because no transparent white-on-dark lockup exists yet —
 the other dark-context file (`marked-minds-logo-black-white.svg`) has its
 own solid charcoal canvas fill that doesn't match the site's `bg-ink`
 (`#0a0a0b`) exactly. See `ROADMAP.md`.
+
+## Favicon (Permanent Decision)
+
+The favicon system uses the **Befitting** font's brush-script "M"
+throughout — no other typeface is substituted anywhere in the set. Large
+contexts use the glyph as-is; small contexts use a simplified derivative
+of the same glyph, not a different font:
+
+| Asset | Treatment | Why |
+|---|---|---|
+| `icon.svg`, `icon-512.png`, `icon-192.png`, `apple-icon.png` / `apple-touch-icon.png` (180px) | Befitting brush "M" as drawn, `#FF7700`, transparent bg | Large enough for the full brush character to read clearly |
+| `favicon.ico` (16/32/48), `icon-32.png` | The same Befitting "M", cropped tighter (trimming the thin swash extremities) and stroke-thickened into a simplified brand mark, `#FF7700`, transparent bg | The glyph's full diagonal slant reads as abstract stripes at this scale (tested, confirmed); a bolder, tighter derivative reads as a consistent brand mark instead |
+
+This split is the **permanent, ecosystem-wide decision** — don't revisit
+it opportunistically. A dedicated typography sprint (refining or
+replacing the simplified small-size mark, and deciding whether that
+choice should also apply elsewhere) is intentionally deferred until after
+Focus + FLEX Academy Session II.
+
+Source font files are not committed to the repo (`Befitting.otf` lives
+outside the project); only the generated output assets are.
 
 ## Ownership Disclosure
 

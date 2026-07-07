@@ -24,6 +24,8 @@ import {
   ShieldCheck,
   Camera,
   Briefcase,
+  Headphones,
+  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -53,6 +55,8 @@ export const iconMap = {
   "shield-check": ShieldCheck,
   camera: Camera,
   briefcase: Briefcase,
+  headphones: Headphones,
+  "message-circle": MessageCircle,
 } satisfies Record<string, LucideIcon>;
 
 export type IconKey = keyof typeof iconMap;

@@ -36,3 +36,11 @@ export function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function XIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M13.6 10.6 20.4 3h-2.1l-5.9 6.6L7.7 3H2.6l7.1 10.1L2.6 21h2.1l6.2-7 5 7h5.1l-7.4-10.4Zm-2.2 2.5-.7-1L5 4.6h2.2l4.6 6.5.7 1 6 8.4h-2.2l-4.9-6.9Z" />
+    </svg>
+  );
+}

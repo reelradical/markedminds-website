@@ -58,7 +58,7 @@ export default function AboutPage() {
               Founder
             </p>
             <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink">
-              Founded by Danielle Cummings.
+              Founded by Dani Cummings.
             </h2>
             <p className="mt-4 text-lg leading-7 text-charcoal/70">
               Marked Minds reflects the intersection of creativity,
@@ -66,14 +66,11 @@ export default function AboutPage() {
               educator, creative director, producer, workshop facilitator,
               and strategist. Marked Minds LLC is a {site.ownership.toLowerCase()}.
             </p>
-            <a
-              href={site.founderSiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-block text-sm font-medium text-brand-orange-dark underline underline-offset-4"
-            >
-              Full professional profile at DaniCummings.com
-            </a>
+            {/* DaniCummings.com is not live yet — intentionally not linked
+                until it is (see docs/BRAND_GUIDE.md: no dead links). */}
+            <p className="mt-4 text-sm font-medium text-charcoal/50">
+              Full professional profile coming soon at DaniCummings.com
+            </p>
           </AnimatedSection>
         </div>
       </section>

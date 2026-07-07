@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const socialLinks = [
   { label: "Instagram", href: site.social.instagram, Icon: InstagramIcon },
   { label: "Facebook", href: site.social.facebook, Icon: FacebookIcon },
-  // Points to Danielle's personal LinkedIn until Marked Minds has its own
+  // Points to Dani's personal LinkedIn until Marked Minds has its own
   // company page — hidden entirely if that URL hasn't been supplied yet.
   ...(site.founderLinkedinUrl
     ? [{ label: "LinkedIn", href: site.founderLinkedinUrl, Icon: LinkedinIcon }]
