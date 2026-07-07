@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
+import { Analytics } from "@vercel/analytics/next";
 
 // Analytics only load when their env var is set — see README.md
 // "Analytics" for setup. Never hardcode a fallback ID here.
@@ -124,6 +125,7 @@ export default function RootLayout({
         <Footer />
         {gaId && <GoogleAnalytics gaId={gaId} />}
         {clarityId && <MicrosoftClarity clarityId={clarityId} />}
+        <Analytics />
       </body>
     </html>
   );
