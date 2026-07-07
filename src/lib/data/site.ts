@@ -9,7 +9,7 @@ export const site = {
   description:
     "Marked Minds is a creative innovation studio shaping culture through storytelling, education, design, and community.",
   ownership: "Woman-owned and veteran-owned business",
-  url: "https://www.markedminds.org",
+  url: "https://markedminds.com",
   email: "markedminds@gmail.com",
   donationUrl: "https://square.link/u/KV2EedBz",
   social: {
