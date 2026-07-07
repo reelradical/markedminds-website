@@ -50,13 +50,13 @@ filled in with invented content.
 
 ## Favicon / typography
 
-- [x] Favicon set generated and wired in — Befitting "M" throughout (full
-      glyph at large sizes, a simplified cropped/thickened derivative of
-      the same glyph at 16/32px). See `BRAND_GUIDE.md` → Favicon
-      (Permanent Decision).
+- [x] Favicon set finalized — Variant 3 ("Improved Internal Spacing") of
+      the Befitting "M" used consistently at every size, chosen from a
+      5-variant comparison (`design-reference/favicon-iterations.png`)
+      after the full-glyph-at-large/simplified-at-small split proved
+      inconsistent. See `BRAND_GUIDE.md` → Favicon (Permanent Decision).
 - [ ] **Brand Sprint** — scheduled for after Focus + FLEX Academy Session
-      II. Revisit the small-size simplified mark and iconography more
-      broadly.
+      II. Revisit iconography and typography more broadly.
 
 ## Needs a status decision
 

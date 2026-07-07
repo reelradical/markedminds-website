@@ -96,21 +96,32 @@ own solid charcoal canvas fill that doesn't match the site's `bg-ink`
 
 ## Favicon (Permanent Decision)
 
-The favicon system uses the **Befitting** font's brush-script "M"
-throughout — no other typeface is substituted anywhere in the set. Large
-contexts use the glyph as-is; small contexts use a simplified derivative
-of the same glyph, not a different font:
+The favicon system uses one consistent derivative of the **Befitting**
+font's brush-script "M" across every size — `favicon.ico` (16/32/48),
+`icon.svg`, `icon-32.png`, `icon-192.png`, `icon-512.png`, and
+`apple-icon.png`/`apple-touch-icon.png` (180px). No other typeface is
+substituted anywhere in the set.
 
-| Asset | Treatment | Why |
-|---|---|---|
-| `icon.svg`, `icon-512.png`, `icon-192.png`, `apple-icon.png` / `apple-touch-icon.png` (180px) | Befitting brush "M" as drawn, `#FF7700`, transparent bg | Large enough for the full brush character to read clearly |
-| `favicon.ico` (16/32/48), `icon-32.png` | The same Befitting "M", cropped tighter (trimming the thin swash extremities) and stroke-thickened into a simplified brand mark, `#FF7700`, transparent bg | The glyph's full diagonal slant reads as abstract stripes at this scale (tested, confirmed); a bolder, tighter derivative reads as a consistent brand mark instead |
+This is **"Variant 3 — Improved Internal Spacing"**, chosen from a
+5-variant comparison (`design-reference/favicon-iterations.png`): the
+Befitting "M" rendered at high resolution, then processed with a
+horizontal-only erosion that narrows each diagonal stroke without moving
+the gaps between them, a tight crop trimming the thinnest swash
+extremities, and a light uniform dilation for weight. This was the only
+variant that kept the three-stroke structure visibly distinct at 16×16 —
+every other approach (increased slant, brush smoothing, aggressive crop
+alone, uniform bold dilation alone) collapsed into a solid, illegible
+blob at that size.
 
-This split is the **permanent, ecosystem-wide decision** — don't revisit
-it opportunistically. A dedicated typography sprint (refining or
-replacing the simplified small-size mark, and deciding whether that
-choice should also apply elsewhere) is intentionally deferred until after
-Focus + FLEX Academy Session II.
+`icon.svg` embeds the same high-resolution processed raster inside an SVG
+wrapper rather than a true vector path — Variant 3 is the output of
+raster morphology operations (numpy-based erosion), not an edited vector
+outline, so there's no separate path to trace.
+
+This is the **permanent, ecosystem-wide decision** — don't revisit it
+opportunistically. A dedicated Brand Sprint (typography and iconography
+more broadly) is intentionally deferred until after Focus + FLEX Academy
+Session II.
 
 Source font files are not committed to the repo (`Befitting.otf` lives
 outside the project); only the generated output assets are.
