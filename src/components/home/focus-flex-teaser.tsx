@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import { academyTagline } from "@/lib/data/academy";
 import { AcademyBadge } from "@/components/academy/academy-badge";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { Button } from "@/components/ui/button";
@@ -18,9 +19,12 @@ export function FocusFlexTeaser() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:px-8">
         <AnimatedSection>
           <AcademyBadge />
-          <h2 className="mt-6 text-balance text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
+          <h2 className="mt-6 text-balance font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
             Focus + FLEX Academy is where potential gets structure.
           </h2>
+          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-academy-purple">
+            {academyTagline}
+          </p>
           <p className="mt-4 max-w-xl text-lg leading-7 text-white/70">
             Our flagship initiative pairs small-group mentorship with
             project-based learning across academics, AI literacy, and

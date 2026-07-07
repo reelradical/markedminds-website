@@ -1,5 +1,6 @@
 import { iconMap } from "@/lib/icon-map";
 import type { Metric } from "@/lib/data/metrics";
+import { cn } from "@/lib/utils";
 
 export function MetricCard({ metric }: { metric: Metric }) {
   const Icon = iconMap[metric.icon];
@@ -10,9 +11,13 @@ export function MetricCard({ metric }: { metric: Metric }) {
         <Icon className="size-6" />
       </div>
       <div>
-        <p className="text-4xl font-semibold tracking-tight text-ink">
-          {metric.value}
-          {metric.suffix}
+        <p
+          className={cn(
+            "text-4xl font-semibold tracking-tight",
+            metric.value === null ? "text-charcoal/30" : "text-ink",
+          )}
+        >
+          {metric.value === null ? "Coming soon" : `${metric.value}${metric.suffix ?? ""}`}
         </p>
         <p className="mt-1 text-sm font-medium text-charcoal/60">
           {metric.label}

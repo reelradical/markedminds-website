@@ -26,8 +26,8 @@ export default function ImpactPage() {
     <>
       <PageHero
         eyebrow="Community Impact"
-        title="Impact you can point to."
-        description="These numbers represent real students, real families, and real partners who chose to invest their time and trust in Marked Minds."
+        title="Impact we're building, one relationship at a time."
+        description="These figures represent real students, families, and partners who have invested their time and trust in Marked Minds. Numbers below will be added as program data is confirmed."
       />
 
       <section className="bg-white py-24 sm:py-28">
@@ -40,8 +40,8 @@ export default function ImpactPage() {
             ))}
           </div>
           <p className="mt-6 text-center text-sm text-charcoal/50">
-            Figures reflect cumulative program activity and are updated
-            regularly.
+            Figures marked &ldquo;Coming soon&rdquo; will be added once
+            confirmed from program records.
           </p>
         </div>
       </section>

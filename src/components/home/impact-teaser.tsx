@@ -13,8 +13,8 @@ export function ImpactTeaser() {
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading
             eyebrow="Community Impact"
-            title="Impact that shows up in real numbers."
-            description="Every metric below reflects a student, a family, or a partner who chose to invest their time with us."
+            title="Impact we're building, one relationship at a time."
+            description="Figures below will populate as program data is confirmed — every metric represents a real student, family, or partner."
           />
           <Button asChild variant="outline" className="shrink-0">
             <Link href="/impact">See Full Impact Report</Link>

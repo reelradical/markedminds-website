@@ -1,3 +1,7 @@
+// Focus + FLEX Academy's own tagline — distinct from the Marked Minds
+// tagline ("We Curate Culture."). Use only on Focus + FLEX pages/sections.
+export const academyTagline = "Learn. Grow. Create. Thrive.";
+
 export type Pillar = {
   name: string;
   description: string;
@@ -94,21 +98,21 @@ export const academicPillars: Pillar[] = [
 
 export type Session = {
   name: string;
-  status: "current" | "future";
+  status: "completed" | "upcoming";
   description: string;
 };
 
 export const sessions: Session[] = [
   {
     name: "Session I",
-    status: "current",
+    status: "completed",
     description:
-      "Our inaugural cohort, currently underway, focused on small-group academics, AI literacy, and creative problem solving.",
+      "Our inaugural cohort, completed, focused on small-group academics, AI literacy, and creative problem solving.",
   },
   {
-    name: "Future Sessions",
-    status: "future",
+    name: "Session II",
+    status: "upcoming",
     description:
-      "Additional sessions are in planning as Focus + FLEX Academy grows to serve more students and families. Join our list to be notified when enrollment opens.",
+      "Preparing to launch. Session II builds on Session I with the same small-group academics, AI literacy, and creative problem solving model. Join our list to be notified when enrollment opens.",
   },
 ];

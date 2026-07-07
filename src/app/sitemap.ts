@@ -5,8 +5,10 @@ import { site } from "@/lib/data/site";
 const routes = [
   "",
   "/about",
+  "/services",
+  "/our-work",
   "/focus-flex",
-  "/programs",
+  "/dream-deferred",
   "/impact",
   "/gallery",
   "/donate",

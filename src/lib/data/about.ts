@@ -8,31 +8,31 @@ export const coreValues: CoreValue[] = [
   {
     name: "Purpose Over Prestige",
     description:
-      "We measure success by transformation in a student's life, not by accolades.",
+      "We measure success by transformation in a person's life or a community's story, not by accolades.",
     icon: "compass",
   },
   {
     name: "Excellence as a Baseline",
     description:
-      "Families and partners deserve professionalism and quality in every interaction, every time.",
+      "Families, partners, and collaborators deserve professionalism and quality in every project, every time.",
     icon: "shield-check",
   },
   {
     name: "Creativity as Strategy",
     description:
-      "We treat imagination as a serious tool for solving real educational and community problems.",
+      "We treat imagination as a serious tool for solving real creative, educational, and community problems.",
     icon: "sparkles",
   },
   {
     name: "Community as Curriculum",
     description:
-      "The people around a learner are as important to their growth as anything taught in a session.",
+      "The people around a project are as important to its impact as anything designed on paper.",
     icon: "heart-handshake",
   },
   {
     name: "Curiosity, Sustained",
     description:
-      "We design for lifelong learners, not just a single test or session cycle.",
+      "We design for lifelong creators and learners, not just a single project or session cycle.",
     icon: "lightbulb",
   },
 ];
@@ -45,27 +45,45 @@ export type TimelineEntry = {
 
 export const timeline: TimelineEntry[] = [
   {
-    year: "Year One",
-    title: "Marked Minds LLC is founded",
+    year: "2017",
+    title: "Marked Minds Founded",
     description:
-      "Marked Minds is established with a single conviction: learning environments should be designed around students, not the other way around.",
+      "Marked Minds LLC was created as a space for creative-minded people to connect, collaborate, promote one another, educate one another, and build meaningful work together.",
   },
   {
-    year: "Year One",
-    title: "Focus + FLEX Academy is developed",
+    year: "2018–2019",
+    title: "Storytelling + Community Media",
     description:
-      "The flagship initiative takes shape — a small-group, project-based model blending academics, AI literacy, and social-emotional learning.",
+      "The vision expanded through podcasting, community conversations, creative projects, and early media production.",
   },
   {
-    year: "Session I",
-    title: "First cohort launches",
+    year: "2019",
+    title: "Workshops + Youth Media",
     description:
-      "Focus + FLEX Academy welcomes its first students and families, backed by scholarships and community partners.",
+      "Marked Minds began supporting educational workshops, teacher-facing learning, youth film, digital media, and creative skill-building experiences.",
   },
   {
-    year: "Today",
-    title: "Building toward what's next",
+    year: "2020–2022",
+    title: "Creative Production Growth",
     description:
-      "Marked Minds continues expanding its portfolio of initiatives — from community impact programming to future creative and consulting ventures.",
+      "The work expanded through photography, video, editing, graphics, shirts, digital content, and community-centered creative production.",
+  },
+  {
+    year: "2023",
+    title: "AI + Creative Education Exploration",
+    description:
+      "Marked Minds began exploring practical uses of AI for creativity, planning, teaching, production, and learning support.",
+  },
+  {
+    year: "2024",
+    title: "AI-Supported Program + Lesson Design",
+    description:
+      "The work evolved into AI-supported lesson planning, program design, creative workflow development, and education strategy.",
+  },
+  {
+    year: "2025–2026",
+    title: "Focus + FLEX Academy",
+    description:
+      "Marked Minds launched Focus + FLEX Academy as a direct expression of its education, creativity, community, and youth development mission.",
   },
 ];

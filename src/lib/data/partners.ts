@@ -1,32 +1,27 @@
+// Real connections only — do not add names here without confirming accuracy.
+// Use "Partner," "Collaborator," "Client," or "Community Connection" per the
+// nature of the actual relationship.
+
 export type Partner = {
   name: string;
-  category: "School" | "Business" | "Community Organization" | "Sponsor";
+  category: "Partner" | "Collaborator" | "Client" | "Community Connection";
+  note?: string;
+  placeholder?: boolean;
 };
 
 export const partners: Partner[] = [
-  { name: "Riverside Elementary", category: "School" },
-  { name: "Lincoln Middle School", category: "School" },
-  { name: "Horizon Charter Academy", category: "School" },
-  { name: "Union Street Coffee Co.", category: "Business" },
-  { name: "Brightline Realty Group", category: "Business" },
-  { name: "Cedar & Co. Design Studio", category: "Business" },
-  { name: "Neighborhood Family Alliance", category: "Community Organization" },
-  { name: "East Side Youth Coalition", category: "Community Organization" },
-  { name: "The Reading Room Foundation", category: "Community Organization" },
-  { name: "Founders Circle Giving Fund", category: "Sponsor" },
-  { name: "Northgate Community Bank", category: "Sponsor" },
+  { name: "Re:imagine/ATL", category: "Collaborator" },
+  { name: "Pharaoh's Conclave", category: "Collaborator" },
+  { name: "Cedar Grove community", category: "Community Connection" },
+  { name: "Focus + FLEX Academy families", category: "Community Connection" },
+  {
+    name: "Black2SchoolMvmt",
+    category: "Community Connection",
+    note: "Black educator conference opportunity — developing",
+  },
+  {
+    name: "Additional partners to be confirmed",
+    category: "Community Connection",
+    placeholder: true,
+  },
 ];
-
-export const partnerCategories: Partner["category"][] = [
-  "School",
-  "Business",
-  "Community Organization",
-  "Sponsor",
-];
-
-export const partnerCategoryPlurals: Record<Partner["category"], string> = {
-  School: "Schools",
-  Business: "Businesses",
-  "Community Organization": "Community Organizations",
-  Sponsor: "Sponsors",
-};

@@ -16,7 +16,11 @@ export const metadata: Metadata = {
 const socialLinks = [
   { label: "Instagram", href: site.social.instagram, Icon: InstagramIcon },
   { label: "Facebook", href: site.social.facebook, Icon: FacebookIcon },
-  { label: "LinkedIn", href: site.social.linkedin, Icon: LinkedinIcon },
+  // Points to Danielle's personal LinkedIn until Marked Minds has its own
+  // company page — hidden entirely if that URL hasn't been supplied yet.
+  ...(site.founderLinkedinUrl
+    ? [{ label: "LinkedIn", href: site.founderLinkedinUrl, Icon: LinkedinIcon }]
+    : []),
 ];
 
 export default function ContactPage() {
@@ -31,7 +35,7 @@ export default function ContactPage() {
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 lg:grid-cols-[1fr_1.4fr] lg:px-8">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-ink">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">
               Reach us directly
             </h2>
             <a

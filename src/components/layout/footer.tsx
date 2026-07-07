@@ -10,7 +10,11 @@ import { InstagramIcon, FacebookIcon, LinkedinIcon } from "@/components/shared/s
 const socialLinks = [
   { label: "Instagram", href: site.social.instagram, Icon: InstagramIcon },
   { label: "Facebook", href: site.social.facebook, Icon: FacebookIcon },
-  { label: "LinkedIn", href: site.social.linkedin, Icon: LinkedinIcon },
+  // Points to Danielle's personal LinkedIn until Marked Minds has its own
+  // company page — hidden entirely if that URL hasn't been supplied yet.
+  ...(site.founderLinkedinUrl
+    ? [{ label: "LinkedIn", href: site.founderLinkedinUrl, Icon: LinkedinIcon }]
+    : []),
 ];
 
 export function Footer() {
@@ -21,9 +25,9 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <Logo invert />
             <p className="max-w-xs text-sm leading-6 text-white/60">
-              {site.legalName} develops innovative educational experiences
-              that empower learners, strengthen communities, and inspire
-              lifelong curiosity.
+              {site.legalName} is a creative innovation studio designing
+              media, educational programs, workshops, and community-centered
+              experiences.
             </p>
             <p className="text-sm text-white/60">
               Home of{" "}

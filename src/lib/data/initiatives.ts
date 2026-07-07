@@ -41,24 +41,27 @@ export const currentInitiatives: Initiative[] = [
     name: "Dream Deferred",
     tagline: "A Marked Minds Initiative",
     description:
-      "A storytelling and mentorship initiative reconnecting learners with the ambitions the world asked them to postpone. Full program details are in development.",
-    status: "planned",
-    eyebrow: "Mentorship",
+      "A cultural storytelling platform born from the original Marked Minds vision: connecting creative-minded people, sharing stories, promoting purpose, and building community.",
+    status: "live",
+    href: "/dream-deferred",
+    eyebrow: "Storytelling",
   },
   {
-    name: "Educational Consulting",
+    name: "Consulting + Strategy",
     tagline: "A Marked Minds Initiative",
     description:
-      "Advisory partnerships with schools and districts seeking to design more human, more effective learning environments. Full program details are in development.",
+      "Advisory partnerships with schools, organizations, and brands seeking creative direction, program design, and community engagement strategy.",
     status: "planned",
+    href: "/services",
     eyebrow: "Advisory",
   },
   {
     name: "Creative Studio",
     tagline: "A Marked Minds Initiative",
     description:
-      "A production arm turning student voice into film, design, and media that changes how communities see their own potential. Full program details are in development.",
+      "The production arm of Marked Minds — video, photography, podcast production, editing, graphics, and brand storytelling for people and organizations.",
     status: "planned",
+    href: "/services",
     eyebrow: "Media & Design",
   },
 ];

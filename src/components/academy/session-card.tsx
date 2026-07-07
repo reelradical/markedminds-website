@@ -3,19 +3,19 @@ import { Badge } from "@/components/ui/badge";
 import type { Session } from "@/lib/data/academy";
 
 export function SessionCard({ session }: { session: Session }) {
-  const isCurrent = session.status === "current";
+  const isUpcoming = session.status === "upcoming";
 
   return (
     <div
       className={cn(
         "flex flex-col gap-3 rounded-2xl border p-8",
-        isCurrent
+        isUpcoming
           ? "border-academy-purple/30 bg-academy-purple/5"
           : "border-ink/8 bg-white",
       )}
     >
-      <Badge variant={isCurrent ? "academy" : "outline"} className="w-fit">
-        {isCurrent ? "Enrolling Now" : "Coming Soon"}
+      <Badge variant={isUpcoming ? "academy" : "outline"} className="w-fit">
+        {isUpcoming ? "Preparing to Launch" : "Completed"}
       </Badge>
       <h3 className="text-xl font-semibold tracking-tight text-ink">
         {session.name}

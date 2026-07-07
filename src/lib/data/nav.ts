@@ -5,21 +5,13 @@ export type NavLink = {
 
 export const primaryNav: NavLink[] = [
   { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Our Work", href: "/our-work" },
   { label: "Focus + FLEX Academy", href: "/focus-flex" },
-  { label: "Programs", href: "/programs" },
+  { label: "Dream Deferred", href: "/dream-deferred" },
   { label: "Impact", href: "/impact" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Partners", href: "/partners" },
+  { label: "Support", href: "/donate" },
   { label: "Contact", href: "/contact" },
 ];
 
-export const footerNav: NavLink[] = [
-  { label: "About", href: "/about" },
-  { label: "Focus + FLEX Academy", href: "/focus-flex" },
-  { label: "Programs", href: "/programs" },
-  { label: "Impact", href: "/impact" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Donate", href: "/donate" },
-  { label: "Partners", href: "/partners" },
-  { label: "Contact", href: "/contact" },
-];
+export const footerNav: NavLink[] = primaryNav;

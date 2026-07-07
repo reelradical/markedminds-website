@@ -57,7 +57,7 @@ export default function DonatePage() {
   return (
     <>
       <PageHero
-        eyebrow="Support Marked Minds"
+        eyebrow="Support Focus + FLEX Academy"
         title="Your gift becomes a student's next chapter."
         description="Every dollar directly supports scholarships, meals, enrichment, technology, and community programming for students and families."
       >
@@ -110,7 +110,7 @@ export default function DonatePage() {
               <div className="flex size-14 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange-dark">
                 <HeartHandshake className="size-7" />
               </div>
-              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-ink">
+              <h2 className="mt-6 font-display text-3xl font-semibold tracking-tight text-ink">
                 Individual Giving
               </h2>
               <p className="mt-4 text-lg leading-7 text-charcoal/70">
@@ -162,7 +162,7 @@ export default function DonatePage() {
               <div className="flex size-14 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange-dark">
                 <Building2 className="size-7" />
               </div>
-              <h2 className="mt-6 text-3xl font-semibold tracking-tight text-ink">
+              <h2 className="mt-6 font-display text-3xl font-semibold tracking-tight text-ink">
                 Corporate Sponsorship
               </h2>
               <p className="mt-4 text-lg leading-7 text-charcoal/70">

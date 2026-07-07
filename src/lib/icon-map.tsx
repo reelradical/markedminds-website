@@ -22,6 +22,8 @@ import {
   Footprints,
   Compass,
   ShieldCheck,
+  Camera,
+  Briefcase,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +51,8 @@ export const iconMap = {
   footprints: Footprints,
   compass: Compass,
   "shield-check": ShieldCheck,
+  camera: Camera,
+  briefcase: Briefcase,
 } satisfies Record<string, LucideIcon>;
 
 export type IconKey = keyof typeof iconMap;

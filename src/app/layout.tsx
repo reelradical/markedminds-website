@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Bricolage_Grotesque } from "next/font/google";
 
 import "./globals.css";
 import { site } from "@/lib/data/site";
@@ -8,6 +8,12 @@ import { Footer } from "@/components/layout/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
   display: "swap",
 });
@@ -21,12 +27,14 @@ export const metadata: Metadata = {
   description: site.description,
   keywords: [
     "Marked Minds",
+    "creative innovation studio",
     "Focus + FLEX Academy",
-    "education nonprofit",
+    "video production",
+    "brand storytelling",
+    "educator workshops",
     "project-based learning",
-    "AI literacy for students",
-    "community education programs",
-    "scholarships",
+    "AI literacy for classrooms",
+    "community-centered creative work",
   ],
   authors: [{ name: site.legalName }],
   creator: site.legalName,
@@ -51,7 +59,7 @@ export const metadata: Metadata = {
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
+  "@type": "Organization",
   name: site.legalName,
   alternateName: site.name,
   url: site.url,
@@ -74,7 +82,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${bricolageGrotesque.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col">
         <script
           type="application/ld+json"

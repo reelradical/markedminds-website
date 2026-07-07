@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, HandCoins } from "lucide-react";
 
-import { learningModel, academicPillars, sessions } from "@/lib/data/academy";
+import { learningModel, academicPillars, sessions, academyTagline } from "@/lib/data/academy";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
@@ -26,6 +26,9 @@ export default function FocusFlexPage() {
         description="Small-group, project-based learning designed to build academic skill, creative confidence, and emotional resilience — together."
         academy
       >
+        <p className="mt-4 text-sm font-semibold uppercase tracking-[0.2em] text-academy-purple">
+          {academyTagline}
+        </p>
         <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" variant="academy">
             <Link href="/contact">
@@ -82,7 +85,7 @@ export default function FocusFlexPage() {
             <div className="flex size-14 items-center justify-center rounded-full bg-academy-purple/20 text-academy-purple">
               <HandCoins className="size-7" />
             </div>
-            <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl">
               Scholarships keep Focus + FLEX accessible.
             </h2>
             <p className="max-w-xl text-balance text-lg leading-7 text-white/70">
@@ -108,7 +111,7 @@ export default function FocusFlexPage() {
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
           <SectionHeading
             eyebrow="Sessions"
-            title="Session I is underway. Future sessions are in planning."
+            title="Session I is complete. Session II is preparing to launch."
             align="center"
             className="mx-auto"
           />
@@ -125,7 +128,7 @@ export default function FocusFlexPage() {
       {/* CTA */}
       <section className="bg-academy-purple py-20">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 text-center lg:px-8">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h2 className="text-balance font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
             Ready to learn more about Focus + FLEX Academy?
           </h2>
           <p className="max-w-xl text-balance text-lg leading-7 text-white/80">

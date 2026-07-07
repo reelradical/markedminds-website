@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">
         404
       </p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+      <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
         This page hasn&apos;t been marked yet.
       </h1>
       <p className="mt-4 max-w-md text-balance text-charcoal/70">
