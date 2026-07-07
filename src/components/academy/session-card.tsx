@@ -24,13 +24,25 @@ export function SessionCard({ session }: { session: Session }) {
         {session.name}
       </h3>
       <p className="text-charcoal/70">{session.description}</p>
-      {session.registrationUrl && (
-        <Button asChild variant="academy" className="mt-2 w-fit">
-          <a href={session.registrationUrl} target="_blank" rel="noopener noreferrer">
-            Register for Session II
-            <ArrowRight className="size-4" />
-          </a>
-        </Button>
+      {(session.registrationUrl || session.depositUrl) && (
+        <div className="mt-2 flex flex-wrap gap-3">
+          {session.registrationUrl && (
+            <Button asChild variant="academy" className="w-fit">
+              <a href={session.registrationUrl} target="_blank" rel="noopener noreferrer">
+                Register for Session II
+                <ArrowRight className="size-4" />
+              </a>
+            </Button>
+          )}
+          {session.depositUrl && (
+            <Button asChild variant="academy-outline" className="w-fit">
+              <a href={session.depositUrl} target="_blank" rel="noopener noreferrer">
+                Pay Session II Deposit
+                <ArrowRight className="size-4" />
+              </a>
+            </Button>
+          )}
+        </div>
       )}
     </div>
   );

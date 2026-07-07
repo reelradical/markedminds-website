@@ -100,11 +100,16 @@ export const academicPillars: Pillar[] = [
 export const sessionIIRegistrationUrl =
   "https://docs.google.com/forms/d/e/1FAIpQLSfq7J80YLf1QNHAPlkRmILg7t1UgqkDjlqOH24f8i1dVcuevg/viewform";
 
+// Real Square payment link for the Session II deposit — plain link only,
+// no embed script.
+export const sessionIIDepositUrl = "https://square.link/u/ODkxEJ9r";
+
 export type Session = {
   name: string;
   status: "completed" | "upcoming";
   description: string;
   registrationUrl?: string;
+  depositUrl?: string;
 };
 
 export const sessions: Session[] = [
@@ -120,5 +125,6 @@ export const sessions: Session[] = [
     description:
       "Preparing to launch. Session II builds on Session I with the same small-group academics, AI literacy, and creative problem solving model. Registration is open now.",
     registrationUrl: sessionIIRegistrationUrl,
+    depositUrl: sessionIIDepositUrl,
   },
 ];
