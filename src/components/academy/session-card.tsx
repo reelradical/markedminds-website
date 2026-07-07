@@ -1,5 +1,8 @@
+import { ArrowRight } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { Session } from "@/lib/data/academy";
 
 export function SessionCard({ session }: { session: Session }) {
@@ -21,6 +24,14 @@ export function SessionCard({ session }: { session: Session }) {
         {session.name}
       </h3>
       <p className="text-charcoal/70">{session.description}</p>
+      {session.registrationUrl && (
+        <Button asChild variant="academy" className="mt-2 w-fit">
+          <a href={session.registrationUrl} target="_blank" rel="noopener noreferrer">
+            Register for Session II
+            <ArrowRight className="size-4" />
+          </a>
+        </Button>
+      )}
     </div>
   );
 }

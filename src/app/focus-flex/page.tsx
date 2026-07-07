@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, HandCoins } from "lucide-react";
 
-import { learningModel, academicPillars, sessions, academyTagline } from "@/lib/data/academy";
+import {
+  learningModel,
+  academicPillars,
+  sessions,
+  academyTagline,
+  sessionIIRegistrationUrl,
+} from "@/lib/data/academy";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
@@ -31,10 +37,10 @@ export default function FocusFlexPage() {
         </p>
         <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" variant="academy">
-            <Link href="/contact">
-              Enroll Interest
+            <a href={sessionIIRegistrationUrl} target="_blank" rel="noopener noreferrer">
+              Register for Session II
               <ArrowRight className="size-4" />
-            </Link>
+            </a>
           </Button>
           <Button asChild size="lg" variant="outline-inverse">
             <Link href="/donate">Fund a Scholarship</Link>

@@ -96,10 +96,15 @@ export const academicPillars: Pillar[] = [
   },
 ];
 
+// Real Google Form for Session II registration.
+export const sessionIIRegistrationUrl =
+  "https://docs.google.com/forms/d/e/1FAIpQLSfq7J80YLf1QNHAPlkRmILg7t1UgqkDjlqOH24f8i1dVcuevg/viewform";
+
 export type Session = {
   name: string;
   status: "completed" | "upcoming";
   description: string;
+  registrationUrl?: string;
 };
 
 export const sessions: Session[] = [
@@ -113,6 +118,7 @@ export const sessions: Session[] = [
     name: "Session II",
     status: "upcoming",
     description:
-      "Preparing to launch. Session II builds on Session I with the same small-group academics, AI literacy, and creative problem solving model. Join our list to be notified when enrollment opens.",
+      "Preparing to launch. Session II builds on Session I with the same small-group academics, AI literacy, and creative problem solving model. Registration is open now.",
+    registrationUrl: sessionIIRegistrationUrl,
   },
 ];
