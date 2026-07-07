@@ -98,6 +98,29 @@ No other page needs to change — nav, footer, and the Programs/About listings a
 
 Before launch, update `site.url` in `src/lib/data/site.ts` to the live production domain — it feeds `metadataBase`, the sitemap, robots, and JSON-LD.
 
+## Analytics
+
+Google Analytics 4 and Microsoft Clarity are wired into the root layout (`src/app/layout.tsx` → `src/components/analytics/`), but **each script only loads if its environment variable is set** — with no ID configured, neither script renders at all, and nothing is ever hardcoded into the source.
+
+1. Copy `.env.example` to `.env.local`:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Fill in one or both values:
+
+   ```bash
+   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX        # Google Analytics 4 Measurement ID
+   NEXT_PUBLIC_CLARITY_ID=xxxxxxxxxx     # Microsoft Clarity Project ID
+   ```
+
+3. Restart `npm run dev` (or redeploy) — env vars are read at build/server-start time.
+
+On Vercel, add the same two variables under **Project Settings → Environment Variables** for each environment (Production/Preview/Development) where you want analytics active — e.g. Production only, so local/preview traffic doesn't get tracked.
+
+Both variables are prefixed `NEXT_PUBLIC_` because the scripts run client-side; do not put secrets in them.
+
 ## Photography & Video
 
 The Gallery, Impact, and Home pages render styled placeholder tiles (see `components/shared/gallery-grid.tsx`) until real photography/video is available. Swap them in by adding `src` (photo) or `videoUrl` (video) fields to `GalleryItem` in `lib/data/gallery.ts` and updating `GalleryGrid` to render an `<Image>` / video embed when present — the data shape and page markup won't need to change.

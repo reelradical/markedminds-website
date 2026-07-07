@@ -5,6 +5,13 @@ import "./globals.css";
 import { site } from "@/lib/data/site";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
+
+// Analytics only load when their env var is set — see README.md
+// "Analytics" for setup. Never hardcode a fallback ID here.
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
+const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -115,6 +122,8 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
+        {clarityId && <MicrosoftClarity clarityId={clarityId} />}
       </body>
     </html>
   );
