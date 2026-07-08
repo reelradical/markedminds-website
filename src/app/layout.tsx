@@ -9,7 +9,6 @@ import { Analytics } from "@vercel/analytics/next";
 
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
-import { Analytics } from "@vercel/analytics/next";
 
 // Analytics only load when their env var is set — see README.md
 // "Analytics" for setup. Never hardcode a fallback ID here.
