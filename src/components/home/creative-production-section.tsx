@@ -34,7 +34,7 @@ export function CreativeProductionSection() {
             {category.items.map((item) => (
               <li
                 key={item}
-                className="rounded-xl border border-white/10 bg-white/[0.04] p-5 text-sm leading-6 text-white/80"
+                className="rounded-xl border border-white/10 bg-white/4 p-5 text-sm leading-6 text-white/80"
               >
                 {item}
               </li>

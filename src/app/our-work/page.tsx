@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { currentInitiatives, futureInitiatives } from "@/lib/data/initiatives";
-import { galleryItems } from "@/lib/data/gallery";
+import { pickGalleryItems } from "@/lib/data/gallery";
 import { partners } from "@/lib/data/partners";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -20,6 +20,11 @@ export const metadata: Metadata = {
     "Explore Marked Minds' portfolio of initiatives, creative production, and community collaborations.",
   alternates: { canonical: "/our-work" },
 };
+
+// A distinct, smaller subset from /focus-flex's fuller set — emphasizes
+// the work itself (team, creative output, collaboration) rather than
+// duplicating the same photos in the same order.
+const ourWorkPhotos = pickGalleryItems(["g6", "g4", "g2"]);
 
 export default function OurWorkPage() {
   return (
@@ -72,7 +77,7 @@ export default function OurWorkPage() {
             </Button>
           </div>
           <div className="mt-10">
-            <GalleryGrid items={galleryItems.slice(0, 6)} />
+            <GalleryGrid items={ourWorkPhotos} />
           </div>
         </div>
       </section>

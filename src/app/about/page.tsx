@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { coreValues, timeline } from "@/lib/data/about";
 import { site } from "@/lib/data/site";
@@ -52,8 +53,18 @@ export default function AboutPage() {
 
       {/* Founder */}
       <section className="bg-mist py-24 sm:py-28">
-        <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <AnimatedSection>
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:px-8">
+          <AnimatedSection className="relative aspect-4/5 overflow-hidden rounded-2xl">
+            <Image
+              src="/images/founder/founder-dani-marked-minds-portrait.webp"
+              alt="Dani Cummings, founder of Marked Minds."
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </AnimatedSection>
+
+          <AnimatedSection delay={0.1}>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">
               Founder
             </p>

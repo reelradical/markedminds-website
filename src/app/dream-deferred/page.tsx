@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import { ArrowRight, ArrowUpRight, Mic, ImageIcon } from "lucide-react";
@@ -100,9 +101,18 @@ export default function DreamDeferredPage() {
 
       {/* 4. Origin section */}
       <section className="bg-white py-24 sm:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
-          <AnimatedSection>
-            <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-mist text-ink">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:px-8">
+          <AnimatedSection className="relative aspect-4/5 overflow-hidden rounded-2xl lg:order-2">
+            <Image
+              src="/images/dream-deferred/dream-deferred-live-event.webp"
+              alt="Dream Deferred host at a live event."
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </AnimatedSection>
+          <AnimatedSection className="text-center lg:order-1 lg:text-left">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-mist text-ink lg:mx-0">
               <Mic className="size-6" />
             </div>
             <h2 className="mt-6 font-display text-2xl font-semibold tracking-tight text-ink">
@@ -176,7 +186,16 @@ export default function DreamDeferredPage() {
 
       {/* 6. Instagram / social preview */}
       <section className="bg-white py-24 sm:py-28">
-        <div className="mx-auto max-w-2xl px-6 lg:px-8">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 items-center gap-8 px-6 lg:grid-cols-[1fr_1.2fr] lg:px-8">
+          <AnimatedSection className="relative aspect-4/3 overflow-hidden rounded-2xl">
+            <Image
+              src="/images/dream-deferred/dream-deferred-podcast-host-studio.webp"
+              alt="Dream Deferred host recording in the studio."
+              fill
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="object-cover"
+            />
+          </AnimatedSection>
           <AnimatedSection className="flex flex-col items-center gap-4 rounded-2xl border border-ink/8 bg-mist/60 p-8 text-center">
             <div className="flex size-14 items-center justify-center rounded-full bg-white text-ink shadow-sm">
               <InstagramIcon className="size-6" />

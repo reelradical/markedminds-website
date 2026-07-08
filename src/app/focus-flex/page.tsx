@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, HandCoins } from "lucide-react";
 
@@ -9,12 +10,19 @@ import {
   academyTagline,
   sessionIIRegistrationUrl,
 } from "@/lib/data/academy";
+import { pickGalleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { PillarCard } from "@/components/academy/pillar-card";
 import { SessionCard } from "@/components/academy/session-card";
+import { GalleryGrid } from "@/components/shared/gallery-grid";
 import { Button } from "@/components/ui/button";
+
+// The fullest curated set — this is the dedicated home for Session I
+// photography. Excludes g1 (classroom-small-groups): editorial call, too
+// similar to g2/g3's classroom moments (see docs/CHANGELOG.md).
+const sessionIPhotos = pickGalleryItems(["g2", "g3", "g4", "g5", "g6", "g12"]);
 
 export const metadata: Metadata = {
   title: "Focus + FLEX Academy",
@@ -48,6 +56,22 @@ export default function FocusFlexPage() {
         </div>
       </PageHero>
 
+      {/* Session I Visual */}
+      <section className="bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <AnimatedSection className="relative aspect-video overflow-hidden rounded-2xl">
+            <Image
+              src="/images/focus-flex/focus-flex-session-group-photo.webp"
+              alt="The Focus + FLEX Academy community gathers for a group photo."
+              fill
+              sizes="(min-width: 1024px) 72vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* Learning Model */}
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -80,6 +104,21 @@ export default function FocusFlexPage() {
                 <PillarCard pillar={pillar} />
               </AnimatedSection>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Photo Highlights */}
+      <section className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Session I"
+            title="Moments from inside Focus + FLEX Academy."
+            align="center"
+            className="mx-auto"
+          />
+          <div className="mt-12">
+            <GalleryGrid items={sessionIPhotos} />
           </div>
         </div>
       </section>

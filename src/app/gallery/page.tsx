@@ -22,7 +22,10 @@ export default function GalleryPage() {
 
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <GalleryGrid items={galleryItems} />
+          {/* Only real photos render — entries without a confirmed `src`
+              stay in gallery.ts for future use but are hidden here rather
+              than shown as empty placeholder tiles. */}
+          <GalleryGrid items={galleryItems.filter((item) => item.src)} />
         </div>
       </section>
     </>

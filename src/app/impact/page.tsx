@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Quote } from "lucide-react";
 
 import { metrics } from "@/lib/data/metrics";
-import { galleryItems } from "@/lib/data/gallery";
+import { pickGalleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
@@ -20,6 +20,11 @@ export const metadata: Metadata = {
     "See the measurable impact of Marked Minds' community programming — students served, families supported, scholarships awarded, and more.",
   alternates: { canonical: "/impact" },
 };
+
+// A third distinct subset — emphasizes impact on students/families
+// (community joy, individual academic growth, everyday classroom moments)
+// rather than repeating /focus-flex's or /our-work's selections.
+const impactPhotos = pickGalleryItems(["g5", "g3", "g1"]);
 
 export default function ImpactPage() {
   return (
@@ -70,7 +75,7 @@ export default function ImpactPage() {
             </Button>
           </div>
           <div className="mt-10">
-            <GalleryGrid items={galleryItems.slice(0, 6)} />
+            <GalleryGrid items={impactPhotos} />
           </div>
         </div>
       </section>

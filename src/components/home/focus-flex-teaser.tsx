@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -40,11 +41,20 @@ export function FocusFlexTeaser() {
         </AnimatedSection>
 
         <AnimatedSection delay={0.1}>
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="relative aspect-4/3 overflow-hidden rounded-2xl">
+            <Image
+              src="/images/focus-flex/focus-flex-project-based-painting.webp"
+              alt="Project-based learning through art and creative expression at Focus + FLEX Academy."
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {highlights.map((item) => (
               <li
                 key={item}
-                className="rounded-xl border border-white/10 bg-white/[0.04] p-5 text-sm leading-6 text-white/80"
+                className="rounded-xl border border-white/10 bg-white/4 p-5 text-sm leading-6 text-white/80"
               >
                 {item}
               </li>
