@@ -38,6 +38,9 @@ export function FocusFlexTeaser() {
               <ArrowRight className="size-4" />
             </Link>
           </Button>
+          <p className="mt-4 text-sm text-white/50">
+            Session I: 13 scholars · 7 families · 100% would enroll again
+          </p>
         </AnimatedSection>
 
         <AnimatedSection delay={0.1}>

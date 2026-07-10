@@ -26,13 +26,31 @@ export const metadata: Metadata = {
 // rather than repeating /focus-flex's or /our-work's selections.
 const impactPhotos = pickGalleryItems(["g5", "g3", "g1"]);
 
+// Verbatim, permission-granted quotes from the Session I Parent Exit Survey
+// (7 of 7 families responded). Attributed generically — no scholar names,
+// per the Focus + FLEX Playbook's public-facing guidance.
+const parentQuotes = [
+  {
+    text: "I loved that my kids enjoyed themselves!!",
+    attribution: "Focus + FLEX parent",
+  },
+  {
+    text: "I enjoy the program and my boys did too — thank you for having us.",
+    attribution: "Focus + FLEX parent",
+  },
+  {
+    text: "Each day was different… Looking forward to another Flex and Focus Program!!",
+    attribution: "Focus + FLEX parent",
+  },
+];
+
 export default function ImpactPage() {
   return (
     <>
       <PageHero
         eyebrow="Community Impact"
         title="Impact we're building, one relationship at a time."
-        description="These figures represent real students, families, and partners who have invested their time and trust in Marked Minds. Numbers below will be added as program data is confirmed."
+        description="These are real, confirmed numbers from Focus + FLEX Academy's inaugural Session I — the first proof that this model works."
       />
 
       <section className="bg-white py-24 sm:py-28">
@@ -42,21 +60,28 @@ export default function ImpactPage() {
       </section>
 
       <section className="bg-mist py-24 sm:py-28">
-        <div className="mx-auto max-w-2xl px-6 text-center lg:px-8">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <SectionHeading
             eyebrow="In Their Words"
-            title="Stories from families and partners are on their way."
+            title="What Session I families told us."
             align="center"
             className="mx-auto"
           />
-          <AnimatedSection className="mt-10 rounded-2xl border border-dashed border-ink/15 bg-white p-10">
-            <Quote className="mx-auto size-8 text-brand-orange/30" aria-hidden="true" />
-            <p className="mt-4 text-charcoal/70">
-              We&apos;re collecting real stories from the families,
-              partners, and educators we work with. This section will
-              grow as those conversations come in.
-            </p>
-          </AnimatedSection>
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {parentQuotes.map((quote, i) => (
+              <AnimatedSection
+                key={quote.text}
+                delay={i * 0.06}
+                className="rounded-2xl border border-ink/8 bg-white p-8 text-center"
+              >
+                <Quote className="mx-auto size-6 text-brand-orange/30" aria-hidden="true" />
+                <p className="mt-4 text-charcoal/80">&ldquo;{quote.text}&rdquo;</p>
+                <p className="mt-4 text-sm font-medium text-charcoal/50">
+                  — {quote.attribution}
+                </p>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 

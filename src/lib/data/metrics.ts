@@ -10,11 +10,14 @@ export type Metric = {
   icon: "graduation-cap" | "heart-handshake" | "award" | "mic" | "handshake" | "clock";
 };
 
+// Confirmed from the Session I Pilot Evidence & Impact Report (July 2026).
+// Community Partners and Volunteer Hours stay `null` — the source report
+// itself marks those counts TBD/inconsistent, so we don't guess.
 export const metrics: Metric[] = [
-  { label: "Students Served", value: null, suffix: "+", icon: "graduation-cap" },
-  { label: "Families Supported", value: null, suffix: "+", icon: "heart-handshake" },
-  { label: "Scholarships Awarded", value: null, suffix: "+", icon: "award" },
-  { label: "Guest Educators", value: null, suffix: "+", icon: "mic" },
+  { label: "Students Served", value: 13, icon: "graduation-cap" },
+  { label: "Families Supported", value: 7, icon: "heart-handshake" },
+  { label: "Scholarships Awarded", value: 11, icon: "award" },
+  { label: "Guest Educators", value: 2, icon: "mic" },
   { label: "Community Partners", value: null, suffix: "+", icon: "handshake" },
   { label: "Volunteer Hours", value: null, suffix: "+", icon: "clock" },
 ];

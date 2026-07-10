@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, HandCoins } from "lucide-react";
+import { ArrowRight, HandCoins, Quote } from "lucide-react";
 
 import {
   learningModel,
@@ -18,11 +18,33 @@ import { PillarCard } from "@/components/academy/pillar-card";
 import { SessionCard } from "@/components/academy/session-card";
 import { GalleryGrid } from "@/components/shared/gallery-grid";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // The fullest curated set — this is the dedicated home for Session I
 // photography. Excludes g1 (classroom-small-groups): editorial call, too
 // similar to g2/g3's classroom moments (see docs/CHANGELOG.md).
 const sessionIPhotos = pickGalleryItems(["g2", "g3", "g4", "g5", "g6", "g12"]);
+
+// From the Session I Pilot Evidence & Impact Report (July 2026) — parent
+// survey results, 7 of 7 families responding. No dollar amounts, donor
+// names, or scholar names appear on the public site; see the Focus + FLEX
+// Playbook for the full report.
+const sessionIStats = [
+  { label: "Scholars Served", value: "13" },
+  { label: "Families Served", value: "7" },
+  { label: "Would Enroll Again", value: "100%" },
+  { label: "Would Recommend Us", value: "100%" },
+];
+
+const weekActivities = [
+  "Writing and visual literacy with a guest educator",
+  "Math, chess, and strategy with our enrichment lead",
+  "A multi-day budget challenge that turned problem-solving into a team project",
+  "Hands-on art and creative expression",
+  "First coding profiles, with take-home practice to keep going",
+  "Student-led presentations scholars were genuinely proud to give",
+  "FLEX Friday — a full day of celebration and community that closed out the session",
+];
 
 export const metadata: Metadata = {
   title: "Focus + FLEX Academy",
@@ -37,7 +59,7 @@ export default function FocusFlexPage() {
       <PageHero
         eyebrow="A Marked Minds Initiative"
         title="Focus + FLEX Academy"
-        description="Small-group, project-based learning designed to build academic skill, creative confidence, and emotional resilience — together."
+        description="Small-group, project-based learning built to give every scholar individual attention, real academic rigor, and room to be a kid — for rising 2nd–7th graders across South Metro Atlanta."
         academy
       >
         <p className="mt-4 text-sm font-semibold uppercase tracking-[0.2em] text-academy-purple">
@@ -69,6 +91,35 @@ export default function FocusFlexPage() {
               priority
             />
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Session I Proved the Model */}
+      <section className="bg-mist py-24 sm:py-28">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Session I Results"
+            title="Session I proved the model works."
+            description="In June 2026, thirteen scholars from seven South DeKalb families joined our very first session. Every family who finished the program said they'd enroll again — and every one said they'd recommend Focus + FLEX to someone else. Session I proved the idea works. Session II is how we grow it, carefully."
+            align="center"
+            className="mx-auto"
+          />
+          <div className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {sessionIStats.map((stat, i) => (
+              <AnimatedSection
+                key={stat.label}
+                delay={i * 0.05}
+                className="rounded-2xl border border-ink/8 bg-white p-6 text-center"
+              >
+                <p className="font-display text-4xl font-semibold tracking-tight text-academy-purple">
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-sm font-medium text-charcoal/60">
+                  {stat.label}
+                </p>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -108,6 +159,31 @@ export default function FocusFlexPage() {
         </div>
       </section>
 
+      {/* What Scholars Experienced */}
+      <section className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="The Experience"
+            title="A first look at what a week looked like."
+            align="center"
+            className="mx-auto"
+          />
+          <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {weekActivities.map((item, i) => (
+              <li
+                key={item}
+                className={cn(
+                  "rounded-xl border border-ink/8 bg-mist/60 px-5 py-4 text-sm leading-6 text-charcoal/80",
+                  i === weekActivities.length - 1 && "sm:col-span-2",
+                )}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* Photo Highlights */}
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -123,6 +199,22 @@ export default function FocusFlexPage() {
         </div>
       </section>
 
+      {/* Parent Voice */}
+      <section className="bg-mist py-16">
+        <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
+          <AnimatedSection>
+            <Quote className="mx-auto size-8 text-academy-purple/30" aria-hidden="true" />
+            <p className="mt-4 text-balance font-display text-2xl font-medium leading-snug tracking-tight text-ink">
+              &ldquo;So much fun I&apos;m not sure that they realized they
+              were learning!&rdquo;
+            </p>
+            <p className="mt-3 text-sm font-medium text-charcoal/50">
+              — Focus + FLEX parent
+            </p>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* Scholarships */}
       <section className="bg-white py-24 sm:py-28">
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
@@ -134,10 +226,11 @@ export default function FocusFlexPage() {
               Scholarships keep Focus + FLEX accessible.
             </h2>
             <p className="max-w-xl text-balance text-lg leading-7 text-white/70">
-              No family should be turned away for financial reasons.
-              Scholarships — funded by individual donors, corporate sponsors,
-              and community partners — cover tuition, materials, and meals for
-              qualifying students.
+              No family should be turned away for financial reasons. In
+              Session I, 19 individual donors and community partners helped
+              cover tuition, materials, and meals — and 11 of our 13 scholars
+              received scholarship support. That&apos;s the kind of community
+              generosity that keeps Focus + FLEX accessible.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button asChild size="lg" variant="academy">

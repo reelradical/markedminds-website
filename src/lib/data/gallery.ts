@@ -15,7 +15,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g1",
     type: "photo",
-    caption: "Small-group learning in the Focus + FLEX classroom.",
+    caption:
+      "Small-group instruction in action — Focus + FLEX keeps class sizes small so every scholar gets individual attention.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-classroom-small-groups.webp",
@@ -23,7 +24,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g2",
     type: "photo",
-    caption: "Students collaborating on a puzzle activity.",
+    caption: "Teamwork in action during a hands-on problem-solving activity.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-puzzle-collaboration.webp",
@@ -31,7 +32,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g3",
     type: "photo",
-    caption: "A student shares her estimation project findings.",
+    caption:
+      "A scholar presents her project findings — Session I scholars practiced public speaking and built real confidence presenting their work.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-student-presentation.webp",
@@ -47,7 +49,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g5",
     type: "photo",
-    caption: "Focus + FLEX families celebrating together.",
+    caption:
+      "Scholars celebrate with shaved ice on FLEX Friday — the community day that closed out Session I.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-community-ice-cream.webp",
@@ -55,7 +58,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g6",
     type: "photo",
-    caption: "Dani and Cameron representing Focus + FLEX Academy.",
+    caption:
+      "Founder Dani Cummings and program intern Cameron — Session I doubled as a mentorship experience for the next generation of educators too.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-team-dani-cameron.webp",
@@ -67,7 +71,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g11",
     type: "photo",
-    caption: "The Focus + FLEX Academy community gathers for a group photo.",
+    caption:
+      "Session I's 13 scholars and staff — rising 2nd through 7th grade, together for four days that built a real community.",
     session: "Session I",
     aspect: "landscape",
     src: "/images/focus-flex/focus-flex-session-group-photo.webp",
@@ -75,7 +80,8 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "g12",
     type: "photo",
-    caption: "A student stays focused during a classroom activity.",
+    caption:
+      "A scholar stays locked in during a writing activity — the kind of focus small-group learning makes possible.",
     session: "Session I",
     aspect: "portrait",
     src: "/images/focus-flex/focus-flex-student-engaged.webp",

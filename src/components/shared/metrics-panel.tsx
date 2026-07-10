@@ -14,7 +14,7 @@ export function MetricsPanel({ metrics }: { metrics: Metric[] }) {
   return (
     <div className="flex flex-col gap-6">
       {confirmed.length > 0 && (
-        <div className="grid grid-cols-2 gap-5 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
           {confirmed.map((metric, i) => (
             <AnimatedSection key={metric.label} delay={i * 0.05}>
               <MetricCard metric={metric} />
