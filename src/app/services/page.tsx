@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -50,18 +49,6 @@ export default function ServicesPage() {
                   {category.description}
                 </p>
               </AnimatedSection>
-
-              {category.slug === "creative-production" && (
-                <AnimatedSection className="relative mt-8 aspect-3/2 max-w-2xl overflow-hidden rounded-2xl">
-                  <Image
-                    src="/images/homepage/homepage-creative-production-bts.webp"
-                    alt="Creative production experience across interviews, events, and storytelling projects."
-                    fill
-                    sizes="(min-width: 1024px) 42vw, 100vw"
-                    className="object-cover"
-                  />
-                </AnimatedSection>
-              )}
 
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {category.items.map((item) => (

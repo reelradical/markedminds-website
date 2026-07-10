@@ -39,10 +39,20 @@ code — no code was changed to produce it.
 
 | Section | Asset Type | Suggested Filename | Orientation | Min. Resolution | Description | Status |
 |---|---|---|---|---|---|---|
-| Creative Production | Portfolio sample photos/video | `creative-production/sample-01.jpg` … `sample-04.jpg`, `creative-production/reel.mp4` | Landscape | 1600×1000 (photo), 1920×1080 (video) | Real examples of past video/photo/podcast work — currently just an icon + bullet list of service names, no proof of work | Missing |
+| Creative Production | Portfolio sample photos/video | `creative-production/sample-01.jpg` … `sample-04.jpg`, `creative-production/reel.mp4` | Landscape | 1600×1000 (photo), 1920×1080 (video) | Real examples of past video/photo/podcast work — a single BTS photo was tried here and removed (oversized, and the pictured crew/equipment/environment weren't clearly attributable to Marked Minds). Currently text-led: icon + bullet list of service names, no proof-of-work imagery. | Missing |
 | Design + Brand Support | Portfolio sample graphics | `creative-production/design-sample-01.png` … `-04.png` | Square or Landscape | 1200×1200 | Real graphics/flyer/apparel design examples | Missing |
 | Education + Workshops | Workshop photo | `focus-flex/educator-workshop.jpg` | Landscape | 1600×1000 | Real photo from an educator workshop or AI-in-classroom session | Missing |
 | Consulting + Strategy | Supporting photo/graphic | `our-work/consulting-supporting.jpg` | Landscape | 1600×1000 | Optional: strategy/planning session photo or abstract graphic | Missing |
+
+**TODO — Services page portfolio treatment:** Services currently renders
+text-only (no photos) across all four categories, by editorial decision
+rather than gap. Before adding photography back to Creative Production
+specifically, design a curated *multi-image* portfolio treatment (e.g. a
+small grid or filmstrip, not one oversized single photo) using **only**
+images that clearly and verifiably show Marked Minds' own work — no
+BTS/production shots where the crew, equipment, or environment can't be
+confidently attributed to Marked Minds. Do not reintroduce a single large
+photo as a stopgap.
 
 ## Our Work (`/our-work`)
 
