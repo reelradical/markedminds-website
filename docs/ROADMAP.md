@@ -1,17 +1,33 @@
 # Roadmap / Open Items
 
+## Current Release
+
+**Marked Minds Website v1.1.0**
+Released July 2026
+Status: Production
+
+See `RELEASES.md` for the full release record and `CHANGELOG.md` for
+change-by-change detail.
+
 Things intentionally left as honest placeholders, and what's needed to
 close each one out. See `CONTENT_STYLE_GUIDE.md` for why these weren't
 filled in with invented content.
 
 ## Needs real data
 
-- [ ] **Impact metrics** (`src/lib/data/metrics.ts`) — all six values are
-      `null`. Pull real numbers from program records (students served,
-      families supported, scholarships awarded, guest educators, community
-      partners, volunteer hours).
-- [ ] **Testimonials** (`src/lib/data/testimonials.ts`) — three
-      placeholder entries with no real quotes or names attached yet.
+- [x] **Impact metrics** (`src/lib/data/metrics.ts`) — 4 of 6 values
+      confirmed from the Session I Pilot Evidence & Impact Report:
+      Students Served (13), Families Supported (7), Scholarships Awarded
+      (11), Guest Educators (2). Community Partners and Volunteer Hours
+      remain `null` — the source report itself marks these TBD/inconsistent
+      across its own tables; do not fill in until that's resolved.
+- [x] **Parent testimonials** — real, permission-granted quotes from the
+      Session I Parent Exit Survey now live as short pull-quotes on
+      `/impact` and `/focus-flex`, attributed generically ("Focus + FLEX
+      parent") rather than by full name. Implemented as inline quote
+      cards rather than a standalone `testimonials.ts`/`TestimonialCard`
+      — that file/component was never built; this line item previously
+      referenced a path that doesn't exist in the codebase.
 - [x] **Dream Deferred listen/follow links** (`src/lib/data/dream-deferred.ts`)
       — Spotify, Apple Podcasts, Spreaker, YouTube, Metacast, Instagram, and
       X all confirmed with real URLs.
@@ -22,8 +38,12 @@ filled in with invented content.
       `src/lib/data/dream-deferred.ts`) — confirmed live (Spreaker
       Supporter). No action needed unless it changes.
 - [ ] **Gallery photography/video** (`src/lib/data/gallery.ts`,
-      `GalleryGrid`) — currently styled placeholder tiles; swap in real
-      `<Image>`/video embeds as assets come in.
+      `GalleryGrid`) — 8 of 10 items now have real photos (g1–g6, g11,
+      g12). The remaining 4 (family showcase night, "a day inside Focus +
+      FLEX" video, guest educator visit, reading circle) still have no
+      asset — their entries stay in the data file but are hidden from
+      `/gallery` (filtered on `src` presence) rather than shown as empty
+      placeholder tiles. Swap in real assets as they come in.
 - [ ] **Partner confirmation** (`src/lib/data/partners.ts`) — confirm
       exact relationship category (Partner/Collaborator/Client/Community
       Connection) for each entry, and fill the "Additional partners to be
@@ -72,3 +92,8 @@ filled in with invented content.
       added — explicitly deferred per brand brief, pending approval.
 - [ ] Add real partner/sponsor logo images to replace the wordmark tiles
       in `PartnerLogo`.
+- [ ] **Services page Creative Production portfolio** — a single
+      oversized BTS photo was removed (see `CHANGELOG.md` → v1.1.0); the
+      section is text-led for now. Design a curated multi-image treatment
+      using only clearly-attributable Marked Minds work — see
+      `ASSET_CHECKLIST.md` → Services for the full TODO.

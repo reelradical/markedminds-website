@@ -1,5 +1,80 @@
 # Changelog
 
+## v1.1.0 — July 2026
+
+Session I evidence integration, corrected analytics configuration, and a
+Services page correction. See `RELEASES.md` for the formal release record.
+
+**Added**
+
+- Authentic Session I photography across Focus + FLEX Academy pages
+  (`/focus-flex`, `/gallery`, `/impact`, `/our-work`) — group photo,
+  student portraits, classroom moments, and the FLEX Friday celebration,
+  replacing placeholder gallery tiles.
+- Verified Focus + FLEX Session I impact metrics
+  (`src/lib/data/metrics.ts`): 13 scholars served, 7 families supported,
+  11 scholarships awarded, 2 guest educators — sourced from the Session I
+  Pilot Evidence & Impact Report. Community Partners and Volunteer Hours
+  remain unconfirmed.
+- Real, permission-granted parent testimonials on `/impact` and
+  `/focus-flex`, replacing the "coming soon" placeholder section.
+- "Session I proved the model" and "What Scholars Experienced" sections
+  on `/focus-flex`.
+- Analytics environment-variable validation
+  (`src/components/analytics/google-analytics.tsx`) — the GA4 measurement
+  ID is now trimmed and validated against `^G-[A-Z0-9]+$` before
+  rendering; malformed values render nothing instead of producing broken
+  inline script content.
+
+**Changed**
+
+- Gallery captions rewritten to explain the learning or moment behind
+  each photo rather than a generic description.
+- Services page: removed an oversized behind-the-scenes photo that risked
+  implying the pictured crew/equipment belonged to Marked Minds; Creative
+  Production is now text-led like the other three service categories.
+  Follow-up tracked in `ASSET_CHECKLIST.md`.
+
+**Fixed**
+
+- Corrected the `NEXT_PUBLIC_GA_ID` production environment variable (was
+  duplicated 5× with embedded newlines, causing a sitewide console
+  `SyntaxError` and broken GA4 tracking).
+- Removed a duplicate `Analytics` import in `layout.tsx` introduced by an
+  auto-generated Vercel PR, which had broken the production build.
+
+## v1.0.0 — July 7, 2026
+
+Initial public release of markedminds.com
+
+**Added**
+
+- Public website
+- Dream Deferred hub
+- Focus + FLEX Academy pages
+- Services
+- Our Work
+- Impact
+- Partners
+- Gallery
+- Contact
+- Session II registration
+- Session II deposit payment
+- Google Analytics
+- Microsoft Clarity
+- Vercel Analytics
+- Open Graph images
+- Brand documentation
+- Favicon system
+
+**Fixed**
+
+- Canonical URLs
+- Metadata
+- Social previews
+- Navigation
+- Responsive layout
+
 ## 2026-07-07 — Favicon, Dream Deferred real assets, founder naming decision
 
 **Added**
