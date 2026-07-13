@@ -8,7 +8,6 @@ import {
   academicPillars,
   sessions,
   academyTagline,
-  sessionIIRegistrationUrl,
 } from "@/lib/data/academy";
 import { pickGalleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
@@ -16,6 +15,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { PillarCard } from "@/components/academy/pillar-card";
 import { SessionCard } from "@/components/academy/session-card";
+import { SessionInterestForm } from "@/components/academy/session-interest-form";
 import { GalleryGrid } from "@/components/shared/gallery-grid";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -67,8 +67,8 @@ export default function FocusFlexPage() {
         </p>
         <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
           <Button asChild size="lg" variant="academy">
-            <a href={sessionIIRegistrationUrl} target="_blank" rel="noopener noreferrer">
-              Register for Session II
+            <a href="#session-ii-interest">
+              Join the Interest List
               <ArrowRight className="size-4" />
             </a>
           </Button>
@@ -249,7 +249,7 @@ export default function FocusFlexPage() {
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
           <SectionHeading
             eyebrow="Sessions"
-            title="Session I is complete. Session II is preparing to launch."
+            title="Session I is complete. Session II has been postponed."
             align="center"
             className="mx-auto"
           />
@@ -259,6 +259,22 @@ export default function FocusFlexPage() {
                 <SessionCard session={session} />
               </AnimatedSection>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Session II Interest List */}
+      <section id="session-ii-interest" className="bg-white py-24 sm:py-28">
+        <div className="mx-auto max-w-2xl px-6 text-center lg:px-8">
+          <SectionHeading
+            eyebrow="Stay in the Loop"
+            title="Join our interest list."
+            description="Thank you for the overwhelming support of Focus + FLEX Academy. We have made the decision to postpone our next session so we can continue delivering the high-quality experience our scholars deserve. Join our interest list to be the first to know when enrollment reopens."
+            align="center"
+            className="mx-auto"
+          />
+          <div className="mt-10">
+            <SessionInterestForm />
           </div>
         </div>
       </section>

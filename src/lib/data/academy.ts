@@ -106,12 +106,17 @@ export const sessionIIDepositUrl = "https://square.link/u/ODkxEJ9r";
 
 export type Session = {
   name: string;
-  status: "completed" | "upcoming";
+  status: "completed" | "upcoming" | "postponed";
   description: string;
   registrationUrl?: string;
   depositUrl?: string;
 };
 
+// Session II postponement announced 2026-07-10. Registration/deposit links
+// intentionally not attached to the Session II entry below while postponed
+// — see the interest-list section on /focus-flex instead. The URLs remain
+// defined here for reference in case Session II is later rescheduled and
+// the same form/payment link should be reused.
 export const sessions: Session[] = [
   {
     name: "Session I",
@@ -121,10 +126,8 @@ export const sessions: Session[] = [
   },
   {
     name: "Session II",
-    status: "upcoming",
+    status: "postponed",
     description:
-      "Preparing to launch. Session II builds on Session I with the same small-group academics, AI literacy, and creative problem solving model. Registration is open now.",
-    registrationUrl: sessionIIRegistrationUrl,
-    depositUrl: sessionIIDepositUrl,
+      "Thank you for the overwhelming support of Focus + FLEX Academy. We have made the decision to postpone our next session so we can continue delivering the high-quality experience our scholars deserve. Join our interest list to be the first to know when enrollment reopens.",
   },
 ];

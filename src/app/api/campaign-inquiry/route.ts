@@ -1,0 +1,157 @@
+import { NextResponse } from "next/server";
+
+import { sendEmail, buildFieldListEmail } from "@/lib/email";
+import { saveIntake } from "@/lib/airtable";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_LEN = 2000;
+
+type CampaignInquiryPayload = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  organization?: string;
+  role?: string;
+  gradeLevel?: string;
+  service?: string;
+  format?: string;
+  goal?: string;
+  timing?: string;
+  offerCode?: string;
+  campaign?: string;
+  source?: string;
+};
+
+function clean(value: unknown): string {
+  return typeof value === "string" ? value.trim().slice(0, MAX_LEN) : "";
+}
+
+// Website form values → Airtable "Preferred Format" select options. Lives
+// here (not in airtable.ts) because it's specific to how this form words
+// its options, not a generic Airtable concern.
+const PREFERRED_FORMAT_MAP: Record<string, string> = {
+  Virtual: "Virtual",
+  "In-person": "In Person",
+  "No preference": "Either",
+};
+
+// Black2School-specific Intake Queue values, approved 2026-07. Fixed here
+// rather than in airtable.ts so the helper itself stays generic/reusable
+// for future campaigns with different values.
+const INTAKE_SOURCE = "Black2School Submission";
+const BUSINESS_UNIT = "Marked Minds";
+const INQUIRY_TYPE = "Educator Experience";
+const NEXT_ACTION = "Review educator inquiry and respond";
+
+// Generic campaign-inquiry endpoint, reused by every partner/conference
+// landing page (Black2School and future campaigns) — separate from
+// /api/contact so the general contact form's contract never changes.
+//
+// Submission flow (do not reorder):
+//   1. Validate + sanitize.
+//   2. Send the Resend notification email. If this fails, stop and return
+//      an error — never create an Intake Queue record without a
+//      corresponding notification, and never claim success when nothing
+//      was delivered.
+//   3. On email success, write the lead to the Airtable Intake Queue
+//      (saveIntake() itself checks for a same-email/same-campaign record
+//      created in the last few minutes and skips creating a duplicate).
+//      If Airtable fails, still return success to the caller (the lead
+//      WAS captured via email) but log a short, sanitized error server-
+//      side — never the full payload, never credentials.
+export async function POST(request: Request) {
+  const body = (await request.json().catch(() => null)) as CampaignInquiryPayload | null;
+
+  const firstName = clean(body?.firstName);
+  const lastName = clean(body?.lastName);
+  const email = clean(body?.email);
+  const organization = clean(body?.organization);
+  const role = clean(body?.role);
+  const gradeLevel = clean(body?.gradeLevel);
+  const service = clean(body?.service);
+  const format = clean(body?.format);
+  const goal = clean(body?.goal);
+  const timing = clean(body?.timing);
+  const offerCode = clean(body?.offerCode);
+  const campaign = clean(body?.campaign);
+  const source = clean(body?.source);
+
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !EMAIL_RE.test(email) ||
+    !organization ||
+    !role ||
+    !gradeLevel ||
+    !service ||
+    !format ||
+    !goal
+  ) {
+    return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });
+  }
+
+  const { html, text } = buildFieldListEmail(
+    `New ${campaign || "campaign"} inquiry: ${firstName} ${lastName}`,
+    [
+      ["Participant name", `${firstName} ${lastName}`],
+      ["Email", email],
+      ["Organization", organization],
+      ["Role", role],
+      ["Grade/age group", gradeLevel],
+      ["Service of interest", service],
+      ["Preferred format", format],
+      ["Goal / challenge", goal],
+      ["Preferred timing", timing || "Not specified"],
+      ["Offer code", offerCode || "None"],
+      ["Campaign", campaign || "Not specified"],
+      ["Referral source", source || "Not specified"],
+    ],
+  );
+
+  const emailResult = await sendEmail({
+    subject: `New ${campaign || "campaign"} inquiry: ${firstName} ${lastName}`,
+    html,
+    text,
+    replyTo: email,
+  });
+
+  if (!emailResult.ok) {
+    console.error("[campaign-inquiry] Email delivery failed:", emailResult.error);
+    return NextResponse.json(
+      { error: "We couldn't deliver your request right now. Please try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  const intakeResult = await saveIntake({
+    firstName,
+    lastName,
+    email,
+    organization,
+    role,
+    gradeLevel,
+    service,
+    preferredFormat: PREFERRED_FORMAT_MAP[format] ?? format,
+    goal,
+    preferredTiming: timing,
+    discountCode: offerCode,
+    campaign: campaign || "Not specified",
+    referralSource: source || "Not specified",
+    intakeSource: INTAKE_SOURCE,
+    businessUnit: BUSINESS_UNIT,
+    inquiryType: INQUIRY_TYPE,
+    nextAction: NEXT_ACTION,
+  });
+
+  if (!intakeResult.ok) {
+    // Intentional: the user already got a real, working notification
+    // email — do not make Airtable being down look like a failed
+    // submission. Log a short error only, never the payload/credentials.
+    console.error("[campaign-inquiry] Airtable intake creation failed:", intakeResult.error);
+  } else if (intakeResult.duplicate) {
+    console.info("[campaign-inquiry] Skipped duplicate Airtable intake (recent retry detected).");
+  }
+
+  return NextResponse.json({ ok: true });
+}

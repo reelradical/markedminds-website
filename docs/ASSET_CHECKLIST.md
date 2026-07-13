@@ -130,6 +130,48 @@ All 10 items currently render as styled placeholder tiles (gradient block
 
 No visual assets required — form + text page. **Complete.**
 
+## Campaign Pages (`/black2school` and future campaigns)
+
+**RESOLVED — Airtable Intake Queue integration:** Black2School and the
+Focus + FLEX interest list both write to the Marked Minds OS Airtable base
+(Intake Queue table) via the shared `saveIntake()` helper
+(`src/lib/airtable.ts`). Verified live end-to-end, including the "New
+Inquiry" automation and duplicate prevention. Full schema and integration
+detail: `docs/AIRTABLE_CRM_SCHEMA.md`. Remaining item: confirm
+`AIRTABLE_API_KEY` / `AIRTABLE_BASE_ID` / `AIRTABLE_INTAKE_TABLE` are set
+in Vercel's production environment (confirmed locally only as of this
+writing) — see the Production Readiness Report for status.
+
+**TODO — AI Classroom Starter Kit resources:** The free lead-magnet section
+promised 8 downloadable resources (AI prompt guide, AI classroom policy
+template, parent letter template, lesson-planning prompt bank, student
+reflection prompts, coding vocabulary guide, AI glossary, classroom
+workflow cheat sheet). **None of these files have been authored yet.** The
+section, form, and analytics event (`<slug>_starter_kit_submit`) are fully
+built in `campaign-content.ts` / `starter-kit-form.tsx` but are hidden via
+`campaign.features.starterKit = false` in `campaigns.ts` so the page never
+promises access to a resource that doesn't exist. To launch it: author the
+8 resources, host them somewhere fetchable, wire real delivery (see the
+email-delivery TODO below), then flip `starterKit: true` for the relevant
+campaign — no other code changes needed.
+
+**TODO — Campaign email delivery to production:** `/api/campaign-inquiry`
+and `/api/campaign-lead` send real email via Resend (`src/lib/email.ts`).
+Confirmed working end-to-end in local testing — a real submission was
+delivered to and received at `markedminds@gmail.com`. Two things remain
+before this works on the live site:
+1. Set `RESEND_API_KEY`, `CAMPAIGN_INQUIRY_TO_EMAIL`, and
+   `CAMPAIGN_FROM_EMAIL` in Vercel's production environment variables
+   (currently only set locally in `.env.local`, which is gitignored and
+   never deploys).
+2. The sender is currently Resend's sandbox address
+   (`onboarding@resend.dev`), which only delivers to pre-verified
+   recipient addresses — fine for `markedminds@gmail.com` as a known
+   destination, but **will not reliably deliver for the actual campaign**
+   unless a real domain (e.g. `markedminds.com`) is verified in Resend
+   and `CAMPAIGN_FROM_EMAIL` is switched to an address on it. Verify the
+   domain before relying on this for real conference participants.
+
 ## Sitewide / Brand
 
 | Asset | Asset Type | Suggested Filename | Orientation | Min. Resolution | Description | Status |
