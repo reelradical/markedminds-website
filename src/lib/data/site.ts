@@ -17,10 +17,8 @@ export const site = {
     facebook: "https://www.facebook.com/markedminds",
     linkedin: "https://www.linkedin.com/company/markedminds",
   },
-  // TODO: swap in Dani's personal LinkedIn URL — no Marked Minds company
-  // page exists yet. Leave empty until the real URL is supplied so the
-  // Footer/Founder section can hide the link instead of pointing nowhere.
-  founderLinkedinUrl: "",
+  // Dani's personal LinkedIn — no Marked Minds company page exists yet.
+  founderLinkedinUrl: "https://www.linkedin.com/in/danicummings/",
   // Not live yet — kept here for reference but intentionally not rendered
   // as a link anywhere on the site until it resolves. See the About page's
   // Founder section, which shows it as plain (non-clickable) text instead.

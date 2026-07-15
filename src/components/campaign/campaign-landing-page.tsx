@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
+import { site } from "@/lib/data/site";
 import {
   heroContent,
   empathyContent,
@@ -26,6 +27,7 @@ import { iconMap } from "@/lib/icon-map";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { SentenceBreak } from "@/components/shared/sentence-break";
+import { LinkedinIcon } from "@/components/shared/social-icons";
 import { Button } from "@/components/ui/button";
 import { CopyCodeButton } from "@/components/campaign/copy-code-button";
 import { CampaignInquiryForm } from "@/components/campaign/campaign-inquiry-form";
@@ -404,12 +406,12 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
       {/* 8. About Dani */}
       <section className="bg-mist py-20 sm:py-24">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:px-8">
-          <AnimatedSection className="relative aspect-4/5 overflow-hidden rounded-2xl">
+          <AnimatedSection className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-2xl">
             <Image
               src={aboutDani.portrait}
               alt={`${aboutDani.name}, founder of Marked Minds.`}
               fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 30vw, 60vw"
               className="object-cover"
             />
           </AnimatedSection>
@@ -433,6 +435,17 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
               ))}
             </ul>
             <p className="mt-4 text-lg leading-7 text-charcoal/70">{aboutDani.bio}</p>
+            {site.founderLinkedinUrl && (
+              <a
+                href={site.founderLinkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-orange-dark hover:text-brand-orange"
+              >
+                <LinkedinIcon className="size-4" />
+                Connect on LinkedIn
+              </a>
+            )}
           </AnimatedSection>
         </div>
       </section>
