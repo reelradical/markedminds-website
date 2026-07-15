@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/social/og-image.jpg",
+        url: "/social/og-black2school.jpg",
         width: 1200,
         height: 630,
         alt: `${site.name} — ${campaign.metadata.ogTitle}`,
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: campaign.metadata.ogTitle,
     description: campaign.metadata.ogDescription,
-    images: ["/social/og-image.jpg"],
+    images: ["/social/og-black2school.jpg"],
   },
 };
 
