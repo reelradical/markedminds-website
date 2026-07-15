@@ -16,6 +16,7 @@ import {
 import { iconMap } from "@/lib/icon-map";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { InstagramIcon, XIcon } from "@/components/shared/social-icons";
 import { Badge } from "@/components/ui/badge";
@@ -135,7 +136,9 @@ export default function DreamDeferredPage() {
           <SectionHeading
             eyebrow="Community"
             title="The Conversation Continues"
-            description="Dream Deferred doesn't end when an episode ends. The conversations continue through our community—where listeners reflect, respond, challenge ideas, and encourage one another to keep pursuing the dreams they've deferred."
+            description={
+              <SentenceBreak text="Dream Deferred doesn't end when an episode ends. The conversations continue through our community—where listeners reflect, respond, challenge ideas, and encourage one another to keep pursuing the dreams they've deferred." />
+            }
             align="center"
             className="mx-auto"
           />

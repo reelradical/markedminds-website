@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { serviceCategories } from "@/lib/data/services";
 import { iconMap } from "@/lib/icon-map";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { Badge } from "@/components/ui/badge";
 
@@ -13,7 +14,7 @@ export function ServicesPreviewSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
           eyebrow="Services"
-          title="Four disciplines. One creative studio."
+          title={<SentenceBreak text="Four disciplines. One creative studio." />}
           description="Marked Minds works across production, design, education, and strategy — often on the same project."
           align="center"
           className="mx-auto"

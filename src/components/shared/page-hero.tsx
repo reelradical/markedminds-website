@@ -8,8 +8,8 @@ export function PageHero({
   children,
 }: {
   eyebrow: string;
-  title: string;
-  description?: string;
+  title: React.ReactNode;
+  description?: React.ReactNode;
   academy?: boolean;
   children?: React.ReactNode;
 }) {

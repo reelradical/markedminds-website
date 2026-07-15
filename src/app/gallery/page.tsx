@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { galleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { GalleryGrid } from "@/components/shared/gallery-grid";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function GalleryPage() {
       <PageHero
         eyebrow="Gallery"
         title="A look inside our sessions."
-        description="Photos and videos from Focus + FLEX Academy and Marked Minds community events. New highlights are added after every session."
+        description={
+          <SentenceBreak text="Photos and videos from Focus + FLEX Academy and Marked Minds community events. New highlights are added after every session." />
+        }
       />
 
       <section className="bg-white py-24 sm:py-28">

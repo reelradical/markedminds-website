@@ -84,8 +84,11 @@ export function CampaignInquiryForm({
         <h3 className="text-xl font-semibold text-ink">Request received</h3>
         <p className="max-w-md text-sm text-charcoal/70">
           Thank you for connecting with Marked Minds. Your {campaign.partnerName}{" "}
-          conference offer has been recorded. You will receive next-step
-          information after your request is reviewed.
+          conference offer has been recorded.
+        </p>
+        <p className="max-w-md text-sm font-medium text-ink">
+          Next step: Watch your email for your recommended service and secure
+          Square checkout link.
         </p>
       </div>
     );
@@ -214,8 +217,18 @@ export function CampaignInquiryForm({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor={`${formId}-code`}>Discount code</Label>
-        <Input id={`${formId}-code`} name="offerCode" defaultValue={campaign.offer.code} />
+        <Label htmlFor={`${formId}-code`}>Conference eligibility code</Label>
+        <Input
+          id={`${formId}-code`}
+          name="offerCode"
+          defaultValue={campaign.offer.code}
+          readOnly
+          className="bg-mist text-charcoal/70"
+        />
+        <p className="text-xs leading-5 text-charcoal/50">
+          This records your conference eligibility. You&apos;ll enter this
+          code again at Square checkout to apply your discount.
+        </p>
       </div>
 
       <input type="hidden" name="campaign" value={campaign.analytics.campaign} />

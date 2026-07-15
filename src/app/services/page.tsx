@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { serviceCategories } from "@/lib/data/services";
 import { iconMap } from "@/lib/icon-map";
 import { PageHero } from "@/components/shared/page-hero";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Four disciplines. One creative studio."
+        title={<SentenceBreak text="Four disciplines. One creative studio." />}
         description="Marked Minds works across production, design, education, and strategy — for individuals, brands, schools, and community organizations."
       />
 

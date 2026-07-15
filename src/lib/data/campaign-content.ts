@@ -1,4 +1,5 @@
 import type { IconKey } from "@/lib/icon-map";
+import type { CampaignOffer } from "@/lib/data/campaigns";
 
 // Shared, campaign-agnostic content for partner/conference landing pages
 // (see `campaigns.ts`). This is Marked Minds' general educator-support
@@ -246,42 +247,64 @@ export const aboutDani = {
 
 export type FaqItem = { question: string; answer: string };
 
-// DRAFT answers — the build brief referenced "approved answers" that
-// weren't actually included in what was provided. These are reasonable,
-// policy-consistent drafts written to fill the gap; flagged for explicit
-// review/approval before launch (see the pre-publish checklist).
+// Approved copy — sign-off received; see ROADMAP.md pre-publish checklist.
 export const faqItems: FaqItem[] = [
   {
     question: "Do I need prior AI or coding experience?",
     answer:
-      "No. Sessions start wherever you are, whether you've never opened an AI tool or you're already experimenting in your classroom.",
+      "No. Sessions meet you where you are—whether you have never opened an AI tool, are just beginning to explore coding, or are already experimenting in your classroom.",
   },
   {
     question: "Is this only for classroom teachers?",
     answer:
-      "No. Instructional coaches, specialists, administrators, and program leaders are all welcome — sessions are shaped around your actual role and students.",
+      "No. Classroom teachers, instructional coaches, specialists, administrators, enrichment educators, and program leaders are all welcome. Support is shaped around your role, goals, and the learners or educators you serve.",
   },
   {
     question: "Can the session focus on my grade level or content area?",
     answer:
-      "Yes. Every session is built around your grade band, subject area, and real classroom context — not a generic template.",
+      "Yes. Individual consultations and customized sessions can be tailored to your grade band, subject area, instructional goals, and real classroom context—not a generic template.",
   },
   {
     question: "Are sessions virtual?",
     answer:
-      "Sessions are available virtually. In-person options may be possible depending on location — ask when you submit your request, and Dani will confirm what's available.",
+      "Yes. Individual consultations and planning sessions are available virtually. In-person options may also be possible depending on location, scheduling, group size, and scope. Include your preference when submitting your request, and Dani will confirm the available options.",
   },
   {
     question: "Does the discount include custom materials?",
     answer:
-      "The discount applies to one qualifying session, consultation, or training. Significant custom-resource development is scoped and priced separately.",
+      "The discount applies to one qualifying session, consultation, or training. Any significant custom-resource development, printing, licensing, travel, or extended preparation will be scoped and priced separately before work begins.",
   },
   {
     question: "Does AI replace my professional judgment?",
     answer:
-      "No. AI is a planning and thought partner — a starting point, not a substitute for your relationships with students, instructional expertise, or professional judgment.",
+      "No. AI can serve as a planning and thought partner—a starting point rather than a substitute for your instructional expertise, professional judgment, creativity, or relationships with students.",
   },
 ];
+
+// Approved copy explaining the two-step redemption flow: the website
+// records conference eligibility, but the discount itself is applied at
+// Square checkout. Shared/reusable across campaigns — only the code and
+// percentage are campaign-specific, so this stays a function of the
+// offer rather than hardcoded per page.
+export const howToUseOfferHeading = "How to Use Your Conference Offer";
+
+export function howToUseOfferSteps(
+  offer: Pick<CampaignOffer, "code" | "discountPercent">,
+): string[] {
+  return [
+    "Explore the available educator services.",
+    "Submit a brief request describing the support you need.",
+    "Dani will confirm the recommended session, scope, availability, and price.",
+    "You will receive the appropriate Square checkout link.",
+    `Enter code ${offer.code} at checkout to receive ${offer.discountPercent}% off one qualifying session, consultation, or training.`,
+  ];
+}
+
+export const howToUseOfferEligibilityNote =
+  "Your inquiry form records your conference eligibility, but the discount is applied when you enter the code during Square checkout.";
+
+export const howToUseOfferExclusionsNote =
+  "Custom materials, printing, licensing, travel, and extended development may be quoted separately and may not qualify for the promotional discount.";
 
 export const finalCta = {
   headline: "Let's Make Innovation Feel Useful Again.",

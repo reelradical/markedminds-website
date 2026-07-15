@@ -12,6 +12,7 @@ import {
 import { pickGalleryItems } from "@/lib/data/gallery";
 import { PageHero } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { PillarCard } from "@/components/academy/pillar-card";
 import { SessionCard } from "@/components/academy/session-card";
@@ -249,7 +250,9 @@ export default function FocusFlexPage() {
         <div className="mx-auto max-w-5xl px-6 lg:px-8">
           <SectionHeading
             eyebrow="Sessions"
-            title="Session I is complete. Session II has been postponed."
+            title={
+              <SentenceBreak text="Session I is complete. Session II has been postponed." />
+            }
             align="center"
             className="mx-auto"
           />

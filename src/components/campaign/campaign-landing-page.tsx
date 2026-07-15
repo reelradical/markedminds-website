@@ -17,10 +17,15 @@ import {
   aboutDani,
   faqItems,
   finalCta,
+  howToUseOfferHeading,
+  howToUseOfferSteps,
+  howToUseOfferEligibilityNote,
+  howToUseOfferExclusionsNote,
 } from "@/lib/data/campaign-content";
 import { iconMap } from "@/lib/icon-map";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { SentenceBreak } from "@/components/shared/sentence-break";
 import { Button } from "@/components/ui/button";
 import { CopyCodeButton } from "@/components/campaign/copy-code-button";
 import { CampaignInquiryForm } from "@/components/campaign/campaign-inquiry-form";
@@ -79,8 +84,8 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">
             {heroContent.eyebrow}
           </p>
-          <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-            {heroContent.headline}
+          <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <SentenceBreak text={heroContent.headline} />
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-balance text-lg leading-7 text-white/70">
             {heroContent.supporting}
@@ -96,7 +101,7 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
 
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
             <Button size="lg" onClick={handleOfferClick}>
-              Claim Your Conference Offer
+              Claim My Conference Offer
               <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
             <Button
@@ -114,8 +119,8 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
       <section className="bg-mist py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
           <AnimatedSection>
-            <h2 className="text-balance font-display text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
-              {empathyContent.headline}
+            <h2 className="font-display text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
+              <SentenceBreak text={empathyContent.headline} />
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-2">
               {empathyContent.acknowledgments.map((item) => (
@@ -197,8 +202,8 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
               <h2 className="mt-3 text-balance font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">
                 {starterKit.heading}
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-lg leading-7 text-white/70">
-                {starterKit.supporting}
+              <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-white/70">
+                <SentenceBreak text={starterKit.supporting} />
               </p>
               <ul className="mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-3 text-left sm:grid-cols-2">
                 {starterKit.includes.map((item) => (
@@ -273,10 +278,28 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
               </div>
             </div>
 
-            <p className="mx-auto mt-10 max-w-md text-sm text-academy-purple/80">
-              This offer connects to Focus + FLEX Academy — Marked Minds&apos;
-              small-group, educator-designed learning model.
-            </p>
+            <div className="mx-auto mt-10 max-w-2xl border-t border-white/10 pt-10 text-left">
+              <h3 className="text-center text-sm font-semibold uppercase tracking-[0.15em] text-white/50">
+                {howToUseOfferHeading}
+              </h3>
+              <ol className="mt-4 flex flex-col gap-2 text-sm leading-6 text-white/80">
+                {howToUseOfferSteps(campaign.offer).map((step, i) => (
+                  <li key={step} className="flex gap-3">
+                    <span className="shrink-0 font-semibold text-brand-orange">
+                      {i + 1}.
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-4 text-sm leading-6 text-white/60">
+                {howToUseOfferEligibilityNote}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-white/60">
+                {howToUseOfferExclusionsNote}
+              </p>
+            </div>
+
           </AnimatedSection>
         </div>
       </section>
@@ -456,12 +479,12 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
           <h2 className="text-balance font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
             {finalCta.headline}
           </h2>
-          <p className="max-w-xl text-balance text-lg leading-7 text-white/80">
-            {finalCta.supporting}
+          <p className="max-w-xl text-lg leading-7 text-white/80">
+            <SentenceBreak text={finalCta.supporting} />
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
             <Button size="lg" variant="orange" onClick={handleOfferClick}>
-              Claim My {campaign.offer.discountPercent}% Conference Offer
+              Claim My Conference Offer
               <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
             <Button
