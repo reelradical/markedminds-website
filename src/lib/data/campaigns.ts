@@ -50,6 +50,13 @@ export type Campaign = {
   approvedFraming: string;
   /** Full override text for the hero offer badge — keeps hero copy configurable per campaign without touching the template. */
   heroBadge: string;
+  /**
+   * Partner's official logo, shown in the hero. Optional — omit until an
+   * approved asset exists (see brand rule: never fabricate/imitate a
+   * partner's logo). `width`/`height` are the source file's real pixel
+   * dimensions, used only to preserve aspect ratio at render size.
+   */
+  partnerLogo?: { src: string; alt: string; width: number; height: number };
   offer: CampaignOffer;
   metadata: CampaignMetadata;
   features: CampaignFeatures;
@@ -67,6 +74,14 @@ export const campaigns = {
       "An exclusive opportunity created for Black2SchoolMvmt conference participants.",
     heroBadge:
       "Save 10% on one qualifying session, consultation, or training.",
+    // Official logo, confirmed by Dani as what's live on Black2SchoolMvmt's
+    // own website/FB/IG — approved for use here.
+    partnerLogo: {
+      src: "/images/black2school/black2school-logo.png",
+      alt: "The Black 2 School Movement",
+      width: 342,
+      height: 471,
+    },
     offer: {
       code: "B2S10",
       discountPercent: 10,

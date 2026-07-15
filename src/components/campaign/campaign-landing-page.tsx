@@ -80,6 +80,16 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-32 left-[-10%] h-80 w-80 rounded-full bg-academy-purple/10 blur-3xl"
         />
+        {campaign.partnerLogo && (
+          <Image
+            src={campaign.partnerLogo.src}
+            alt={campaign.partnerLogo.alt}
+            width={campaign.partnerLogo.width}
+            height={campaign.partnerLogo.height}
+            className="absolute right-5 top-6 h-20 w-auto sm:right-10 sm:top-10 sm:h-32 lg:right-14 lg:h-36"
+            priority
+          />
+        )}
         <div className="relative mx-auto max-w-4xl px-6 text-center lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">
             {heroContent.eyebrow}
