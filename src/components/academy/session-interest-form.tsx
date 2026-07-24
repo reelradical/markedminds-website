@@ -6,6 +6,7 @@ import { Check, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { site } from "@/lib/data/site";
 
 export function SessionInterestForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
@@ -67,7 +68,7 @@ export function SessionInterestForm() {
       </Button>
       {status === "error" && (
         <p className="text-sm text-red-600 sm:basis-full">
-          Something went wrong. Please email us directly at markedminds@gmail.com.
+          Something went wrong. Please email us directly at {site.email}.
         </p>
       )}
     </form>

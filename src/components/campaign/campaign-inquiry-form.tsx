@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import { serviceSelectOptions } from "@/lib/data/campaign-content";
 import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
+import { site } from "@/lib/data/site";
 
 const roleOptions = [
   "Early childhood educator",
@@ -246,7 +247,7 @@ export function CampaignInquiryForm({
       {status === "error" && (
         <p className="col-span-full text-sm text-red-600">
           Something went wrong sending your request. Please email us directly
-          at markedminds@gmail.com.
+          at {site.email}.
         </p>
       )}
       <div className="col-span-full flex flex-col items-start gap-3">

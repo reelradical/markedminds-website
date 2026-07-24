@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import type { Campaign } from "@/lib/data/campaigns";
+import { site } from "@/lib/data/site";
 
 // Free lead-magnet email capture. Note: this records the request the same
 // way the general contact form does (server-side log, no email provider
@@ -92,7 +93,7 @@ export function StarterKitForm({ campaign }: { campaign: Campaign }) {
       </Button>
       {status === "error" && (
         <p className="text-sm text-red-400 sm:basis-full">
-          Something went wrong. Please email us directly at markedminds@gmail.com.
+          Something went wrong. Please email us directly at {site.email}.
         </p>
       )}
     </form>

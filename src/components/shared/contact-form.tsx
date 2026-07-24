@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { site } from "@/lib/data/site";
 
 const inquiryTypes = [
   "Parent or Family",
@@ -102,7 +103,7 @@ export function ContactForm() {
       {status === "error" && (
         <p className="col-span-full text-sm text-red-600">
           Something went wrong sending your message. Please email us directly
-          at markedminds@gmail.com.
+          at {site.email}.
         </p>
       )}
       <div className="col-span-full">
