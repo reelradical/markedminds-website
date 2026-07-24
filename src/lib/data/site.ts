@@ -12,6 +12,10 @@ export const site = {
   url: "https://markedminds.com",
   email: "markedminds@gmail.com",
   donationUrl: "https://square.link/u/KV2EedBz",
+  // Square Appointments buyer widget — injects its own floating "Book Now"
+  // button once loaded (no custom markup needed on our side).
+  squareAppointmentsWidgetSrc:
+    "https://square.site/appointments/buyer/widget/696czhxkh9n1bp/LWT3Q9ZWQZ3YR.js",
   social: {
     instagram: "https://www.instagram.com/markedminds",
     facebook: "https://www.facebook.com/markedminds",
