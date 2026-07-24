@@ -138,66 +138,147 @@ export const starterKit = {
 export type SupportOption = {
   name: string;
   duration?: string;
+  /** Shown when routing to the inquiry form (the default/fallback path — see bookingCtaLabel). */
   ctaLabel: string;
+  /** Shown instead of ctaLabel once a real bookingUrl exists. Falls back to ctaLabel if unset. */
+  bookingCtaLabel?: string;
   /** Must match a value in the inquiry form's service <select>. */
   serviceValue: string;
   icon: IconKey;
+  /** "fixed" = bookable now at an exact rate; "inquiry" = custom quote, price is a starting floor. */
+  pricingType: "fixed" | "inquiry";
+  /** Exact price (fixed) or starting floor (inquiry). Real rates — see docs/EDUCATIONAL_SERVICES_PRICING.md. */
+  price: number;
+  /** Appended after the price, e.g. " + travel". */
+  priceSuffix?: string;
   /**
-   * "Starting at" price, once approved — intentionally left unset for every
-   * option today. No dollar figures have been approved, so nothing here
-   * renders a price; setting this later is enough to display one via
-   * `formatStartingAt()`. Do not hardcode a number without sign-off.
+   * Direct Square Appointments booking URL for fixed-price services. When
+   * set, the service card CTA opens this instead of scrolling to the
+   * inquiry form — the client picks a time and pays in one step. Leave
+   * unset (not a placeholder string) until the real URL exists; the card
+   * falls back to the inquiry form automatically. See
+   * SQUARE_APPOINTMENTS_INTEGRATION.md.
    */
-  startingAtPrice?: number;
+  bookingUrl?: string;
 };
 
-export function formatStartingAt(option: SupportOption): string | null {
-  if (option.startingAtPrice == null) return null;
-  return `Starting at $${option.startingAtPrice}`;
+export function formatPrice(option: SupportOption): string {
+  const amount = `$${option.price}${option.priceSuffix ?? ""}`;
+  return option.pricingType === "fixed" ? amount : `Starting at ${amount}`;
+}
+
+/** Discounted price for a fixed-price option under a campaign's offer — null for inquiry-only options. */
+export function formatDiscountedPrice(
+  option: SupportOption,
+  offer: Pick<CampaignOffer, "discountPercent">,
+): string | null {
+  if (option.pricingType !== "fixed") return null;
+  const discounted = Math.round(option.price * (1 - offer.discountPercent / 100));
+  return `$${option.price} → $${discounted}`;
 }
 
 export const supportOptions: SupportOption[] = [
   {
-    name: "One-on-One Educator Consultation",
-    duration: "30 or 45 minutes",
-    ctaLabel: "Book a Consultation",
-    serviceValue: "One-on-one educator consultation",
+    name: "Educator Strategy Consultation",
+    duration: "30 minutes",
+    ctaLabel: "Request This Session",
+    bookingCtaLabel: "Book a Consultation",
+    serviceValue: "Educator Strategy Consultation",
     icon: "message-circle",
+    pricingType: "fixed",
+    price: 75,
   },
   {
     name: "AI-Supported Planning Session",
-    duration: "45 or 60 minutes",
-    ctaLabel: "Plan With AI",
-    serviceValue: "AI-supported lesson-planning session",
+    duration: "60 minutes",
+    ctaLabel: "Request This Session",
+    bookingCtaLabel: "Plan With AI",
+    serviceValue: "AI-Supported Planning Session",
     icon: "bot",
+    pricingType: "fixed",
+    price: 125,
   },
   {
-    name: "Coding in Your Classroom",
-    duration: "45 or 60 minutes",
-    ctaLabel: "Build a Coding Experience",
-    serviceValue: "Classroom coding integration session",
+    name: "Coding Integration Planning Session",
+    duration: "60 minutes",
+    ctaLabel: "Request This Session",
+    bookingCtaLabel: "Build a Coding Experience",
+    serviceValue: "Coding Integration Planning Session",
     icon: "code",
+    pricingType: "fixed",
+    price: 125,
   },
   {
-    name: "Team or Small-Group Training",
-    duration: "60–90 minutes",
+    name: "Team Training",
+    duration: "Custom",
     ctaLabel: "Request Team Training",
-    serviceValue: "Team or small-group training",
+    serviceValue: "Team Training",
     icon: "users",
+    pricingType: "inquiry",
+    price: 350,
   },
   {
-    name: "Custom Workshop or Resource Package",
-    ctaLabel: "Discuss a Custom Experience",
-    serviceValue: "Custom workshop",
+    name: "School-Wide Professional Development",
+    duration: "Custom",
+    ctaLabel: "Discuss School-Wide PD",
+    serviceValue: "School-Wide Professional Development",
+    icon: "graduation-cap",
+    pricingType: "inquiry",
+    price: 750,
+  },
+  {
+    name: "In-Person Sessions",
+    duration: "Custom",
+    ctaLabel: "Request an In-Person Session",
+    serviceValue: "In-Person Sessions",
+    icon: "handshake",
+    pricingType: "inquiry",
+    price: 200,
+    priceSuffix: " + travel",
+  },
+  {
+    name: "Custom Workshops",
+    duration: "Custom",
+    ctaLabel: "Discuss a Custom Workshop",
+    serviceValue: "Custom Workshops",
     icon: "briefcase",
+    pricingType: "inquiry",
+    price: 350,
+  },
+  {
+    name: "Custom Resource Packets",
+    duration: "Digital delivery",
+    ctaLabel: "Request a Resource Packet",
+    serviceValue: "Custom Resource Packets",
+    icon: "book-open",
+    pricingType: "inquiry",
+    price: 97,
+  },
+  {
+    name: "Travel-Based Engagements",
+    duration: "Custom",
+    ctaLabel: "Inquire About Travel",
+    serviceValue: "Travel-Based Engagements",
+    icon: "compass",
+    pricingType: "inquiry",
+    price: 500,
+    priceSuffix: " + travel",
+  },
+  {
+    name: "Large-Group Training",
+    duration: "20+ participants",
+    ctaLabel: "Request Large-Group Training",
+    serviceValue: "Large-Group Training",
+    icon: "target",
+    pricingType: "inquiry",
+    price: 500,
   },
 ];
 
 // Service <select> options for the inquiry form — a superset of the
-// support-option cards above (adds the two catch-all choices).
+// support-option cards above (adds the catch-all choice).
 export const serviceSelectOptions = [
   ...supportOptions.map((option) => option.serviceValue),
-  "Resource-development request",
   "Not sure—I need help choosing",
 ];
 
@@ -248,7 +329,11 @@ export const aboutDani = {
 export type FaqItem = { question: string; answer: string };
 
 // Approved copy — sign-off received; see ROADMAP.md pre-publish checklist.
-export const faqItems: FaqItem[] = [
+// A function of the offer (not a plain constant) because the "discount"
+// FAQ answer must stay accurate if a future campaign has a different
+// discountPercent — see howToUseOfferSteps() for the same pattern.
+export function faqItems(offer: Pick<CampaignOffer, "discountPercent">): FaqItem[] {
+  return [
   {
     question: "Do I need prior AI or coding experience?",
     answer:
@@ -272,39 +357,42 @@ export const faqItems: FaqItem[] = [
   {
     question: "Does the discount include custom materials?",
     answer:
-      "The discount applies to one qualifying session, consultation, or training. Any significant custom-resource development, printing, licensing, travel, or extended preparation will be scoped and priced separately before work begins.",
+      `The ${offer.discountPercent}% discount applies to fixed-price services. Custom resource development, team trainings, and other inquiry-based services aren't discounted the same way, but include a complimentary strategy consultation instead. Printing, licensing, and travel are always billed separately.`,
   },
   {
     question: "Does AI replace my professional judgment?",
     answer:
       "No. AI can serve as a planning and thought partner—a starting point rather than a substitute for your instructional expertise, professional judgment, creativity, or relationships with students.",
   },
-];
+  ];
+}
 
-// Approved copy explaining the two-step redemption flow: the website
-// records conference eligibility, but the discount itself is applied at
-// Square checkout. Shared/reusable across campaigns — only the code and
-// percentage are campaign-specific, so this stays a function of the
-// offer rather than hardcoded per page.
+// Explains the two-step redemption flow: the website records conference
+// eligibility, but the benefit itself — a percentage off or a free
+// consultation, depending on the service — is applied afterward, either
+// at Square checkout or when Dani follows up. Shared/reusable across
+// campaigns — only the code, percentage, and inquiry benefit are
+// campaign-specific, so this stays a function of the offer rather than
+// hardcoded per page.
 export const howToUseOfferHeading = "How to Use Your Conference Offer";
 
 export function howToUseOfferSteps(
-  offer: Pick<CampaignOffer, "code" | "discountPercent">,
+  offer: Pick<CampaignOffer, "code" | "discountPercent" | "inquiryBenefit">,
 ): string[] {
   return [
     "Explore the available educator services.",
-    "Submit a brief request describing the support you need.",
+    "Submit a brief request describing the support you need, and mention your code.",
     "Dani will confirm the recommended session, scope, availability, and price.",
-    "You will receive the appropriate Square checkout link.",
-    `Enter code ${offer.code} at checkout to receive ${offer.discountPercent}% off one qualifying session, consultation, or training.`,
+    `Fixed-price services: you'll receive a Square checkout link — enter code ${offer.code} for ${offer.discountPercent}% off.`,
+    `Custom or inquiry-based services: mentioning ${offer.code} in your request gets you ${offer.inquiryBenefit}.`,
   ];
 }
 
 export const howToUseOfferEligibilityNote =
-  "Your inquiry form records your conference eligibility, but the discount is applied when you enter the code during Square checkout.";
+  "Your inquiry form records your conference eligibility. Fixed-price discounts are applied at Square checkout; the complimentary consultation for custom services is confirmed when Dani follows up.";
 
 export const howToUseOfferExclusionsNote =
-  "Custom materials, printing, licensing, travel, and extended development may be quoted separately and may not qualify for the promotional discount.";
+  "Travel expenses, printing, and licensing are billed separately from any listed price and are not part of the promotional discount.";
 
 export const finalCta = {
   headline: "Let's Make Innovation Feel Useful Again.",

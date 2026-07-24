@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import { serviceSelectOptions } from "@/lib/data/campaign-content";
-import type { Campaign } from "@/lib/data/campaigns";
+import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
 
 const roleOptions = [
   "Early childhood educator",
@@ -87,8 +87,15 @@ export function CampaignInquiryForm({
           conference offer has been recorded.
         </p>
         <p className="max-w-md text-sm font-medium text-ink">
-          Next step: Watch your email for your recommended service and secure
-          Square checkout link.
+          Dani will personally review your request and follow up by email.
+          Fixed-price sessions may include a direct Square booking link;
+          custom or team requests will be scoped with you first. Your{" "}
+          {campaign.offer.code} benefit ({campaign.offer.discountPercent}% off
+          fixed-price services, or a complimentary strategy consultation for
+          custom requests){" "}
+          {formatOfferExpiration(campaign.offer)
+            ? `is valid through ${formatOfferExpiration(campaign.offer)}.`
+            : "has been recorded."}
         </p>
       </div>
     );
@@ -226,8 +233,10 @@ export function CampaignInquiryForm({
           className="bg-mist text-charcoal/70"
         />
         <p className="text-xs leading-5 text-charcoal/50">
-          This records your conference eligibility. You&apos;ll enter this
-          code again at Square checkout to apply your discount.
+          This records your conference eligibility. For fixed-price
+          services, you&apos;ll enter this code again at Square checkout.
+          For custom or inquiry-based services, it&apos;s already included
+          with this request.
         </p>
       </div>
 

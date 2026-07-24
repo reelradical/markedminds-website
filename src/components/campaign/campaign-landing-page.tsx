@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
@@ -13,7 +14,8 @@ import {
   helpCards,
   starterKit,
   supportOptions,
-  formatStartingAt,
+  formatPrice,
+  formatDiscountedPrice,
   realWorldExperience,
   aboutDani,
   faqItems,
@@ -67,6 +69,9 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
 
   return (
     <>
+      {site.squareAppointmentsWidgetSrc && (
+        <Script src={site.squareAppointmentsWidgetSrc} strategy="lazyOnload" />
+      )}
       {/* 1. Exclusive Offer Banner */}
       <div className="bg-ink px-6 py-2.5 text-center text-xs font-semibold uppercase tracking-[0.15em] text-white sm:text-sm">
         Exclusive for {campaign.partnerName} {campaign.eventName} Participants
@@ -246,8 +251,9 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
               Your {campaign.partnerName} Conference Exclusive
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-balance text-lg leading-7 text-white/70">
-              Receive {campaign.offer.discountPercent}% off one qualifying
-              Marked Minds educator session, consultation, or training.
+              Receive {campaign.offer.discountPercent}% off a fixed-price
+              Marked Minds educator service, or a free strategy consultation
+              with any custom request.
             </p>
 
             <div className="mx-auto mt-8 flex max-w-xs flex-col items-center gap-4 rounded-2xl border border-brand-orange/30 bg-brand-orange/10 p-6">
@@ -267,13 +273,23 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-8 text-left sm:grid-cols-2">
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/50">
-                  Eligible services
+                  {campaign.offer.discountPercent}% off fixed-price services
                 </h3>
                 <ul className="mt-3 flex flex-col gap-2 text-sm leading-6 text-white/80">
-                  {campaign.offer.eligibleServices.map((service) => (
-                    <li key={service}>{service}</li>
-                  ))}
+                  {supportOptions
+                    .filter((option) => option.pricingType === "fixed")
+                    .map((option) => (
+                      <li key={option.name} className="flex items-baseline justify-between gap-3">
+                        <span>{option.name}</span>
+                        <span className="whitespace-nowrap text-white/60">
+                          {formatDiscountedPrice(option, campaign.offer)}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
+                <p className="mt-4 text-sm leading-6 text-white/60">
+                  Custom or inquiry-based services: {campaign.offer.inquiryBenefit}.
+                </p>
               </div>
               <div>
                 <h3 className="text-sm font-semibold uppercase tracking-[0.15em] text-white/50">
@@ -344,19 +360,36 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
                     {option.duration && (
                       <p className="mt-1 text-sm text-charcoal/50">{option.duration}</p>
                     )}
-                    {formatStartingAt(option) && (
-                      <p className="mt-1 text-sm font-medium text-brand-orange-dark">
-                        {formatStartingAt(option)}
-                      </p>
-                    )}
+                    <p className="mt-1 text-sm font-medium text-brand-orange-dark">
+                      {formatPrice(option)}
+                    </p>
                   </div>
-                  <Button
-                    variant="outline"
-                    className="mt-auto"
-                    onClick={() => handleChooseSupport(option.serviceValue)}
-                  >
-                    {option.ctaLabel}
-                  </Button>
+                  {option.bookingUrl ? (
+                    <a
+                      href={option.bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto"
+                      onClick={() =>
+                        trackEvent(`${campaign.slug}_book_fixed`, {
+                          service: option.serviceValue,
+                          campaign: campaign.analytics.campaign,
+                        })
+                      }
+                    >
+                      <Button variant="outline" className="w-full">
+                        {option.bookingCtaLabel ?? option.ctaLabel}
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="mt-auto"
+                      onClick={() => handleChooseSupport(option.serviceValue)}
+                    >
+                      {option.ctaLabel}
+                    </Button>
+                  )}
                 </AnimatedSection>
               );
             })}
@@ -480,7 +513,7 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             className="mx-auto"
           />
           <div className="mt-12 flex flex-col gap-6">
-            {faqItems.map((item, i) => (
+            {faqItems(campaign.offer).map((item, i) => (
               <AnimatedSection
                 key={item.question}
                 delay={i * 0.04}

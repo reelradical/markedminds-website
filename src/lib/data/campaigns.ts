@@ -8,9 +8,12 @@
 // `src/app/<slug>/page.tsx` that renders <CampaignLandingPage campaign={campaigns.<slug>} />.
 
 export type CampaignOffer = {
-  /** Promo code participants enter/quote, e.g. "B2S10". */
+  /** Promo code participants enter/quote, e.g. "B2S20". */
   code: string;
+  /** Percent off — applies only to fixed-price services (see SupportOption.pricingType). */
   discountPercent: number;
+  /** What inquiry-only (custom-quote) services get instead of a percentage off. */
+  inquiryBenefit: string;
   /** ISO date (YYYY-MM-DD) the event ends — kept for traceability of expirationDate below. */
   eventEndDate: string;
   /** Booking window, in days, counted from eventEndDate — used only to compute expirationDate. */
@@ -22,7 +25,6 @@ export type CampaignOffer = {
    * expiration off the page entirely until a real date lands here.
    */
   expirationDate: string | null;
-  eligibleServices: string[];
   /** Fixed terms bullets beyond the auto-generated expiration-date line. */
   otherTerms: string[];
 };
@@ -73,7 +75,7 @@ export const campaigns = {
     approvedFraming:
       "An exclusive opportunity created for Black2SchoolMvmt conference participants.",
     heroBadge:
-      "Save 10% on one qualifying session, consultation, or training.",
+      "Save 20% on fixed-price services, or get a free strategy consultation with any custom request.",
     // Official logo, confirmed by Dani as what's live on Black2SchoolMvmt's
     // own website/FB/IG — approved for use here.
     partnerLogo: {
@@ -83,24 +85,19 @@ export const campaigns = {
       height: 471,
     },
     offer: {
-      code: "B2S10",
-      discountPercent: 10,
+      code: "B2S20",
+      discountPercent: 20,
+      inquiryBenefit:
+        "a complimentary 30-minute Educator Strategy Consultation ($75 value) before your custom quote — no commitment required",
       // Conference confirmed: July 23–26, 2026.
       eventEndDate: "2026-07-26",
       expirationDays: 30,
       // Confirmed: eventEndDate + expirationDays = August 25, 2026.
       expirationDate: "2026-08-25",
-      eligibleServices: [
-        "One-on-one educator consultation",
-        "AI-supported lesson-planning session",
-        "Classroom coding integration session",
-        "Small-group or grade-level training",
-        "Customized educator workshop",
-      ],
       otherTerms: [
-        "Valid for one qualifying service per conference participant",
+        "20% off applies to fixed-price services only, one per conference participant",
+        "The complimentary consultation applies once per conference participant",
         "Subject to scheduling and availability",
-        "Travel, extended training, and significant custom-resource development may be priced separately",
         "Cannot be combined with another promotional offer",
         "Final scope and deliverables must be confirmed before work begins",
       ],
