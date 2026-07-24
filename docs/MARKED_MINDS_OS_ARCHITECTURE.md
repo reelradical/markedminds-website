@@ -7,6 +7,25 @@ photo/asset gaps, see `docs/ASSET_CHECKLIST.md`. For version history, see
 
 ---
 
+## Status: Resend + Transactional Email Workflows — COMPLETE
+
+- ✅ Resend connected and live
+- ✅ React Email templates built (`src/emails/` — see `STYLE_GUIDE.md` for the shared voice/design conventions)
+- ✅ Black2School confirmation + internal notification live
+- ✅ Focus + FLEX confirmation + internal notification live
+- ✅ Airtable + Task creation verified (multiple live end-to-end tests, both local and production)
+- ✅ Production deployment verified (`fed6851`, confirmed via GitHub deployment status, not assumed)
+- ⚠️ Mobile rendering — **not independently verified.** No real device or browser-automation tool (Playwright) was available in this environment; a headless-Chrome CLI screenshot attempt at a narrow viewport was inconclusive and confirmed (via a plain-HTML control test) to be a limitation of that specific tool, not a template bug. The markup uses standard responsive email patterns (max-width container, fluid table-based Sections), but this should get a real manual check (e.g. forward a test email to a phone) before being treated as fully confirmed.
+- ⚠️ QA records — **partially deleted.** All 5 test Intake Queue records were deleted and confirmed gone via search. Their 5 linked Task records could **not** be deleted — the Airtable API token has no write (or even read) access to the Tasks table, only Intake Queue. These are now orphaned and need manual deletion in Airtable's UI: `rec171cPgx4UdNpzH`, `rec8yCTSb39D2twBv`, `recAt6eZkE5xj9jqZ`, `rechkfkvbNHgnTovX`, `rec7WSC0ESqH47uID`.
+
+**Status:** Complete
+**Deployed:** `fed6851`
+**Owner:** Dani
+**Last verified:** July 24, 2026
+**Next review:** when adding a new form or email template
+
+---
+
 ## Current architecture
 
 ```

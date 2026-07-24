@@ -16,7 +16,9 @@ export function BaseEmail({
 }) {
   return (
     <Html lang="en">
-      <Head />
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       {previewText && <Preview>{previewText}</Preview>}
       <Body
         style={{
