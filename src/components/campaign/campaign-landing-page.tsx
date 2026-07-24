@@ -24,6 +24,9 @@ import {
   howToUseOfferSteps,
   howToUseOfferEligibilityNote,
   howToUseOfferExclusionsNote,
+  fixedPricePurchaseNotice,
+  PURCHASE_CTA_LABEL,
+  type SupportOption,
 } from "@/lib/data/campaign-content";
 import { iconMap } from "@/lib/icon-map";
 import { AnimatedSection } from "@/components/shared/animated-section";
@@ -65,6 +68,61 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
       via: "card",
     });
     scrollToId("inquiry-form");
+  }
+
+  const fixedOptions = supportOptions.filter((option) => option.pricingType === "fixed");
+  const inquiryOptions = supportOptions.filter((option) => option.pricingType === "inquiry");
+
+  function renderSupportCard(option: SupportOption, i: number) {
+    const Icon = iconMap[option.icon];
+    return (
+      <AnimatedSection
+        key={option.name}
+        delay={i * 0.06}
+        className="flex flex-col gap-4 rounded-2xl border border-ink/8 bg-white p-7"
+      >
+        <div className="flex size-12 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange-dark">
+          <Icon className="size-5" aria-hidden="true" />
+        </div>
+        <div>
+          <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
+            {option.name}
+          </h3>
+          {option.duration && (
+            <p className="mt-1 text-sm text-charcoal/50">{option.duration}</p>
+          )}
+          <p className="mt-1 text-sm font-medium text-brand-orange-dark">
+            {formatPrice(option)}
+          </p>
+        </div>
+        {option.paymentUrl ? (
+          <a
+            href={option.paymentUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-auto"
+            onClick={() =>
+              trackEvent(`${campaign.slug}_purchase_fixed`, {
+                service: option.serviceValue,
+                campaign: campaign.analytics.campaign,
+              })
+            }
+          >
+            <Button variant="outline" className="w-full">
+              {PURCHASE_CTA_LABEL}
+            </Button>
+          </a>
+        ) : (
+          <Button
+            variant="outline"
+            className="mt-auto"
+            onClick={() => handleChooseSupport(option.serviceValue)}
+          >
+            {option.ctaLabel}
+          </Button>
+        )}
+      </AnimatedSection>
+    );
   }
 
   return (
@@ -341,58 +399,25 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             align="center"
             className="mx-auto"
           />
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {supportOptions.map((option, i) => {
-              const Icon = iconMap[option.icon];
-              return (
-                <AnimatedSection
-                  key={option.name}
-                  delay={i * 0.06}
-                  className="flex flex-col gap-4 rounded-2xl border border-ink/8 bg-white p-7"
-                >
-                  <div className="flex size-12 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange-dark">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
-                      {option.name}
-                    </h3>
-                    {option.duration && (
-                      <p className="mt-1 text-sm text-charcoal/50">{option.duration}</p>
-                    )}
-                    <p className="mt-1 text-sm font-medium text-brand-orange-dark">
-                      {formatPrice(option)}
-                    </p>
-                  </div>
-                  {option.bookingUrl ? (
-                    <a
-                      href={option.bookingUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto"
-                      onClick={() =>
-                        trackEvent(`${campaign.slug}_book_fixed`, {
-                          service: option.serviceValue,
-                          campaign: campaign.analytics.campaign,
-                        })
-                      }
-                    >
-                      <Button variant="outline" className="w-full">
-                        {option.bookingCtaLabel ?? option.ctaLabel}
-                      </Button>
-                    </a>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="mt-auto"
-                      onClick={() => handleChooseSupport(option.serviceValue)}
-                    >
-                      {option.ctaLabel}
-                    </Button>
-                  )}
-                </AnimatedSection>
-              );
-            })}
+
+          <p className="mx-auto mt-8 max-w-2xl text-balance text-center text-sm font-medium text-ink">
+            {campaign.partnerName} attendees receive {campaign.offer.discountPercent}% off
+            {formatOfferExpiration(campaign.offer)
+              ? ` through ${formatOfferExpiration(campaign.offer)}`
+              : ""}
+            . Enter code {campaign.offer.code} during secure Square checkout.
+          </p>
+
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {fixedOptions.map((option, i) => renderSupportCard(option, i))}
+          </div>
+
+          <p className="mx-auto mt-6 max-w-2xl text-balance text-center text-sm text-charcoal/60">
+            {fixedPricePurchaseNotice}
+          </p>
+
+          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {inquiryOptions.map((option, i) => renderSupportCard(option, i))}
           </div>
         </div>
       </section>

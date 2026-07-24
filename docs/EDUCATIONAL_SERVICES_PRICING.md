@@ -14,7 +14,7 @@ This document outlines the current service offerings, pricing rationale, and con
 **Code:** `B2S20`
 **Who it's for:** Black2SchoolMVMT conference attendees
 **Expiration:** August 25, 2026 (30 days after the conference's July 26, 2026 end date — confirmed, live on the site)
-**Where to apply:** At Square checkout once direct booking links are live; until then, submitted through the inquiry form on markedminds.com/black2school
+**Where to apply:** At Square checkout, entered manually by the client — the website does not apply it automatically
 
 This code unlocks **two benefits** depending on the service:
 
@@ -30,9 +30,10 @@ This code unlocks **two benefits** depending on the service:
 
 ## Fixed-Price Services
 
-These services have a fixed, pre-approved rate — no custom quote needed. Direct online booking
-(pick a time and pay in one step) is designed but not yet live; until Square Appointments booking
-links are configured, requests go through the inquiry form and Dani follows up manually.
+These services have a fixed, pre-approved rate — no custom quote needed. Each has a live Square
+Payment Link: payment happens immediately (no time-slot picker), and Dani follows up within one
+business day to schedule the actual session. A purchase does not by itself assign an appointment
+time.
 
 ---
 

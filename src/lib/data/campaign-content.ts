@@ -135,31 +135,33 @@ export const starterKit = {
   ctaLabel: "Get the Free Starter Kit",
 };
 
+/** Uniform CTA label for any fixed-price service once its Square Payment Link is live. */
+export const PURCHASE_CTA_LABEL = "Purchase & Schedule";
+
 export type SupportOption = {
   name: string;
   duration?: string;
-  /** Shown when routing to the inquiry form (the default/fallback path — see bookingCtaLabel). */
+  /** Shown when routing to the inquiry form (the default/fallback path, and for all inquiry-only options). */
   ctaLabel: string;
-  /** Shown instead of ctaLabel once a real bookingUrl exists. Falls back to ctaLabel if unset. */
-  bookingCtaLabel?: string;
   /** Must match a value in the inquiry form's service <select>. */
   serviceValue: string;
   icon: IconKey;
-  /** "fixed" = bookable now at an exact rate; "inquiry" = custom quote, price is a starting floor. */
+  /** "fixed" = pay now via Square Payment Link; "inquiry" = custom quote, price is a starting floor. */
   pricingType: "fixed" | "inquiry";
   /** Exact price (fixed) or starting floor (inquiry). Real rates — see docs/EDUCATIONAL_SERVICES_PRICING.md. */
   price: number;
   /** Appended after the price, e.g. " + travel". */
   priceSuffix?: string;
   /**
-   * Direct Square Appointments booking URL for fixed-price services. When
-   * set, the service card CTA opens this instead of scrolling to the
-   * inquiry form — the client picks a time and pays in one step. Leave
-   * unset (not a placeholder string) until the real URL exists; the card
-   * falls back to the inquiry form automatically. See
-   * SQUARE_APPOINTMENTS_INTEGRATION.md.
+   * Square Payment Link for fixed-price services. Payment happens
+   * immediately at this link; scheduling is coordinated afterward by Dani
+   * (see fixedPricePurchaseNotice below) — this is NOT a Square
+   * Appointments booking page and has no time-slot picker. When set, the
+   * card CTA opens this instead of scrolling to the inquiry form. Leave
+   * unset (not a placeholder string) until the real link exists; the card
+   * falls back to the inquiry form automatically.
    */
-  bookingUrl?: string;
+  paymentUrl?: string;
 };
 
 export function formatPrice(option: SupportOption): string {
@@ -182,31 +184,31 @@ export const supportOptions: SupportOption[] = [
     name: "Educator Strategy Consultation",
     duration: "30 minutes",
     ctaLabel: "Request This Session",
-    bookingCtaLabel: "Book a Consultation",
     serviceValue: "Educator Strategy Consultation",
     icon: "message-circle",
     pricingType: "fixed",
     price: 75,
+    paymentUrl: "https://square.link/u/9xlhrR58",
   },
   {
     name: "AI-Supported Planning Session",
     duration: "60 minutes",
     ctaLabel: "Request This Session",
-    bookingCtaLabel: "Plan With AI",
     serviceValue: "AI-Supported Planning Session",
     icon: "bot",
     pricingType: "fixed",
     price: 125,
+    paymentUrl: "https://square.link/u/vURRSzzs",
   },
   {
     name: "Coding Integration Planning Session",
     duration: "60 minutes",
     ctaLabel: "Request This Session",
-    bookingCtaLabel: "Build a Coding Experience",
     serviceValue: "Coding Integration Planning Session",
     icon: "code",
     pricingType: "fixed",
     price: 125,
+    paymentUrl: "https://square.link/u/jspKFIyA",
   },
   {
     name: "Team Training",
@@ -393,6 +395,13 @@ export const howToUseOfferEligibilityNote =
 
 export const howToUseOfferExclusionsNote =
   "Travel expenses, printing, and licensing are billed separately from any listed price and are not part of the promotional discount.";
+
+// Shown beneath the fixed-price service cards. Payment via Square Payment
+// Link happens immediately; scheduling is a separate, manual follow-up —
+// this notice exists specifically so a completed purchase is never mistaken
+// for a confirmed appointment time.
+export const fixedPricePurchaseNotice =
+  "After your purchase is complete, Marked Minds will contact you within one business day to coordinate your session. Purchasing a session does not automatically assign an appointment time.";
 
 export const finalCta = {
   headline: "Let's Make Innovation Feel Useful Again.",
