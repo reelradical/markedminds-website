@@ -13,7 +13,22 @@
 // If any are unset, sendEmail() returns a clear failure — it never throws
 // and never fabricates success.
 
+import { render } from "@react-email/render";
+import type { ReactElement } from "react";
+
 const RESEND_API_URL = "https://api.resend.com/emails";
+
+// Bridges the src/emails/ React Email templates into sendEmail()'s plain
+// {html, text} contract, so there's one send pathway regardless of whether
+// the caller built its HTML by hand (buildFieldListEmail) or as a
+// component tree.
+export async function renderEmail(element: ReactElement): Promise<{ html: string; text: string }> {
+  const [html, text] = await Promise.all([
+    render(element),
+    render(element, { plainText: true }),
+  ]);
+  return { html, text };
+}
 
 export type EmailResult = { ok: true } | { ok: false; error: string };
 
