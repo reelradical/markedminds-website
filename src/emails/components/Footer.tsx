@@ -3,35 +3,31 @@ import { Section, Text, Link, Hr } from "@react-email/components";
 import { emailBrand } from "@/emails/brand";
 import { site } from "@/lib/data/site";
 
-// Deliberately does not include a physical mailing address — none exists
-// in site.ts today (only site.address.locality = "United States"). Add
-// one here if/when a real address is confirmed; do not fabricate one for
-// CAN-SPAM-style footer completeness.
+// Subtle brand-recall footer — the pillars line is the same one used
+// sitewide (site.pillarsLine, e.g. the homepage hero), reused here rather
+// than inventing new footer copy, so the email stays recognizably
+// "Marked Minds" even without the logo. Contact info lives in Signature,
+// not here, so it isn't repeated twice in one email.
 export function Footer() {
   return (
-    <Section style={{ padding: "24px 40px 32px" }}>
+    <Section style={{ padding: "8px 40px 32px", textAlign: "center" }}>
       <Hr style={{ borderColor: emailBrand.silver, margin: "0 0 20px" }} />
       <Text
         style={{
-          fontSize: "13px",
-          lineHeight: "20px",
+          fontSize: "11px",
+          fontWeight: 600,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
           color: emailBrand.charcoal,
-          margin: "0 0 4px",
+          opacity: 0.55,
+          margin: "0 0 6px",
         }}
       >
-        {site.legalName}
+        {site.pillarsLine}
       </Text>
-      <Text
-        style={{
-          fontSize: "13px",
-          lineHeight: "20px",
-          color: emailBrand.charcoal,
-          margin: 0,
-        }}
-      >
-        Questions? Email{" "}
-        <Link href={`mailto:${site.email}`} style={{ color: emailBrand.orangeDark }}>
-          {site.email}
+      <Text style={{ fontSize: "13px", color: emailBrand.charcoal, opacity: 0.7, margin: 0 }}>
+        <Link href={site.url} style={{ color: emailBrand.charcoal, textDecoration: "none" }}>
+          markedminds.com
         </Link>
       </Text>
     </Section>

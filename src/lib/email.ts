@@ -33,25 +33,28 @@ export async function renderEmail(element: ReactElement): Promise<{ html: string
 export type EmailResult = { ok: true } | { ok: false; error: string };
 
 export async function sendEmail({
+  to,
   subject,
   html,
   text,
   replyTo,
 }: {
+  /** Recipient override — defaults to CAMPAIGN_INQUIRY_TO_EMAIL (the internal notification inbox) when omitted. */
+  to?: string;
   subject: string;
   html: string;
   text: string;
   replyTo?: string;
 }): Promise<EmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CAMPAIGN_INQUIRY_TO_EMAIL;
+  const recipient = to || process.env.CAMPAIGN_INQUIRY_TO_EMAIL;
   const from = process.env.CAMPAIGN_FROM_EMAIL;
 
-  if (!apiKey || !to || !from) {
+  if (!apiKey || !recipient || !from) {
     return {
       ok: false,
       error:
-        "Email delivery is not configured — missing RESEND_API_KEY, CAMPAIGN_INQUIRY_TO_EMAIL, or CAMPAIGN_FROM_EMAIL.",
+        "Email delivery is not configured — missing RESEND_API_KEY, CAMPAIGN_FROM_EMAIL, or a recipient (pass `to`, or set CAMPAIGN_INQUIRY_TO_EMAIL).",
     };
   }
 
@@ -64,7 +67,7 @@ export async function sendEmail({
       },
       body: JSON.stringify({
         from,
-        to,
+        to: recipient,
         subject,
         html,
         text,

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
+import { createElement } from "react";
 
+import { sendEmail, renderEmail } from "@/lib/email";
 import { saveIntake } from "@/lib/airtable";
+import { NewInquiryNotification } from "@/emails/internal/NewInquiryNotification";
+import { InterestConfirmation } from "@/emails/focus-flex/InterestConfirmation";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 200;
@@ -26,12 +30,19 @@ function parseName(fullName: string): { firstName?: string; lastName?: string } 
 }
 
 // Focus + FLEX Session II interest-list capture, added while Session II is
-// postponed (see src/lib/data/academy.ts). Routes straight into the
-// Airtable Intake Queue as its own intake source — no Resend notification
-// for these yet (intentional, per direct instruction). Never blocks the
-// user-facing response on Airtable being unavailable; logs a sanitized
-// error server-side instead. Does not touch Black2School's flow or
-// /api/contact.
+// postponed (see src/lib/data/academy.ts). Does not touch Black2School's
+// flow or /api/contact.
+//
+// Submission flow (mirrors campaign-inquiry's, do not reorder):
+//   1. Validate + sanitize.
+//   2. Send the internal Resend notification (NewInquiryNotification). If
+//      this fails, stop and return an error — never create an Intake
+//      Queue record without a corresponding notification.
+//   3. Best-effort: send the customer-facing InterestConfirmation.
+//      Failure here does NOT block the response.
+//   4. Write to the Airtable Intake Queue. Never blocks the user-facing
+//      response on Airtable being unavailable; logs a sanitized error
+//      server-side instead.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as InterestPayload | null;
 
@@ -43,6 +54,46 @@ export async function POST(request: Request) {
   }
 
   const { firstName, lastName } = parseName(name);
+
+  const { html, text } = await renderEmail(
+    createElement(NewInquiryNotification, {
+      title: `New Focus + FLEX interest signup: ${name || email}`,
+      fields: [
+        { label: "Name", value: name || "Not provided" },
+        { label: "Email", value: email },
+        { label: "Campaign", value: "focus-flex-interest" },
+        { label: "Referral source", value: "Website" },
+      ],
+    }),
+  );
+
+  const emailResult = await sendEmail({
+    subject: `New Focus + FLEX interest signup: ${name || email}`,
+    html,
+    text,
+    replyTo: email,
+  });
+
+  if (!emailResult.ok) {
+    console.error("[focus-flex-interest] Notification email delivery failed:", emailResult.error);
+    return NextResponse.json(
+      { error: "We couldn't process your request right now. Please try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  // Best-effort customer-facing confirmation — never blocks the response.
+  const confirmationResult = await sendEmail({
+    to: email,
+    subject: "You're on the Focus + FLEX Academy interest list",
+    ...(await renderEmail(createElement(InterestConfirmation, { firstName }))),
+  });
+  if (!confirmationResult.ok) {
+    console.error(
+      "[focus-flex-interest] Confirmation email delivery failed:",
+      confirmationResult.error,
+    );
+  }
 
   const intakeResult = await saveIntake({
     firstName,

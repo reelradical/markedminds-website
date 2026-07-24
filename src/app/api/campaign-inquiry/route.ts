@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { createElement } from "react";
 
-import { sendEmail, buildFieldListEmail } from "@/lib/email";
+import { sendEmail, renderEmail } from "@/lib/email";
 import { saveIntake } from "@/lib/airtable";
+import { campaigns, formatOfferExpiration } from "@/lib/data/campaigns";
+import { NewInquiryNotification } from "@/emails/internal/NewInquiryNotification";
+import { InquiryConfirmation } from "@/emails/educator/InquiryConfirmation";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 2000;
@@ -49,16 +53,20 @@ const NEXT_ACTION = "Review educator inquiry and respond";
 //
 // Submission flow (do not reorder):
 //   1. Validate + sanitize.
-//   2. Send the Resend notification email. If this fails, stop and return
-//      an error — never create an Intake Queue record without a
-//      corresponding notification, and never claim success when nothing
-//      was delivered.
-//   3. On email success, write the lead to the Airtable Intake Queue
-//      (saveIntake() itself checks for a same-email/same-campaign record
-//      created in the last few minutes and skips creating a duplicate).
-//      If Airtable fails, still return success to the caller (the lead
-//      WAS captured via email) but log a short, sanitized error server-
-//      side — never the full payload, never credentials.
+//   2. Send the internal Resend notification (NewInquiryNotification). If
+//      this fails, stop and return an error — never create an Intake
+//      Queue record without a corresponding notification, and never claim
+//      success when nothing was delivered.
+//   3. Best-effort: send the customer-facing InquiryConfirmation. Failure
+//      here does NOT block the response — staff already have the
+//      notification from step 2, so this is a degraded experience, not a
+//      lost inquiry.
+//   4. Write the lead to the Airtable Intake Queue (saveIntake() itself
+//      checks for a same-email/same-campaign record created in the last
+//      few minutes and skips creating a duplicate). If Airtable fails,
+//      still return success to the caller (the lead WAS captured via
+//      email) but log a short, sanitized error server-side — never the
+//      full payload, never credentials.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as CampaignInquiryPayload | null;
 
@@ -91,26 +99,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });
   }
 
-  const { html, text } = buildFieldListEmail(
-    `New ${campaign || "campaign"} inquiry: ${firstName} ${lastName}`,
-    [
-      ["Participant name", `${firstName} ${lastName}`],
-      ["Email", email],
-      ["Organization", organization],
-      ["Role", role],
-      ["Grade/age group", gradeLevel],
-      ["Service of interest", service],
-      ["Preferred format", format],
-      ["Goal / challenge", goal],
-      ["Preferred timing", timing || "Not specified"],
-      ["Offer code", offerCode || "None"],
-      ["Campaign", campaign || "Not specified"],
-      ["Referral source", source || "Not specified"],
-    ],
+  const subject = `New ${campaign || "campaign"} inquiry: ${firstName} ${lastName}`;
+  const { html, text } = await renderEmail(
+    createElement(NewInquiryNotification, {
+      title: subject,
+      fields: [
+        { label: "Participant name", value: `${firstName} ${lastName}` },
+        { label: "Email", value: email },
+        { label: "Organization", value: organization },
+        { label: "Role", value: role },
+        { label: "Grade/age group", value: gradeLevel },
+        { label: "Service of interest", value: service },
+        { label: "Preferred format", value: format },
+        { label: "Goal / challenge", value: goal },
+        { label: "Preferred timing", value: timing || "Not specified" },
+        { label: "Offer code", value: offerCode || "None" },
+        { label: "Campaign", value: campaign || "Not specified" },
+        { label: "Referral source", value: source || "Not specified" },
+      ],
+    }),
   );
 
   const emailResult = await sendEmail({
-    subject: `New ${campaign || "campaign"} inquiry: ${firstName} ${lastName}`,
+    subject,
     html,
     text,
     replyTo: email,
@@ -122,6 +133,36 @@ export async function POST(request: Request) {
       { error: "We couldn't deliver your request right now. Please try again shortly." },
       { status: 502 },
     );
+  }
+
+  // Best-effort customer-facing confirmation — never blocks the response.
+  // Internal staff already have the notification above, so a failure here
+  // is a degraded experience, not a lost inquiry.
+  const matchedCampaign = Object.values(campaigns).find((c) => c.analytics.campaign === campaign);
+  if (matchedCampaign) {
+    const { html: confirmationHtml, text: confirmationText } = await renderEmail(
+      createElement(InquiryConfirmation, {
+        firstName,
+        partnerName: matchedCampaign.partnerName,
+        offerCode: matchedCampaign.offer.code,
+        discountPercent: matchedCampaign.offer.discountPercent,
+        expirationDate: formatOfferExpiration(matchedCampaign.offer),
+      }),
+    );
+    const confirmationResult = await sendEmail({
+      to: email,
+      subject: "Your Marked Minds educator inquiry has been received",
+      html: confirmationHtml,
+      text: confirmationText,
+    });
+    if (!confirmationResult.ok) {
+      console.error(
+        "[campaign-inquiry] Confirmation email delivery failed:",
+        confirmationResult.error,
+      );
+    }
+  } else {
+    console.error(`[campaign-inquiry] No matching campaign for analytics id "${campaign}" — confirmation email skipped.`);
   }
 
   const intakeResult = await saveIntake({
