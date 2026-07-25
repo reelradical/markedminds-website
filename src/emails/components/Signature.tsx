@@ -14,7 +14,7 @@ export function Signature({ closing = "Looking forward to connecting," }: { clos
         {closing}
       </Text>
       <Text style={{ fontSize: "15px", lineHeight: "22px", color: emailBrand.ink, margin: 0, fontWeight: 600 }}>
-        Danielle Cummings
+        Dani Cummings
       </Text>
       <Text style={{ fontSize: "14px", lineHeight: "20px", color: emailBrand.charcoal, margin: "2px 0 0" }}>
         Founder &amp; Creative Director

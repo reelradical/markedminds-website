@@ -80,7 +80,7 @@ Renders as:
 ```
 Looking forward to connecting,
 
-Danielle Cummings
+Dani Cummings
 Founder & Creative Director
 Marked Minds LLC
 
