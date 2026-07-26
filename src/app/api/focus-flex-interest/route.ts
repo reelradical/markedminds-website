@@ -3,6 +3,7 @@ import { createElement } from "react";
 
 import { sendEmail, renderEmail } from "@/lib/email";
 import { saveIntake } from "@/lib/airtable";
+import { isBotSubmission } from "@/lib/spam-guard";
 import { NewInquiryNotification } from "@/emails/internal/NewInquiryNotification";
 import { InterestConfirmation } from "@/emails/focus-flex/InterestConfirmation";
 
@@ -45,6 +46,12 @@ function parseName(fullName: string): { firstName?: string; lastName?: string } 
 //      server-side instead.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as InterestPayload | null;
+
+  // Silently accept-and-discard suspected bot traffic — no email, no
+  // Airtable write, same {ok:true} a real success gets. See spam-guard.ts.
+  if (isBotSubmission(body as Record<string, unknown> | null)) {
+    return NextResponse.json({ ok: true });
+  }
 
   const name = clean(body?.name);
   const email = clean(body?.email);

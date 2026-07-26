@@ -6,6 +6,7 @@ import { Check, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { HoneypotField } from "@/components/shared/honeypot-field";
 import { trackEvent } from "@/lib/analytics";
 import type { Campaign } from "@/lib/data/campaigns";
 import { site } from "@/lib/data/site";
@@ -87,6 +88,7 @@ export function StarterKitForm({ campaign }: { campaign: Campaign }) {
       </div>
       <input type="hidden" name="campaign" value={campaign.analytics.campaign} />
       <input type="hidden" name="source" value={campaign.analytics.source} />
+      <HoneypotField />
       <Button type="submit" variant="orange" disabled={status === "loading"} className="shrink-0">
         {status === "loading" && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
         Get the Free Starter Kit

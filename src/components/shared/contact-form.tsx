@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { HoneypotField } from "@/components/shared/honeypot-field";
 import { site } from "@/lib/data/site";
 
 const inquiryTypes = [
@@ -100,6 +101,7 @@ export function ContactForm() {
         <Label htmlFor="message">Message</Label>
         <Textarea id="message" name="message" required rows={6} />
       </div>
+      <HoneypotField />
       {status === "error" && (
         <p className="col-span-full text-sm text-red-600">
           Something went wrong sending your message. Please email us directly

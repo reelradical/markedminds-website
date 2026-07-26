@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { isBotSubmission } from "@/lib/spam-guard";
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Wire this up to a real email marketing provider (e.g. Mailchimp,
@@ -8,6 +10,11 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // that swap can happen without touching NewsletterForm.
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
+
+  if (isBotSubmission(body as Record<string, unknown> | null)) {
+    return NextResponse.json({ ok: true });
+  }
+
   const email = typeof body?.email === "string" ? body.email.trim() : "";
 
   if (!email || !EMAIL_RE.test(email)) {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { site } from "@/lib/data/site";
+import { isBotSubmission } from "@/lib/spam-guard";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,6 +18,10 @@ type ContactPayload = {
 // success) is stable so ContactForm never needs to change.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as ContactPayload | null;
+
+  if (isBotSubmission(body as Record<string, unknown> | null)) {
+    return NextResponse.json({ ok: true });
+  }
 
   if (
     !body?.name?.trim() ||

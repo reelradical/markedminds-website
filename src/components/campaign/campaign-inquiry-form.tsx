@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { HoneypotField } from "@/components/shared/honeypot-field";
 import { trackEvent } from "@/lib/analytics";
 import { serviceSelectOptions } from "@/lib/data/campaign-content";
 import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
@@ -243,6 +244,7 @@ export function CampaignInquiryForm({
 
       <input type="hidden" name="campaign" value={campaign.analytics.campaign} />
       <input type="hidden" name="source" value={campaign.analytics.source} />
+      <HoneypotField />
 
       {status === "error" && (
         <p className="col-span-full text-sm text-red-600">

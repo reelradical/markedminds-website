@@ -6,6 +6,7 @@ import { Check, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { HoneypotField } from "@/components/shared/honeypot-field";
 import { site } from "@/lib/data/site";
 
 export function SessionInterestForm() {
@@ -62,6 +63,7 @@ export function SessionInterestForm() {
           autoComplete="email"
         />
       </div>
+      <HoneypotField />
       <Button type="submit" variant="academy" disabled={status === "loading"} className="shrink-0">
         {status === "loading" && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
         Join the Interest List

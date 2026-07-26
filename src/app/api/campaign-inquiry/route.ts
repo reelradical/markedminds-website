@@ -3,6 +3,7 @@ import { createElement } from "react";
 
 import { sendEmail, renderEmail } from "@/lib/email";
 import { saveIntake } from "@/lib/airtable";
+import { isBotSubmission } from "@/lib/spam-guard";
 import { campaigns, formatOfferExpiration } from "@/lib/data/campaigns";
 import { NewInquiryNotification } from "@/emails/internal/NewInquiryNotification";
 import { InquiryConfirmation } from "@/emails/educator/InquiryConfirmation";
@@ -69,6 +70,10 @@ const NEXT_ACTION = "Review educator inquiry and respond";
 //      full payload, never credentials.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as CampaignInquiryPayload | null;
+
+  if (isBotSubmission(body as Record<string, unknown> | null)) {
+    return NextResponse.json({ ok: true });
+  }
 
   const firstName = clean(body?.firstName);
   const lastName = clean(body?.lastName);

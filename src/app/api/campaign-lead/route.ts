@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { sendEmail, buildFieldListEmail } from "@/lib/email";
+import { isBotSubmission } from "@/lib/spam-guard";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LEN = 200;
@@ -24,6 +25,10 @@ function clean(value: unknown): string {
 // false success on email failure.
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as CampaignLeadPayload | null;
+
+  if (isBotSubmission(body as Record<string, unknown> | null)) {
+    return NextResponse.json({ ok: true });
+  }
 
   const firstName = clean(body?.firstName);
   const email = clean(body?.email);

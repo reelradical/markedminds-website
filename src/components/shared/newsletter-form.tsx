@@ -1,16 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { HONEYPOT_FIELD, RENDERED_AT_FIELD } from "@/lib/spam-guard";
 
 export function NewsletterForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle",
   );
   const [email, setEmail] = useState("");
+  const renderedAtRef = useRef(0);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    renderedAtRef.current = Date.now();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,7 +27,11 @@ export function NewsletterForm() {
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          [HONEYPOT_FIELD]: honeypotRef.current?.value ?? "",
+          [RENDERED_AT_FIELD]: renderedAtRef.current,
+        }),
       });
       if (!res.ok) throw new Error("Request failed");
       setStatus("success");
@@ -53,6 +64,19 @@ export function NewsletterForm() {
         onChange={(e) => setEmail(e.target.value)}
         className="border-white/20 bg-white/5 text-white placeholder:text-white/40 focus-visible:border-white/60"
       />
+      <div
+        style={{ position: "absolute", left: "-9999px", top: 0, width: 1, height: 1, overflow: "hidden" }}
+        aria-hidden="true"
+      >
+        <label htmlFor="newsletter-org-website">Leave this field blank</label>
+        <input
+          type="text"
+          id="newsletter-org-website"
+          ref={honeypotRef}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <Button
         type="submit"
         variant="inverse"
