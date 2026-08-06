@@ -14,6 +14,7 @@ import { SectionHeading } from "@/components/shared/section-heading";
 import { SentenceBreak } from "@/components/shared/sentence-break";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { Button } from "@/components/ui/button";
+import { PurchaseConfirmedTracker } from "@/components/campaign/purchase-confirmed-tracker";
 
 // Post-purchase confirmation for the 3 Black2School fixed-price Square
 // Payment Links. Public but unlisted — not in nav.ts, not in sitemap.ts —
@@ -68,6 +69,7 @@ const prepItems = [
 export default function Black2SchoolThankYouPage() {
   return (
     <>
+      <PurchaseConfirmedTracker eventName="black2school_purchase_confirmed" />
       <PageHero
         eyebrow="Purchase Confirmed"
         title="Thank You!"
