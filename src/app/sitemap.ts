@@ -9,6 +9,7 @@ const routes = [
   "/our-work",
   "/focus-flex",
   "/dream-deferred",
+  "/ruthless-scout",
   "/impact",
   "/gallery",
   "/donate",
