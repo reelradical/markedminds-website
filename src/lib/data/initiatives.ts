@@ -47,6 +47,15 @@ export const currentInitiatives: Initiative[] = [
     eyebrow: "Storytelling",
   },
   {
+    name: "Ruthless Scout",
+    tagline: "A Marked Minds Technology Product",
+    description:
+      "Opportunity intelligence for experienced people navigating career transitions without abandoning the life, responsibilities, and purpose they have already built.",
+    status: "live",
+    href: "/ruthless-scout",
+    eyebrow: "Career Technology",
+  },
+  {
     name: "Consulting + Strategy",
     tagline: "A Marked Minds Initiative",
     description:
