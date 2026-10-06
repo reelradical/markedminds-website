@@ -1,7 +1,7 @@
 import Script from "next/script";
 
-// Only rendered by RootLayout when NEXT_PUBLIC_CLARITY_ID is set — see
-// src/app/layout.tsx and the "Analytics" section in README.md.
+// Only rendered by the marketing layout when NEXT_PUBLIC_CLARITY_ID is set.
+// Never render this component in Planner: Clarity includes session replay.
 export function MicrosoftClarity({ clarityId }: { clarityId: string }) {
   return (
     <Script id="clarity-init" strategy="afterInteractive">

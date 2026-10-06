@@ -3,17 +3,6 @@ import { Geist, Bricolage_Grotesque } from "next/font/google";
 
 import "./globals.css";
 import { site } from "@/lib/data/site";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { Analytics } from "@vercel/analytics/next";
-
-import { GoogleAnalytics } from "@/components/analytics/google-analytics";
-import { MicrosoftClarity } from "@/components/analytics/microsoft-clarity";
-
-// Analytics only load when their env var is set — see README.md
-// "Analytics" for setup. Never hardcode a fallback ID here.
-const gaId = process.env.NEXT_PUBLIC_GA_ID;
-const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,50 +18,6 @@ const bricolageGrotesque = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} | ${site.tagline}`,
-    template: `%s | ${site.name}`,
-  },
-  description: site.description,
-  keywords: [
-    "Marked Minds",
-    "creative innovation studio",
-    "Focus + FLEX Academy",
-    "video production",
-    "brand storytelling",
-    "educator workshops",
-    "project-based learning",
-    "AI literacy for classrooms",
-    "community-centered creative work",
-  ],
-  authors: [{ name: site.legalName }],
-  creator: site.legalName,
-  openGraph: {
-    type: "website",
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} | ${site.tagline}`,
-    description: site.description,
-    locale: "en_US",
-    images: [
-      {
-        url: "/social/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: `${site.name} — ${site.tagline}`,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} | ${site.tagline}`,
-    description: site.description,
-    images: ["/social/og-image.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
   // Setting `icons` explicitly overrides ALL file-convention icon tags
   // (favicon.ico/icon.svg/apple-icon.png), so every size needs to be
   // listed here rather than split between this and the file convention.
@@ -88,25 +33,6 @@ export const metadata: Metadata = {
   },
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.legalName,
-  alternateName: site.name,
-  url: site.url,
-  logo: `${site.url}/logos/marked-minds-logo-white-black-orange.svg`,
-  description: site.description,
-  email: site.email,
-  sameAs: [site.social.instagram, site.social.facebook, site.social.linkedin],
-  subOrganization: {
-    "@type": "EducationalOrganization",
-    name: "Focus + FLEX Academy",
-    description:
-      "A Marked Minds Initiative delivering small-group, project-based learning.",
-    url: `${site.url}/focus-flex`,
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -117,25 +43,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${bricolageGrotesque.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+      <body className="min-h-full">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white"
         >
           Skip to content
         </a>
-        <Navbar />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        {gaId && <GoogleAnalytics gaId={gaId} />}
-        {clarityId && <MicrosoftClarity clarityId={clarityId} />}
-        <Analytics />
+        {children}
       </body>
     </html>
   );
