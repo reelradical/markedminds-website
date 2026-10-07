@@ -7,8 +7,8 @@ import { site } from "@/lib/data/site";
 import { getSupabasePublicConfig } from "@/lib/supabase/config";
 
 export const metadata: Metadata = {
-  title: "Sign in | Marked Minds Planner",
-  description: "Sign in to Marked Minds Planner.",
+  title: "Sign in | MAPS by Marked Minds",
+  description: "Sign in to MAPS by Marked Minds.",
   robots: {
     index: false,
     follow: false,
@@ -39,14 +39,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <div className="flex items-center justify-between">
           <PlannerBrand />
           <Link href={`${site.url}/plan`} className="text-sm font-medium text-charcoal/60 hover:text-ink">
-            About Planner
+            About MAPS
           </Link>
         </div>
 
         <div className="my-auto grid gap-8 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">
-              Marked Minds Planner
+              MAPS by Marked Minds
             </p>
             <h1 className="mt-4 max-w-xl text-balance font-display text-4xl font-semibold tracking-tight sm:text-6xl">
               Plan for the class you actually have.
@@ -61,7 +61,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               Sign in
             </h2>
             <p className="mt-2 text-sm leading-6 text-charcoal/60">
-              Use the Google account you want associated with Planner.
+              Use the Google account you want associated with MAPS.
             </p>
 
             {message ? (
@@ -81,7 +81,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </div>
 
             <p className="mt-6 border-t border-ink/8 pt-5 text-xs leading-5 text-charcoal/50">
-              Authentication is used only to protect your Planner workspace. No lesson or student data is collected in this phase.
+              Authentication is used only to protect your MAPS workspace. No lesson or student data is collected in this phase.
             </p>
           </section>
         </div>

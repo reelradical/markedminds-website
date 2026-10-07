@@ -67,12 +67,12 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
     <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <div className="flex flex-col gap-6 border-b border-ink/8 pb-10 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">Planner dashboard</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">MAPS preview</p>
           <h1 className="mt-3 text-balance font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             What do you need to plan?
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-charcoal/65">
-            This preview establishes the future planning workspace. No planning mode is active yet.
+            This preview establishes the future MAPS planning workspace. No planning mode is active yet.
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:items-end">

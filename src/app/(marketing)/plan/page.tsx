@@ -13,9 +13,9 @@ import { AnimatedSection } from "@/components/shared/animated-section";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Planner",
+  title: "MAPS",
   description:
-    "Marked Minds Planner helps teachers shape realistic learning experiences around the students, time, materials, environment, and constraints they actually have.",
+    "MAPS by Marked Minds is a planning-system preview built around teachers' actual students, instructional time, materials, transitions, and classroom constraints.",
   alternates: { canonical: "/plan" },
 };
 
@@ -64,20 +64,20 @@ export default function PlannerLandingPage() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">
-              Marked Minds Planner
+              MAPS by Marked Minds
             </p>
             <h1 className="mt-6 max-w-3xl text-balance font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
               Plan for the class you actually have.
             </h1>
             <p className="mt-7 max-w-2xl text-pretty text-lg leading-8 text-white/70 sm:text-xl">
-              Teachers already know what they need to teach. Marked Minds Planner helps turn
-              that responsibility into a realistic learning experience based on the actual
-              students, instructional time, materials, environment, and constraints available.
+              Teachers already know what they need to teach. MAPS is being built to help shape
+              that responsibility around actual students, instructional time, materials,
+              transitions, classroom constraints, and the changes that happen in real life.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Button asChild variant="inverse" size="lg">
                 <Link href="/planner">
-                  Try the Planner
+                  Preview MAPS
                   <ArrowRight aria-hidden="true" />
                 </Link>
               </Button>
@@ -134,7 +134,7 @@ export default function PlannerLandingPage() {
               The same lesson changes when the conditions change.
             </h2>
             <p className="mt-5 text-lg leading-8 text-charcoal/70">
-              The Planner is being designed to make those conditions part of the plan from the beginning.
+              MAPS is being designed to make those conditions part of the plan from the beginning.
             </p>
           </AnimatedSection>
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -179,13 +179,13 @@ export default function PlannerLandingPage() {
 
       <section className="bg-brand-orange py-20 sm:py-24">
         <div className="mx-auto flex max-w-4xl flex-col items-center px-6 text-center lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/60">Marked Minds Planner</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink/60">MAPS by Marked Minds</p>
           <h2 className="mt-4 text-balance font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
             Start with the classroom in front of you.
           </h2>
           <Button asChild size="lg" className="mt-8">
             <Link href="/planner">
-              Try the Planner
+              Preview MAPS
               <ArrowRight aria-hidden="true" />
             </Link>
           </Button>

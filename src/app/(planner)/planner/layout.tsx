@@ -11,8 +11,8 @@ import { site } from "@/lib/data/site";
 
 export const metadata: Metadata = {
   title: {
-    default: "Marked Minds Planner",
-    template: "%s | Marked Minds Planner",
+    default: "MAPS | Marked Minds",
+    template: "%s | MAPS by Marked Minds",
   },
   description: "Plan for the class you actually have.",
   robots: {
@@ -39,7 +39,7 @@ export default function PlannerLayout({ children }: Readonly<{ children: React.R
           <p className="text-xs font-semibold uppercase tracking-wide text-charcoal/45">Product preview</p>
           <p className="mt-2 text-sm leading-5 text-charcoal/70">Planning workflows are not active yet.</p>
           <Link href={`${site.url}/plan`} className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink">
-            About Planner
+            About MAPS
             <ArrowUpRight className="size-3.5" aria-hidden="true" />
           </Link>
         </div>

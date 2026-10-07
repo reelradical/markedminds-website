@@ -15,8 +15,8 @@ export function PlannerBrand() {
         M
       </span>
       <span>
-        <span className="block text-xs font-medium uppercase tracking-[0.16em] text-charcoal/45">Marked Minds</span>
-        <span className="block font-display text-lg font-semibold leading-tight">Planner</span>
+        <span className="block font-display text-lg font-semibold leading-tight">MAPS</span>
+        <span className="block text-xs font-medium uppercase tracking-[0.16em] text-charcoal/45">by Marked Minds</span>
       </span>
     </Link>
   );
@@ -24,7 +24,7 @@ export function PlannerBrand() {
 
 export function PlannerDesktopNavigation() {
   return (
-    <nav aria-label="Planner" className="mt-10 flex flex-col gap-2">
+    <nav aria-label="MAPS" className="mt-10 flex flex-col gap-2">
       {navItems.map(({ label, icon: Icon, active }) => (
         <div
           key={label}
@@ -46,7 +46,7 @@ export function PlannerDesktopNavigation() {
 export function PlannerMobileNavigation() {
   return (
     <nav
-      aria-label="Planner"
+      aria-label="MAPS"
       className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-ink/10 bg-white/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur md:hidden"
     >
       {navItems.map(({ label, icon: Icon, active }) => (
