@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { HoneypotField } from "@/components/shared/honeypot-field";
 import { trackEvent } from "@/lib/analytics";
 import { serviceSelectOptions } from "@/lib/data/campaign-content";
-import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
+import { formatOfferExpiration, isOfferExpired, type Campaign } from "@/lib/data/campaigns";
 import { site } from "@/lib/data/site";
 
 const roleOptions = [
@@ -44,6 +44,7 @@ export function CampaignInquiryForm({
     "idle",
   );
   const [hasStarted, setHasStarted] = useState(false);
+  const offerActive = !isOfferExpired(campaign.offer);
   const formId = useId();
 
   function handleFirstInteraction() {
@@ -85,19 +86,19 @@ export function CampaignInquiryForm({
         <CheckCircle2 className="size-10 text-brand-orange" aria-hidden="true" />
         <h3 className="text-xl font-semibold text-ink">Request received</h3>
         <p className="max-w-md text-sm text-charcoal/70">
-          Thank you for connecting with Marked Minds. Your {campaign.partnerName}{" "}
-          conference offer has been recorded.
+          Thank you for connecting with Marked Minds, in partnership with{" "}
+          {campaign.partnerName}.
         </p>
         <p className="max-w-md text-sm font-medium text-ink">
           Dani will personally review your request and follow up by email.
           Fixed-price sessions may include a direct Square booking link;
-          custom or team requests will be scoped with you first. Your{" "}
-          {campaign.offer.code} benefit ({campaign.offer.discountPercent}% off
-          fixed-price services, or a complimentary strategy consultation for
-          custom requests){" "}
-          {formatOfferExpiration(campaign.offer)
-            ? `is valid through ${formatOfferExpiration(campaign.offer)}.`
-            : "has been recorded."}
+          custom or team requests will be scoped with you first.
+          {offerActive &&
+            ` Your ${campaign.offer.code} benefit (${campaign.offer.discountPercent}% off fixed-price services, or a complimentary strategy consultation for custom requests) ${
+              formatOfferExpiration(campaign.offer)
+                ? `is valid through ${formatOfferExpiration(campaign.offer)}.`
+                : "has been recorded."
+            }`}
         </p>
       </div>
     );
@@ -225,22 +226,24 @@ export function CampaignInquiryForm({
           placeholder="e.g. Within the next 2 weeks"
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor={`${formId}-code`}>Conference eligibility code</Label>
-        <Input
-          id={`${formId}-code`}
-          name="offerCode"
-          defaultValue={campaign.offer.code}
-          readOnly
-          className="bg-mist text-charcoal/70"
-        />
-        <p className="text-xs leading-5 text-charcoal/50">
-          This records your conference eligibility. For fixed-price
-          services, you&apos;ll enter this code again at Square checkout.
-          For custom or inquiry-based services, it&apos;s already included
-          with this request.
-        </p>
-      </div>
+      {offerActive && (
+        <div className="flex flex-col gap-2">
+          <Label htmlFor={`${formId}-code`}>Conference eligibility code</Label>
+          <Input
+            id={`${formId}-code`}
+            name="offerCode"
+            defaultValue={campaign.offer.code}
+            readOnly
+            className="bg-mist text-charcoal/70"
+          />
+          <p className="text-xs leading-5 text-charcoal/50">
+            This records your conference eligibility. For fixed-price
+            services, you&apos;ll enter this code again at Square checkout.
+            For custom or inquiry-based services, it&apos;s already included
+            with this request.
+          </p>
+        </div>
+      )}
 
       <input type="hidden" name="campaign" value={campaign.analytics.campaign} />
       <input type="hidden" name="source" value={campaign.analytics.source} />

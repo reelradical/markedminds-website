@@ -6,7 +6,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { ArrowRight, Sparkles } from "lucide-react";
 
-import { formatOfferExpiration, type Campaign } from "@/lib/data/campaigns";
+import { formatOfferExpiration, isOfferExpired, type Campaign } from "@/lib/data/campaigns";
 import { site } from "@/lib/data/site";
 import {
   heroContent,
@@ -45,6 +45,7 @@ function scrollToId(id: string) {
 
 export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
   const [selectedService, setSelectedService] = useState("");
+  const offerActive = !isOfferExpired(campaign.offer);
 
   useEffect(() => {
     trackEvent(`${campaign.slug}_page_view`, {
@@ -130,9 +131,11 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
       {site.squareAppointmentsWidgetSrc && (
         <Script src={site.squareAppointmentsWidgetSrc} strategy="lazyOnload" />
       )}
-      {/* 1. Exclusive Offer Banner */}
+      {/* 1. Partner Banner — offer-specific wording only while the offer is active */}
       <div className="bg-ink px-6 py-2.5 text-center text-xs font-semibold uppercase tracking-[0.15em] text-white sm:text-sm">
-        Exclusive for {campaign.partnerName} {campaign.eventName} Participants
+        {offerActive
+          ? `Exclusive for ${campaign.partnerName} ${campaign.eventName} Participants`
+          : `In Partnership with ${campaign.partnerName}`}
       </div>
 
       {/* 2. Hero */}
@@ -169,19 +172,23 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             {heroContent.secondaryLine}
           </p>
 
-          <div className="mx-auto mt-8 inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-5 py-2 text-sm font-medium text-brand-orange">
-            <Sparkles className="size-4" aria-hidden="true" />
-            {campaign.heroBadge}
-          </div>
+          {offerActive && (
+            <div className="mx-auto mt-8 inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-5 py-2 text-sm font-medium text-brand-orange">
+              <Sparkles className="size-4" aria-hidden="true" />
+              {campaign.heroBadge}
+            </div>
+          )}
 
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button size="lg" onClick={handleOfferClick}>
-              Claim My Conference Offer
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Button>
+            {offerActive && (
+              <Button size="lg" onClick={handleOfferClick}>
+                Claim My Conference Offer
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Button>
+            )}
             <Button
               size="lg"
-              variant="outline-inverse"
+              variant={offerActive ? "outline-inverse" : "orange"}
               onClick={() => scrollToId("choose-your-support")}
             >
               Explore Educator Support
@@ -298,7 +305,8 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
         </section>
       )}
 
-      {/* 5. Conference Exclusive Offer */}
+      {/* 5. Conference Exclusive Offer — entirely skipped once the offer expires */}
+      {offerActive && (
       <section id="conference-offer" className="bg-white py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <AnimatedSection className="overflow-hidden rounded-2xl bg-ink px-8 py-14 text-center text-white sm:px-14">
@@ -389,6 +397,7 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
           </AnimatedSection>
         </div>
       </section>
+      )}
 
       {/* 6. Choose Your Support */}
       <section id="choose-your-support" className="bg-mist py-20 sm:py-24">
@@ -400,13 +409,15 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             className="mx-auto"
           />
 
-          <p className="mx-auto mt-8 max-w-2xl text-balance text-center text-sm font-medium text-ink">
-            {campaign.partnerName} attendees receive {campaign.offer.discountPercent}% off
-            {formatOfferExpiration(campaign.offer)
-              ? ` through ${formatOfferExpiration(campaign.offer)}`
-              : ""}
-            . Enter code {campaign.offer.code} during secure Square checkout.
-          </p>
+          {offerActive && (
+            <p className="mx-auto mt-8 max-w-2xl text-balance text-center text-sm font-medium text-ink">
+              {campaign.partnerName} attendees receive {campaign.offer.discountPercent}% off
+              {formatOfferExpiration(campaign.offer)
+                ? ` through ${formatOfferExpiration(campaign.offer)}`
+                : ""}
+              . Enter code {campaign.offer.code} during secure Square checkout.
+            </p>
+          )}
 
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {fixedOptions.map((option, i) => renderSupportCard(option, i))}
@@ -512,7 +523,7 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
       <section id="inquiry-form" className="bg-white py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <SectionHeading
-            eyebrow={`${campaign.partnerName} Conference Offer`}
+            eyebrow={offerActive ? `${campaign.partnerName} Conference Offer` : campaign.partnerName}
             title="Tell us about your classroom."
             description="Submit your request. Dani will review your goals, confirm availability and scope, and send the appropriate booking and payment details."
             align="center"
@@ -538,7 +549,7 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             className="mx-auto"
           />
           <div className="mt-12 flex flex-col gap-6">
-            {faqItems(campaign.offer).map((item, i) => (
+            {faqItems(campaign.offer, offerActive).map((item, i) => (
               <AnimatedSection
                 key={item.question}
                 delay={i * 0.04}
@@ -564,13 +575,15 @@ export function CampaignLandingPage({ campaign }: { campaign: Campaign }) {
             <SentenceBreak text={finalCta.supporting} />
           </p>
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button size="lg" variant="orange" onClick={handleOfferClick}>
-              Claim My Conference Offer
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Button>
+            {offerActive && (
+              <Button size="lg" variant="orange" onClick={handleOfferClick}>
+                Claim My Conference Offer
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Button>
+            )}
             <Button
               size="lg"
-              variant="outline-inverse"
+              variant={offerActive ? "outline-inverse" : "orange"}
               onClick={() => handleChooseSupport("Custom workshop")}
             >
               {finalCta.secondaryButtonLabel}

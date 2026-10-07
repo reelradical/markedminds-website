@@ -334,7 +334,13 @@ export type FaqItem = { question: string; answer: string };
 // A function of the offer (not a plain constant) because the "discount"
 // FAQ answer must stay accurate if a future campaign has a different
 // discountPercent — see howToUseOfferSteps() for the same pattern.
-export function faqItems(offer: Pick<CampaignOffer, "discountPercent">): FaqItem[] {
+// `offerActive` omits the discount-specific question once an offer has
+// expired (see isOfferExpired() in campaigns.ts) rather than showing a
+// question about a discount that no longer applies.
+export function faqItems(
+  offer: Pick<CampaignOffer, "discountPercent">,
+  offerActive: boolean = true,
+): FaqItem[] {
   return [
   {
     question: "Do I need prior AI or coding experience?",
@@ -356,11 +362,14 @@ export function faqItems(offer: Pick<CampaignOffer, "discountPercent">): FaqItem
     answer:
       "Yes. Individual consultations and planning sessions are available virtually. In-person options may also be possible depending on location, scheduling, group size, and scope. Include your preference when submitting your request, and Dani will confirm the available options.",
   },
-  {
-    question: "Does the discount include custom materials?",
-    answer:
-      `The ${offer.discountPercent}% discount applies to fixed-price services. Custom resource development, team trainings, and other inquiry-based services aren't discounted the same way, but include a complimentary strategy consultation instead. Printing, licensing, and travel are always billed separately.`,
-  },
+  ...(offerActive
+    ? [
+        {
+          question: "Does the discount include custom materials?",
+          answer: `The ${offer.discountPercent}% discount applies to fixed-price services. Custom resource development, team trainings, and other inquiry-based services aren't discounted the same way, but include a complimentary strategy consultation instead. Printing, licensing, and travel are always billed separately.`,
+        },
+      ]
+    : []),
   {
     question: "Does AI replace my professional judgment?",
     answer:

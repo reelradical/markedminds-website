@@ -103,12 +103,12 @@ export const campaigns = {
       ],
     },
     metadata: {
-      title: "Black2SchoolMvmt Educator Offer | Marked Minds LLC",
+      title: "Black2SchoolMvmt Educator Support | Marked Minds LLC",
       description:
-        "An exclusive Black2SchoolMvmt conference offer helping educators use AI, coding, computational thinking, and creative learning strategies in practical, classroom-ready ways.",
+        "Educator support from Marked Minds, created in partnership with Black2SchoolMvmt — AI, coding, computational thinking, and creative learning strategies in practical, classroom-ready ways.",
       ogTitle: "AI + Coding Tools for Today. Impact for Tomorrow.",
       ogDescription:
-        "Black2SchoolMvmt conference participants receive an exclusive offer on educator consultations, planning sessions, and professional learning from Marked Minds LLC.",
+        "Educator consultations, planning sessions, and professional learning from Marked Minds LLC, created in partnership with Black2SchoolMvmt.",
     },
     features: {
       starterKit: false,
@@ -116,6 +116,19 @@ export const campaigns = {
     analytics: { campaign: "black2school-2026", source: "black2school-conference" },
   },
 } satisfies Record<string, Campaign>;
+
+/**
+ * Whether an offer's confirmed expiration date has passed. Always `false`
+ * when `expirationDate` is unconfirmed (`null`) — an offer isn't treated
+ * as expired just because no date was ever set. Compared in UTC to match
+ * `formatOfferExpiration`'s own date handling.
+ */
+export function isOfferExpired(offer: CampaignOffer): boolean {
+  if (!offer.expirationDate) return false;
+  const [year, month, day] = offer.expirationDate.split("-").map(Number);
+  const expiration = Date.UTC(year, month - 1, day);
+  return Date.now() > expiration;
+}
 
 /** Formats an offer's confirmed expiration date for display, e.g. "August 25, 2026". Returns null (render nothing) if unconfirmed. */
 export function formatOfferExpiration(offer: CampaignOffer): string | null {
