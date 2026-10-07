@@ -7,7 +7,7 @@ export const site = {
   tagline: "We Curate Culture.",
   pillarsLine: "Create. Teach. Build. Connect.",
   description:
-    "Marked Minds is a creative innovation studio shaping culture through storytelling, education, design, and community.",
+    "Marked Minds is an education technology company — building learning programs, educator services, and digital tools for schools, families, and communities.",
   ownership: "Woman-owned and veteran-owned business",
   url: "https://markedminds.com",
   email: "markedminds@gmail.com",
