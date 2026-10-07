@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, HandCoins, Quote } from "lucide-react";
+import { ArrowRight, HandCoins, Quote, Footprints } from "lucide-react";
 
 import {
   learningModel,
@@ -279,6 +279,31 @@ export default function FocusFlexPage() {
           <div className="mt-10">
             <SessionInterestForm />
           </div>
+        </div>
+      </section>
+
+      {/* Run Club Teaser */}
+      <section className="bg-mist py-20 sm:py-24">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <AnimatedSection className="flex flex-col items-center gap-5 rounded-2xl border border-academy-purple/15 bg-white p-8 text-center sm:p-12">
+            <div className="flex size-14 items-center justify-center rounded-full bg-academy-purple/10 text-academy-purple">
+              <Footprints className="size-6" aria-hidden="true" />
+            </div>
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+              Focus + FLEX Run Club | Bouldercrest
+            </h2>
+            <p className="max-w-xl text-lg leading-7 text-charcoal/70">
+              A year-round Focus + FLEX community running program,
+              participating in Kilometer Kids, Atlanta Track Club&apos;s
+              youth running program.
+            </p>
+            <Button asChild size="lg" variant="academy">
+              <Link href="/focus-flex/run-club">
+                Explore the Run Club
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </Button>
+          </AnimatedSection>
         </div>
       </section>
 

@@ -26,6 +26,9 @@ import {
   Briefcase,
   Headphones,
   MessageCircle,
+  MapPin,
+  CalendarDays,
+  Repeat,
   type LucideIcon,
 } from "lucide-react";
 
@@ -57,6 +60,9 @@ export const iconMap = {
   briefcase: Briefcase,
   headphones: Headphones,
   "message-circle": MessageCircle,
+  "map-pin": MapPin,
+  "calendar-days": CalendarDays,
+  repeat: Repeat,
 } satisfies Record<string, LucideIcon>;
 
 export type IconKey = keyof typeof iconMap;

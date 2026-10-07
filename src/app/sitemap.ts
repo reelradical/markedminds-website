@@ -8,6 +8,7 @@ const routes = [
   "/services",
   "/our-work",
   "/focus-flex",
+  "/focus-flex/run-club",
   "/dream-deferred",
   "/ruthless-scout",
   "/impact",

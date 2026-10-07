@@ -1,7 +1,11 @@
-import { iconMap } from "@/lib/icon-map";
-import type { Pillar } from "@/lib/data/academy";
+import { iconMap, type IconKey } from "@/lib/icon-map";
 
-export function PillarCard({ pillar }: { pillar: Pillar }) {
+// Icon is typed against the full IconKey map (not academy.ts's narrower
+// Pillar type) so other Focus + FLEX programs — e.g. Run Club — can reuse
+// this card with their own icon choices without widening academy.ts itself.
+type PillarLike = { name: string; description: string; icon: IconKey };
+
+export function PillarCard({ pillar }: { pillar: PillarLike }) {
   const Icon = iconMap[pillar.icon];
 
   return (

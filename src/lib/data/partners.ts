@@ -12,6 +12,14 @@ export type Partner = {
 export const partners: Partner[] = [
   { name: "Re:imagine/ATL", category: "Collaborator" },
   { name: "Pharaoh's Conclave", category: "Collaborator" },
+  {
+    name: "Atlanta Track Club",
+    category: "Partner",
+    // Scoped to Focus + FLEX Run Club | Bouldercrest's participation in
+    // Kilometer Kids — not a sponsor of Marked Minds or Focus + FLEX
+    // Academy as a whole. See /focus-flex/run-club for the full context.
+    note: "Run Club Program Partner",
+  },
   { name: "Cedar Grove community", category: "Community Connection" },
   { name: "Focus + FLEX Academy families", category: "Community Connection" },
   {
