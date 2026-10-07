@@ -1,19 +1,22 @@
-# Marked Minds Planner — Phase 1A Architecture
+# Marked Minds Planner — Architecture
 
-Phase 1A establishes a visual and routing boundary only. It does not include
-authentication, onboarding, a database, AI calls, billing, plan generation, or
-plan persistence.
+Phase 1A established the visual, routing, and analytics boundary. Phase 1C adds
+only a Supabase authentication proof of concept. It does not include onboarding,
+application database tables, AI calls, billing, plan generation, or plan
+persistence.
 
 ## Route boundaries
 
 - `markedminds.com/plan` is the public, indexable product landing page.
 - `/planner` is the internal application route and remains directly available
   during local development.
-- `app.markedminds.com` is the intended production application hostname.
+- `maps.markedminds.com` is the intended production application hostname.
 
 Public site pages live in `src/app/(marketing)`. The route-group name does not
 appear in URLs, so existing public routes remain unchanged. The application
 shell lives in `src/app/(planner)/planner` and receives a separate layout.
+Public Planner authentication endpoints live in the same `(planner)` route
+group at `/login`, `/auth/callback`, and `/logout`.
 
 The root layout owns only document-wide concerns: HTML/body, fonts, global
 styles, the metadata base and icons, and the universal skip link.
@@ -33,14 +36,30 @@ analytics or event collection is implemented in this phase.
 ## Prepared subdomain routing
 
 `src/proxy.ts` recognizes only the exact production hostname
-`app.markedminds.com`. Requests on that hostname are internally rewritten to
-the `/planner` route tree. Requests on localhost, preview deployments, and the
-main marketing hostname pass through unchanged, so `/planner` continues to
-work directly during development.
+`maps.markedminds.com`. Requests on that hostname are internally rewritten to
+the `/planner` route tree. Authentication endpoints are excluded from that
+rewrite so `/login`, `/auth/callback`, and `/logout` remain stable on every
+host. Requests on localhost, preview deployments, and the main marketing
+hostname pass through unchanged, so `/planner` continues to work directly
+during development.
+
+## Authentication boundary
+
+- `src/lib/supabase/client.ts` is the sole browser-client factory.
+- `src/lib/supabase/server.ts` is the sole Server Component and Route Handler
+  client factory.
+- `src/lib/supabase/proxy.ts` refreshes cookie-backed sessions before Planner
+  rendering. It is not the authorization boundary.
+- The `/planner` Server Component verifies the user with Supabase before it
+  renders account or application content.
+- Only the Supabase URL and publishable key are exposed to the browser. There
+  is no service-role credential in this phase.
+- Planner routes remain outside the marketing layout, so existing GA4,
+  Clarity, and Vercel Analytics scripts do not load there.
 
 Before activating the subdomain in production:
 
-1. Add `app.markedminds.com` to the existing Vercel project.
+1. Add `maps.markedminds.com` to the existing Vercel project.
 2. Add the CNAME record Vercel specifies at the current DNS provider.
 3. Wait for Vercel domain verification and SSL provisioning.
 4. Test the root URL and future nested application routes on the real hostname.
@@ -51,6 +70,7 @@ No DNS or Vercel project setting is changed by the repository code alone.
 
 ## Next implementation boundary
 
-The next phase should make explicit decisions about authentication, account and
-organization ownership, data privacy, persistence, and the AI provider service
-before adding the Account → onboarding → Plan Tomorrow vertical slice.
+After the auth proof of concept is configured and verified, the next approved
+slice may add the application profile and onboarding contract. Database schema,
+RLS, planning workflows, and AI integration remain separate implementation
+decisions and must follow the approved Phase 1B contracts.

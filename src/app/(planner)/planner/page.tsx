@@ -1,4 +1,8 @@
 import { AlertTriangle, CalendarDays, Clock3, SlidersHorizontal, Sparkles } from "lucide-react";
+import { redirect } from "next/navigation";
+
+import { getAuthenticatedUser } from "@/lib/supabase/auth";
+import { SupabaseConfigurationError } from "@/lib/supabase/config";
 
 const planningModes = [
   {
@@ -31,7 +35,34 @@ const planningModes = [
   },
 ];
 
-export default function PlannerDashboardPage() {
+export const dynamic = "force-dynamic";
+
+type PlannerDashboardPageProps = {
+  searchParams: Promise<{ error?: string | string[] }>;
+};
+
+export default async function PlannerDashboardPage({ searchParams }: PlannerDashboardPageProps) {
+  let user;
+
+  try {
+    user = await getAuthenticatedUser();
+  } catch (error) {
+    if (error instanceof SupabaseConfigurationError) {
+      redirect("/login?error=configuration");
+    }
+
+    redirect("/login");
+  }
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { error } = await searchParams;
+  const errorCode = Array.isArray(error) ? error[0] : error;
+  const metadataName = user.user_metadata.full_name;
+  const displayName = typeof metadataName === "string" && metadataName.trim() ? metadataName : null;
+
   return (
     <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <div className="flex flex-col gap-6 border-b border-ink/8 pb-10 sm:flex-row sm:items-end sm:justify-between">
@@ -44,11 +75,32 @@ export default function PlannerDashboardPage() {
             This preview establishes the future planning workspace. No planning mode is active yet.
           </p>
         </div>
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-white px-4 py-2 text-sm text-charcoal/60">
-          <Clock3 className="size-4" aria-hidden="true" />
-          Product preview
+        <div className="flex flex-col items-start gap-3 sm:items-end">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-ink/10 bg-white px-4 py-2 text-sm text-charcoal/60">
+            <Clock3 className="size-4" aria-hidden="true" />
+            Product preview
+          </div>
+          <div className="text-left sm:text-right">
+            <p className="max-w-64 truncate text-sm font-medium text-ink">
+              {displayName ?? user.email ?? "Signed-in account"}
+            </p>
+            {displayName && user.email ? (
+              <p className="max-w-64 truncate text-xs text-charcoal/50">{user.email}</p>
+            ) : null}
+          </div>
+          <form action="/logout" method="post">
+            <button type="submit" className="text-sm font-medium text-charcoal/60 hover:text-ink">
+              Sign out
+            </button>
+          </form>
         </div>
       </div>
+
+      {errorCode === "logout" ? (
+        <p role="alert" className="mt-6 rounded-xl bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+          Sign-out could not be completed. Please try again.
+        </p>
+      ) : null}
 
       <section aria-labelledby="planning-modes" className="py-10">
         <h2 id="planning-modes" className="sr-only">Planning modes</h2>

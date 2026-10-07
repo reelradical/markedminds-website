@@ -300,7 +300,7 @@ Conditions and caveats:
 - Store migration SQL in the repository; do not make untracked production
   schema changes through a dashboard.
 - Before implementation, verify callback behavior on both `/planner` and the
-  future `app.markedminds.com` hostname.
+  future `maps.markedminds.com` hostname.
 - Reassess Clerk or Auth0 before implementation if district SAML/OIDC, SCIM,
   managed invitations, organization switching, or administrator roles become
   near-term launch requirements rather than future possibilities.
