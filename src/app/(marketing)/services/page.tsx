@@ -14,7 +14,7 @@ import { CtaSection } from "@/components/home/cta-section";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Creative production, design and brand support, education and workshops, and consulting and strategy from Marked Minds LLC.",
+    "Design and brand support, education and workshops, and consulting and strategy from Marked Minds LLC.",
   alternates: { canonical: "/services" },
 };
 
@@ -23,8 +23,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title={<SentenceBreak text="Four disciplines. One creative studio." />}
-        description="Marked Minds works across production, design, education, and strategy — for individuals, brands, schools, and community organizations."
+        title={<SentenceBreak text="Three disciplines. One practice." />}
+        description="Marked Minds works across design, education, and strategy — for individuals, brands, schools, and community organizations."
       />
 
       {serviceCategories.map((category, i) => {

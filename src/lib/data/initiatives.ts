@@ -64,15 +64,6 @@ export const currentInitiatives: Initiative[] = [
     href: "/services",
     eyebrow: "Advisory",
   },
-  {
-    name: "Creative Studio",
-    tagline: "A Marked Minds Initiative",
-    description:
-      "The production arm of Marked Minds — video, photography, podcast production, editing, graphics, and brand storytelling for people and organizations.",
-    status: "planned",
-    href: "/services",
-    eyebrow: "Media & Design",
-  },
 ];
 
 export const futureInitiatives: Initiative[] = [

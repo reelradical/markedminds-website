@@ -64,9 +64,9 @@ export const timeline: TimelineEntry[] = [
   },
   {
     year: "2020–2022",
-    title: "Creative Production Growth",
+    title: "Design + Brand Growth",
     description:
-      "The work expanded through photography, video, editing, graphics, shirts, digital content, and community-centered creative production.",
+      "The work expanded through graphics, brand design, apparel, digital content, and community-centered creative projects.",
   },
   {
     year: "2023",

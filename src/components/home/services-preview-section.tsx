@@ -14,8 +14,8 @@ export function ServicesPreviewSection() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SectionHeading
           eyebrow="Services"
-          title={<SentenceBreak text="Four disciplines. One creative studio." />}
-          description="Marked Minds works across production, design, education, and strategy — often on the same project."
+          title={<SentenceBreak text="Three disciplines. One practice." />}
+          description="Marked Minds works across design, education, and strategy — often on the same project."
           align="center"
           className="mx-auto"
         />

@@ -17,7 +17,7 @@ import { CtaSection } from "@/components/home/cta-section";
 export const metadata: Metadata = {
   title: "Our Work",
   description:
-    "Explore Marked Minds' portfolio of initiatives, creative production, and community collaborations.",
+    "Explore Marked Minds' portfolio of initiatives, programs, and community collaborations.",
   alternates: { canonical: "/our-work" },
 };
 
@@ -31,8 +31,8 @@ export default function OurWorkPage() {
     <>
       <PageHero
         eyebrow="Our Work"
-        title="A portfolio built across media, education, and community."
-        description="Every Marked Minds initiative — live, in development, or on the horizon — is part of the same creative practice."
+        title="A portfolio built across education, technology, and community."
+        description="Every Marked Minds initiative — live, in development, or on the horizon — is part of the same practice."
       />
 
       <section className="bg-white py-24 sm:py-28">

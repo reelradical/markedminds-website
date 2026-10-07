@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { Hero } from "@/components/home/hero";
 import { WhatWeDoSection } from "@/components/home/what-we-do-section";
-import { CreativeProductionSection } from "@/components/home/creative-production-section";
 import { EducationWorkshopsSection } from "@/components/home/education-workshops-section";
 import { FocusFlexTeaser } from "@/components/home/focus-flex-teaser";
 import { DreamDeferredTeaser } from "@/components/home/dream-deferred-teaser";
@@ -22,7 +21,6 @@ export default function Home() {
     <>
       <Hero />
       <WhatWeDoSection />
-      <CreativeProductionSection />
       <EducationWorkshopsSection />
       <FocusFlexTeaser />
       <DreamDeferredTeaser />

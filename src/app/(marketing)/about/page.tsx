@@ -41,11 +41,10 @@ export default function AboutPage() {
               creative-minded people to connect, collaborate, promote one
               another, educate one another, and build meaningful work
               together. That vision grew into storytelling and community
-              media, then educator workshops and youth media, then creative
-              production — photography, video, editing, graphics, and brand
-              storytelling. Along the way, it grew into practical uses of AI
-              for creativity, planning, and teaching, and into Focus + FLEX
-              Academy, one direct expression of that founding mission.
+              media, then educator workshops and youth programming. Along
+              the way, it grew into practical uses of AI for creativity,
+              planning, and teaching, and into Focus + FLEX Academy, one
+              direct expression of that founding mission.
             </p>
           </AnimatedSection>
         </div>

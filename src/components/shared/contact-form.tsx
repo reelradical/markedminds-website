@@ -14,7 +14,6 @@ const inquiryTypes = [
   "Parent or Family",
   "Prospective Student",
   "Workshop or Training Booking",
-  "Creative Production Client",
   "School Leader",
   "Community Organization",
   "Sponsor or Donor",

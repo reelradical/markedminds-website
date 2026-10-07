@@ -12,23 +12,6 @@ export type ServiceCategory = {
 
 export const serviceCategories: ServiceCategory[] = [
   {
-    slug: "creative-production",
-    name: "Creative Production",
-    description:
-      "Media that captures a moment and makes it last — built for brands, families, and communities.",
-    items: [
-      "Video production",
-      "Photography",
-      "Podcast production",
-      "Editing",
-      "Social media content",
-      "Event recap media",
-      "Brand storytelling",
-    ],
-    icon: "camera",
-    pillar: "Create",
-  },
-  {
     slug: "design-brand-support",
     name: "Design + Brand Support",
     description:

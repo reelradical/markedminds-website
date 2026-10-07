@@ -9,9 +9,9 @@ const pillars = [
   {
     name: "Create",
     description:
-      "Photography, video, podcasts, graphics, apparel, branding, and creative production.",
+      "Graphics, branding, apparel, visual identity, and campaign design.",
     href: "/services",
-    icon: "camera",
+    icon: "palette",
   },
   {
     name: "Teach",
@@ -48,9 +48,9 @@ export function WhatWeDoSection() {
             {site.pillarsLine}
           </p>
           <p className="mx-auto mt-4 max-w-2xl text-balance text-lg leading-7 text-charcoal/70">
-            Marked Minds curates culture through media, education, design,
-            storytelling, workshops, creative production, community
-            connection, and program development.
+            Marked Minds curates culture through education, design,
+            storytelling, workshops, community connection, and program
+            development.
           </p>
         </AnimatedSection>
       </div>
