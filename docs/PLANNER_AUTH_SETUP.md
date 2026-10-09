@@ -3,14 +3,17 @@
 **Status:** Authentication proof of concept
 **Provider:** Supabase Auth
 **Sign-in method:** Google OAuth
-**Application data schema:** Not created in this phase
+**Application data schema:** Added separately in Phase 1D; see
+`docs/PLANNER_PROFILE_SETUP.md`
 
 Phase 1C proves the narrow path:
 
 > Account → authenticate → server recognizes user → protected Planner
 
-It does not create profiles, onboarding, plans, migrations, RLS policies, AI
-services, organizations, billing, or password storage.
+This authentication phase did not create profiles, onboarding, plans,
+migrations, RLS policies, AI services, organizations, billing, or password
+storage. The later, separately scoped Phase 1D profile migration is documented
+in `docs/PLANNER_PROFILE_SETUP.md`.
 
 ## Repository contract
 
@@ -180,6 +183,5 @@ available for a teacher. It is intentionally deferred because the PKCE email
 template and `/auth/confirm` token-hash path should be configured and tested as
 one separate slice.
 
-Also deferred: profile synchronization, application database tables,
-migrations, RLS, onboarding, Plan Tomorrow, saved plans, AI services, billing,
+Still deferred after Phase 1D: Plan Tomorrow, saved plans, AI services, billing,
 organizations, account deletion, and production legal/compliance review.

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { getAuthenticatedUser } from "@/lib/supabase/auth";
 import { SupabaseConfigurationError } from "@/lib/supabase/config";
+import { getCurrentProfileBundle, ProfileDataError } from "@/server/dal/profiles";
 
 const planningModes = [
   {
@@ -58,10 +59,23 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
     redirect("/login");
   }
 
+  let profileBundle;
+  try {
+    profileBundle = await getCurrentProfileBundle();
+  } catch (error) {
+    if (error instanceof ProfileDataError && error.code === "unauthenticated") redirect("/login");
+    return <ProfileUnavailable />;
+  }
+
+  if (!profileBundle.profile?.onboardingCompleted || !profileBundle.teacherProfile) {
+    redirect("/onboarding");
+  }
+
   const { error } = await searchParams;
   const errorCode = Array.isArray(error) ? error[0] : error;
   const metadataName = user.user_metadata.full_name;
-  const displayName = typeof metadataName === "string" && metadataName.trim() ? metadataName : null;
+  const authDisplayName = typeof metadataName === "string" && metadataName.trim() ? metadataName : null;
+  const displayName = profileBundle.profile.displayName ?? authDisplayName;
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
@@ -131,6 +145,18 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
           ))}
         </div>
       </section>
+    </div>
+  );
+}
+
+function ProfileUnavailable() {
+  return (
+    <div className="mx-auto max-w-2xl px-5 py-16 sm:px-8">
+      <div role="alert" className="rounded-3xl border border-red-200 bg-white p-7 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-red-700">Profile unavailable</p>
+        <h1 className="mt-3 font-display text-3xl font-semibold text-ink">MAPS could not load your teaching defaults.</h1>
+        <p className="mt-4 text-sm leading-6 text-charcoal/65">Please refresh and try again. Your profile details were not displayed or logged.</p>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ const PLANNER_HOSTNAME = "maps.markedminds.com";
 // on localhost and on markedminds.com. Once maps.markedminds.com is assigned to
 // this Vercel project, clean app URLs will resolve to the internal /planner
 // route tree without changing the application's canonical code structure.
-const PUBLIC_PLANNER_PATHS = ["/login", "/auth", "/logout"];
+const PLANNER_PASSTHROUGH_PATHS = ["/login", "/auth", "/logout", "/onboarding", "/settings"];
 
 export async function proxy(request: NextRequest) {
   const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
@@ -23,7 +23,7 @@ export async function proxy(request: NextRequest) {
   const isPlannerRequest =
     isPlannerHost ||
     pathname.startsWith("/planner") ||
-    PUBLIC_PLANNER_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+    PLANNER_PASSTHROUGH_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
   let sessionRefresh: SupabaseSessionRefresh = { cookies: [], headers: new Headers() };
 
@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/planner") ||
-    PUBLIC_PLANNER_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`)) ||
+    PLANNER_PASSTHROUGH_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`)) ||
     pathname.includes(".")
   ) {
     return applySupabaseSession(NextResponse.next({ request }), sessionRefresh);
