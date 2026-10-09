@@ -4,9 +4,19 @@ export const ruthlessScout = {
   headline: "Your next move should fit your life—not just your résumé.",
   description:
     "Opportunity intelligence for people carrying real experience, real responsibilities, and a dream that refuses to stay deferred.",
-  foundingPrice: 147,
+  // The founding pilot is complimentary and invite-only. This is not an
+  // active price — it's the anticipated price once the paid product
+  // launches, which requires standalone (non-ChatGPT) authentication and
+  // the access/provenance/evidence work described in
+  // docs/RUTHLESS_SCOUT_PRODUCT_AND_BRAND_AUDIT.md.
+  futurePrice: 147,
   foundingCapacity: 10,
-  turnaround: "7 business days after payment and intake",
+  turnaround: "7 business days after intake, once the pilot cohort opens",
+  accessModel: {
+    short: "ChatGPT sign-in required — no paid subscription",
+    detail:
+      "Private pilot access currently opens through ChatGPT sign-in. No paid ChatGPT subscription is required. The pilot is complimentary and invite-only while Marked Minds finalizes access, data handling, and candidate-protection requirements ahead of a paid, standalone product.",
+  },
   deliverables: [
     "A personal transition profile built around your compensation, location, travel, flexibility, and life-fit requirements",
     "A translation of your existing experience into credible, market-facing strengths",
@@ -42,7 +52,7 @@ export const ruthlessScout = {
     {
       question: "Do I need ChatGPT or an OpenAI account?",
       answer:
-        "No. Ruthless Scout is delivered through Marked Minds. You only need an email address to join the founding pilot.",
+        "Yes, for the current pilot. Private pilot access opens through ChatGPT sign-in—no paid ChatGPT subscription is required, but you do need a ChatGPT account to sign in. Marked Minds is building a standalone version of Ruthless Scout that will not require this for the paid product.",
     },
     {
       question: "Is this a résumé-writing service?",
@@ -62,7 +72,7 @@ export const ruthlessScout = {
     {
       question: "What happens after I apply for founding access?",
       answer:
-        "Marked Minds reviews your submission for pilot fit and capacity. If selected, you receive a secure Square payment link and the full transition intake. Your seven-business-day delivery window begins after both are complete.",
+        "Marked Minds reviews your submission for pilot fit and capacity. If selected, you receive an invitation with instructions to sign in through ChatGPT and complete your private intake. The founding pilot is complimentary—no payment is requested at this stage.",
     },
   ],
 } as const;

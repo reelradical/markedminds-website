@@ -60,10 +60,11 @@ export default function RuthlessScoutPage() {
               </Button>
             </div>
             <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/60">
-              <span className="flex items-center gap-2"><Check className="size-4 text-brand-orange" />No ChatGPT account required</span>
+              <span className="flex items-center gap-2"><Check className="size-4 text-brand-orange" />{ruthlessScout.accessModel.short}</span>
               <span className="flex items-center gap-2"><Check className="size-4 text-brand-orange" />Human-reviewed intelligence</span>
               <span className="flex items-center gap-2"><Check className="size-4 text-brand-orange" />You make every final decision</span>
             </div>
+            <p className="mt-5 max-w-2xl text-sm leading-6 text-white/55">{ruthlessScout.accessModel.detail}</p>
           </div>
           <div className="relative mx-auto w-full max-w-md">
             <div className="absolute -inset-4 rounded-[2rem] border border-white/10" aria-hidden="true" />
@@ -195,10 +196,11 @@ export default function RuthlessScoutPage() {
             <Badge variant="orange">Founding pilot · 10 people</Badge>
             <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/55">Ruthless Scout Transition Sprint</p>
             <div className="mt-3 flex items-end gap-2">
-              <span className="font-display text-6xl font-semibold tracking-tight">${ruthlessScout.foundingPrice}</span>
-              <span className="pb-2 text-sm text-white/55">one time</span>
+              <span className="font-display text-5xl font-semibold tracking-tight">Complimentary</span>
             </div>
-            <p className="mt-5 text-sm leading-6 text-white/70">{ruthlessScout.turnaround}. Payment is requested only after founding-pilot acceptance.</p>
+            <p className="mt-5 text-sm leading-6 text-white/70">
+              {ruthlessScout.turnaround}. No payment is requested for the founding pilot. The ${ruthlessScout.futurePrice} transition sprint reflects Marked Minds&apos; anticipated price for the future standalone product, not a current charge.
+            </p>
             <div className="mt-8 space-y-4 border-t border-white/10 pt-8 text-sm text-white/70">
               <p className="flex items-center gap-3"><Compass className="size-4 text-brand-orange" />Personal transition strategy</p>
               <p className="flex items-center gap-3"><Radar className="size-4 text-brand-orange" />Five verified opportunities</p>

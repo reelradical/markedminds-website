@@ -46,7 +46,7 @@ export function FoundingPilotForm() {
           Your request is in.
         </h3>
         <p className="mx-auto mt-3 max-w-md leading-7 text-charcoal/70">
-          Marked Minds will review your submission and respond within two business days. If the founding pilot is a fit and space remains, your reply will include the secure Square payment link and full intake.
+          Marked Minds will review your submission and respond within two business days. If the founding pilot is a fit and space remains, your reply will include an invitation with instructions to sign in through ChatGPT and complete your private intake. The founding pilot is complimentary—no payment is requested.
         </p>
       </div>
     );
@@ -138,7 +138,7 @@ export function FoundingPilotForm() {
           Apply for Founding Access
         </Button>
         <p className="mt-3 text-xs leading-5 text-charcoal/55">
-          Applying does not charge you. Selected participants receive a secure Square payment link before work begins.
+          Applying does not charge you. The founding pilot is complimentary and invite-only; selected participants sign in through ChatGPT to complete their private intake.
         </p>
       </div>
     </form>
