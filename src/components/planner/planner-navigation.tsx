@@ -1,14 +1,26 @@
+"use client";
+
 import Link from "next/link";
 import { CalendarPlus, Home, Library, Settings } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { key: "home", label: "Home", icon: Home, href: "/planner" },
-  { key: "new", label: "New plan", icon: CalendarPlus, href: null },
-  { key: "saved", label: "Saved", icon: Library, href: null },
+  { key: "new", label: "New plan", icon: CalendarPlus, href: "/planner/plans/new/tomorrow" },
+  { key: "saved", label: "Saved", icon: Library, href: "/planner/plans" },
   { key: "settings", label: "Settings", icon: Settings, href: "/settings/profile" },
 ] as const;
 
-export type PlannerNavigationItem = "home" | "settings" | null;
+type PlannerNavigationItem = "home" | "new" | "saved" | "settings" | null;
+
+function useActiveItem(): PlannerNavigationItem {
+  const pathname = usePathname();
+  if (pathname.startsWith("/settings")) return "settings";
+  if (pathname.includes("/plans/new")) return "new";
+  if (pathname.includes("/plans")) return "saved";
+  if (pathname === "/planner" || pathname === "/") return "home";
+  return null;
+}
 
 export function PlannerBrand() {
   return (
@@ -24,7 +36,8 @@ export function PlannerBrand() {
   );
 }
 
-export function PlannerDesktopNavigation({ activeItem }: { activeItem: PlannerNavigationItem }) {
+export function PlannerDesktopNavigation() {
+  const activeItem = useActiveItem();
   return (
     <nav aria-label="MAPS" className="mt-10 flex flex-col gap-2">
       {navItems.map(({ key, label, icon: Icon, href }) => {
@@ -44,7 +57,8 @@ export function PlannerDesktopNavigation({ activeItem }: { activeItem: PlannerNa
   );
 }
 
-export function PlannerMobileNavigation({ activeItem }: { activeItem: PlannerNavigationItem }) {
+export function PlannerMobileNavigation() {
+  const activeItem = useActiveItem();
   return (
     <nav
       aria-label="MAPS"

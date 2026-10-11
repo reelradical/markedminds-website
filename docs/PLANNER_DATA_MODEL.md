@@ -1,18 +1,52 @@
 # Marked Minds Planner — V1 Data Model and Infrastructure Decision
 
-**Status:** Approved logical design target; no database exists yet  
-**Phase:** 1B — documentation only  
-**Last updated:** October 6, 2026
+**Status:** Approved logical design with Phase 1D–1E Supabase implementation
+**Phase:** 1E
+**Last updated:** October 9, 2026
 
-This document translates the V1 product contract into a provider-neutral
-logical schema, defines generation metadata, and reassesses auth/database
-options. It does not create migrations or install packages.
+This document defines the provider-neutral V1 design. Phase 1D implemented the
+profile subset, and Phase 1E implements the first Plan Tomorrow persistence
+subset through committed Supabase migrations.
+
+Physical implementation details and setup live in:
+
+- `supabase/migrations/202610090001_maps_teacher_profiles.sql`
+- `supabase/migrations/202610090002_maps_plan_tomorrow.sql`
+- `supabase/migrations/202610110001_fix_maps_plan_finalize_ambiguity.sql`
+- `docs/PLANNER_PROFILE_SETUP.md`
+- `docs/PLANNER_GENERATION_SETUP.md`
 
 See also:
 
 - `docs/PLANNER_PRODUCT_CONTRACT.md`
 - `docs/PLANNER_PRIVACY_BOUNDARY.md`
 - `docs/PLANNER_ARCHITECTURE.md`
+
+## Implemented Supabase mapping
+
+The physical schema intentionally narrows the provider-neutral design for the
+current Supabase-authenticated V1:
+
+- `profiles.user_id` is both the application profile key and FK to
+  `auth.users(id)`. A separate provider-neutral identity key can be introduced
+  only if a future auth migration requires it.
+- `plans.owner_user_id` and `created_by_user_id` both reference that profile
+  key and must match in Phase 1E.
+- `generation_runs.plan_id` is nullable while an initial provider attempt is
+  pending or failed. This lets MAPS retain safe failure metadata without
+  creating an empty plan. A successful atomic finalize links the run, plan, and
+  revision.
+- Phase 1E revisions use only `source_kind = initial_generation`, revision
+  number 1, and a null parent. The broader source enum remains a future schema
+  migration rather than inactive states in the current table.
+- Composite foreign keys enforce that current revisions, generation runs, and
+  parent revisions cannot point across plan boundaries.
+- The application requires lesson-flow time within one minute of the requested
+  duration and prompts for an exact match. Outputs outside that tolerance fail
+  and receive at most one targeted timing retry.
+
+These implementation choices do not add organizations, shared ownership, or
+additional revision behaviors.
 
 ## Modeling rules
 

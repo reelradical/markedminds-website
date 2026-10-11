@@ -16,5 +16,5 @@ export const metadata: Metadata = {
 };
 
 export default function PlannerLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <PlannerAppShell activeItem="home">{children}</PlannerAppShell>;
+  return <PlannerAppShell>{children}</PlannerAppShell>;
 }

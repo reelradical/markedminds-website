@@ -1,9 +1,10 @@
 # Marked Minds Planner — Architecture
 
 Phase 1A established the visual, routing, and analytics boundary. Phase 1C added
-Supabase authentication. Phase 1D adds only a minimal authenticated profile and
-onboarding layer. It does not include AI calls, billing, plan generation, plan
-revisions, or plan persistence.
+Supabase authentication. Phase 1D added the authenticated profile and
+onboarding layer. Phase 1E adds one Plan Tomorrow generation and persistence
+path. It does not include revision actions, other planning modes, billing,
+organizations, sharing, or classroom integrations.
 
 ## Route boundaries
 
@@ -18,7 +19,9 @@ shell lives in `src/app/(planner)/planner` and receives a separate layout.
 Public authentication endpoints live in the same `(planner)` route group at
 `/login`, `/auth/callback`, and `/logout`. Authenticated profile routes live at
 `/onboarding` and `/settings/profile`; the latter shares the MAPS application
-shell.
+shell. Plan Tomorrow lives at `/planner/plans/new/tomorrow`, the owner-scoped
+library at `/planner/plans`, and saved detail pages at
+`/planner/plans/[planId]`.
 
 The root layout owns only document-wide concerns: HTML/body, fonts, global
 styles, the metadata base and icons, and the universal skip link.
@@ -68,6 +71,25 @@ deployments, and the main marketing hostname pass through unchanged, so
 - Planner routes remain outside the marketing layout, so existing GA4,
   Clarity, and Vercel Analytics scripts do not load there.
 
+## Planning service boundary
+
+- `src/server/planning/planning-service.ts` is the provider-independent entry
+  point used by the Plan Tomorrow Server Action.
+- `src/server/planning/providers/registry.ts` resolves the internal
+  `planner-primary` alias. Provider SDK imports remain inside provider modules.
+- The Phase 1E registry maps the alias to OpenAI `gpt-5.4-mini` through the
+  Responses API with strict Structured Outputs and provider storage disabled.
+- Input, output, prompt, and model-alias versions are persisted as identifiers;
+  full prompts and raw provider payloads are not stored.
+- `src/server/dal/plans.ts` is the server-only persistence boundary. It derives
+  ownership from the verified Supabase user and never accepts a client-supplied
+  owner ID.
+- Provider work happens outside a long transaction. The final plan, immutable
+  revision, successful run linkage, and current-revision pointer are committed
+  atomically by `finalize_plan_tomorrow_generation(...)`.
+- Setup and failure behavior are documented in
+  `docs/PLANNER_GENERATION_SETUP.md`.
+
 Before activating the subdomain in production:
 
 1. Add `maps.markedminds.com` to the existing Vercel project.
@@ -81,8 +103,8 @@ No DNS or Vercel project setting is changed by the repository code alone.
 
 ## Next implementation boundary
 
-After the Phase 1D migration and two-account RLS verification are complete in a
-target Supabase environment, the next approved slice may implement one narrow
-planning workflow against the approved Phase 1B contracts. AI integration,
-saved plans, revisions, billing, organizations, and broader product features
-remain separate implementation decisions.
+After the Phase 1E migration, live provider generation, persistence, reopening,
+and two-account RLS verification pass in a target environment, a separately
+approved Phase 1F may add one revision behavior. Quick actions, additional
+planning modes/providers, billing, organizations, sharing, and broader product
+features remain separate implementation decisions.

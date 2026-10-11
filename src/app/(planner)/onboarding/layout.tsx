@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function OnboardingLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <PlannerAppShell activeItem={null}>{children}</PlannerAppShell>;
+  return <PlannerAppShell>{children}</PlannerAppShell>;
 }

@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function SettingsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <PlannerAppShell activeItem="settings">{children}</PlannerAppShell>;
+  return <PlannerAppShell>{children}</PlannerAppShell>;
 }

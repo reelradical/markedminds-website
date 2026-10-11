@@ -52,7 +52,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               Plan for the class you actually have.
             </h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-charcoal/65 sm:text-lg">
-              Sign in to enter the private planning workspace. Planning workflows remain inactive during this proof of concept.
+              Sign in to enter your private planning workspace and build a practical plan for tomorrow.
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             </div>
 
             <p className="mt-6 border-t border-ink/8 pt-5 text-xs leading-5 text-charcoal/50">
-              Authentication is used only to protect your MAPS workspace. No lesson or student data is collected in this phase.
+              Keep student information anonymous. Describe classroom needs in groups, without names, IDs, diagnoses, or copied records.
             </p>
           </section>
         </div>
