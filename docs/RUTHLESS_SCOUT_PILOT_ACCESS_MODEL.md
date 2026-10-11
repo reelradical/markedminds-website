@@ -38,8 +38,13 @@ provenance/verification system, see `AUTHORIZATION_AND_PROVENANCE.md` in the
 7. Approve suggested changes — nothing changes without the candidate's
    explicit approval; the candidate can also edit any suggestion before
    accepting, or decline and keep their original wording.
-8. Begin scouting — once intake (and any pending profile review) is
-   complete, opportunities become visible in the candidate's private queue.
+8. See opportunities — once intake (and any pending profile review) is
+   complete, any opportunities the owner has manually staged for that
+   candidate (or that the candidate adds themselves) become visible in
+   their private queue. **Correction**: there is currently no automated
+   "scouting" step here — see the scouting blocker below. Approval does
+   not, by itself, trigger any opportunities to appear; someone (the
+   owner or the candidate) has to add them.
 
 ## What changed on the marketing site, and why
 
@@ -52,18 +57,35 @@ provenance/verification system, see `AUTHORIZATION_AND_PROVENANCE.md` in the
 | `src/components/ruthless-scout/founding-pilot-form.tsx` success message and footer note | Promised a "secure Square payment link" | Describes the real invite + ChatGPT sign-in outcome; states no payment is requested | Same reason — removes a payment-to-access promise the application cannot currently fulfill. |
 | `src/lib/data/ruthless-scout.ts` | `foundingPrice: 147` used as an active price | Renamed to `futurePrice` with an explaining comment | Keeps the number available for future-product positioning without it reading as a live charge. |
 
-## Release blocker
+## Release blockers
 
-**"No paid ChatGPT subscription is required" has not been technically
-verified.** This claim is implemented verbatim as given, but whether a
-genuine free-tier ChatGPT account can actually sign in to and use the
-Sites-hosted pilot is a platform-level behavior — nothing in either
-codebase can confirm it. This must be verified by actually attempting
-pilot sign-in with a real free-tier account before the pilot opens beyond
-invitees already known to have ChatGPT access, and before this claim is
-relied upon publicly at scale. Tracked as a formal release blocker in
-`RUTHLESS_SCOUT_PRODUCT_AND_BRAND_AUDIT.md` §9 and in the `ruthless-scout`
-repo's `docs/PRODUCTION_DEPLOYMENT_RUNBOOK.md` pre-flight checklist.
+Three open blockers, tracked in full detail in the `ruthless-scout` repo's
+`docs/AUTHORIZATION_AND_PROVENANCE.md`. Summarized here because they bear
+directly on what the marketing site can honestly claim:
+
+1. **Account-access blocker — confirmed failed, not merely unverified.**
+   The owner personally attempted to sign into the pilot with a separate
+   ChatGPT account; it did not work ("no longer works" / timed out). The
+   failure layer (ChatGPT auth, Sites hosting, connector activation, app
+   load, or an API/runtime step) has not yet been determined. **"No paid
+   ChatGPT subscription is required" must not be treated as confirmed —
+   access was actively tried and failed**, which is a stronger finding than
+   "not yet verified." Do not rely on this claim publicly at scale until
+   the failure is diagnosed and a working free-account sign-in is actually
+   demonstrated.
+2. **Scouting blocker.** Source inspection of the pilot found no automatic
+   scouting process of any kind — no scheduled job, no external job-source
+   integration, no post-approval trigger. The pilot today is an
+   intake/decision dashboard; every opportunity a candidate sees was added
+   by a person (the owner) or an active ChatGPT tool call, never generated
+   on its own. Marketing language should not imply an automated "scout" is
+   actively searching on a candidate's behalf yet.
+3. **Gate/scoring-integrity blocker** (fixed in the `ruthless-scout` repo
+   this pass, documented for completeness): candidate-added opportunities
+   were defaulting to a "50 Fit" score that implied an evaluation had
+   happened when none had, and nothing checked a candidate-added lead
+   against their own compensation/travel gates before it sat in their
+   active queue.
 
 ## Other open items
 
