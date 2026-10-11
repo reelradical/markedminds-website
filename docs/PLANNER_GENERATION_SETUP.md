@@ -60,13 +60,16 @@ and [text generation guide](https://developers.openai.com/api/docs/guides/text).
 
 - Input: `plan_tomorrow_input.v1`
 - Output: `generated_plan_output.v1`
-- Prompt: `plan_tomorrow_prompt.v1`
+- Prompt: `plan_tomorrow_prompt.v2`
+- Learning quality layer: `learning_quality.v1`
 
 Prompt source lives in
-`src/server/planning/prompts/plan-tomorrow-v1.ts`. It is assembled from distinct
-sections for core planning rules, profile preferences, Plan Tomorrow behavior,
-the normalized request, constraints, timing correction, and output rules.
-Rendered prompts and provider payloads are never stored.
+`src/server/planning/prompts/plan-tomorrow-v2.ts`. It is assembled from distinct
+sections for core planning rules, the versioned learning quality layer, profile
+preferences, Plan Tomorrow behavior, the normalized request, constraints,
+timing correction, and output rules. The quality contract and framework
+influences are documented in `docs/PLANNER_LEARNING_QUALITY.md`. Rendered
+prompts and provider payloads are never stored.
 
 The immutable input snapshot contains normalized teacher input and provenance
 for defaultable values using `user`, `profile`, or `system`. The immutable

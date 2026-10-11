@@ -1,6 +1,6 @@
 export const PLAN_TOMORROW_INPUT_SCHEMA_VERSION = "plan_tomorrow_input.v1";
 export const GENERATED_PLAN_OUTPUT_SCHEMA_VERSION = "generated_plan_output.v1";
-export const PLAN_TOMORROW_PROMPT_VERSION = "plan_tomorrow_prompt.v1";
+export const PLAN_TOMORROW_PROMPT_VERSION = "plan_tomorrow_prompt.v2";
 export const PLANNER_MODEL_ALIAS = "planner-primary";
 
 export const accessOptions = [

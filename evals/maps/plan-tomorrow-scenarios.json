@@ -1,0 +1,329 @@
+[
+  {
+    "id": "art-k5-symbol-and-pattern",
+    "name": "K–5 visual art across grade bands",
+    "profile": {
+      "role": "special_area",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "extra_attention",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "neutral",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Explore balance, repetition, rhythm, color, symbolism, and theme through modern portrait design. Picasso may be one reference, but students should make original choices rather than copy an artist's style.",
+      "subject_area": "visual_arts",
+      "grade_levels": ["K", "1", "2", "3", "4", "5"],
+      "duration_minutes": 45,
+      "class_size": 26,
+      "objective": "Students will use visual elements intentionally and explain at least one artistic choice at an age-appropriate level.",
+      "available_materials": ["drawing paper", "pencils", "crayons", "colored pencils", "markers"],
+      "student_needs": "Some younger students need oral directions and simple choices; older students are ready for symbolism, mood, and critique. Several students benefit from visual examples and reduced fine-motor complexity.",
+      "constraints": {
+        "copy_access": "limited",
+        "technology_access": "none",
+        "prep_time_minutes": 10,
+        "transition_minutes": 2,
+        "cleanup_minutes": 5,
+        "space_constraints": "Students work at shared tables in an art room used by the next class immediately afterward.",
+        "must_avoid": ["paint", "requiring every grade to complete the same cognitive task", "copying a famous artist's style"],
+        "other": "Identify what is essential before class versus optional if time allows."
+      },
+      "additional_notes": "The teacher teaches a different grade each period and needs grade-band adaptations that preserve one central concept."
+    }
+  },
+  {
+    "id": "kindergarten-story-sequencing",
+    "name": "Kindergarten story sequencing through purposeful play",
+    "profile": {
+      "role": "elementary_teacher",
+      "planDetailPreference": "concise",
+      "transitionCleanupPreference": "extra_attention",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "encourage",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Retell a familiar story in sequence using oral language, movement, and simple props.",
+      "subject_area": "ela",
+      "grade_levels": ["K"],
+      "duration_minutes": 30,
+      "class_size": 22,
+      "objective": "Students will orally retell beginning, middle, and end and place three events in order.",
+      "available_materials": ["one familiar picture book", "three blank sheets of paper", "crayons", "classroom objects"],
+      "student_needs": "Several students are emerging multilingual learners, four students are reluctant to speak in the whole group, and the class benefits from movement every 8 to 10 minutes.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 5,
+        "transition_minutes": 2,
+        "cleanup_minutes": 2,
+        "space_constraints": "Small carpet area with tables around the perimeter.",
+        "must_avoid": ["worksheets", "long teacher explanations"],
+        "other": "Play should produce evidence of sequencing, not just fill time."
+      }
+    }
+  },
+  {
+    "id": "grade2-phonics-small-groups",
+    "name": "Grade 2 phonics with mixed readiness",
+    "profile": {
+      "role": "elementary_teacher",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "neutral",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Decode and spell words with vowel teams ai and ay.",
+      "subject_area": "ela",
+      "grade_levels": ["2"],
+      "duration_minutes": 35,
+      "class_size": 25,
+      "objective": "Students will read and spell one-syllable words containing ai or ay and explain where each spelling usually appears.",
+      "available_materials": ["whiteboard", "dry-erase markers", "index cards", "pencils", "notebooks"],
+      "student_needs": "Six students still need sound-by-sound blending support; five are ready to apply the pattern in sentences; several need frequent response opportunities.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 8,
+        "transition_minutes": 2,
+        "cleanup_minutes": 1,
+        "must_avoid": ["silent independent work longer than 7 minutes"],
+        "other": "The teacher cannot run three elaborate stations."
+      }
+    }
+  },
+  {
+    "id": "grade3-fractions-limited-manipulatives",
+    "name": "Grade 3 fractions with scarce materials",
+    "profile": {
+      "role": "elementary_teacher",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "encourage",
+      "differentiationPreference": "when_relevant"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Compare fractions with the same numerator or denominator using visual models and reasoning.",
+      "subject_area": "math",
+      "grade_levels": ["3"],
+      "duration_minutes": 40,
+      "class_size": 31,
+      "objective": "Students will compare two fractions and justify the comparison with a drawing or concrete model.",
+      "available_materials": ["12 fraction strips", "scrap paper", "pencils", "whiteboard"],
+      "student_needs": "About one third of the class confuses numerator and denominator; several students finish quickly and need reasoning challenges rather than more computation.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 5,
+        "transition_minutes": 3,
+        "cleanup_minutes": 2,
+        "space_constraints": "Desks are in tight rows and cannot be moved.",
+        "must_avoid": ["one manipulative set per student", "assuming students already know cross multiplication"],
+        "other": "Use the limited fraction strips without creating a materials bottleneck."
+      }
+    }
+  },
+  {
+    "id": "grade5-erosion-no-lab",
+    "name": "Grade 5 science without lab supplies",
+    "profile": {
+      "role": "elementary_teacher",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "neutral",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Use evidence to explain how water changes land through weathering and erosion.",
+      "subject_area": "science",
+      "grade_levels": ["5"],
+      "duration_minutes": 45,
+      "class_size": 29,
+      "objective": "Students will distinguish weathering from erosion and construct an evidence-based explanation from observable examples.",
+      "available_materials": ["whiteboard", "paper", "pencils", "two photographs of landforms"],
+      "student_needs": "Several students need vocabulary support and sentence frames; the class can discuss evidence but tends to jump to claims without explaining reasoning.",
+      "constraints": {
+        "copy_access": "limited",
+        "technology_access": "none",
+        "prep_time_minutes": 10,
+        "transition_minutes": 2,
+        "cleanup_minutes": 1,
+        "must_avoid": ["inventing a hands-on lab without materials", "requiring internet research"],
+        "other": "Keep the work scientifically accurate and intellectually active without pretending a demonstration occurred."
+      }
+    }
+  },
+  {
+    "id": "grade6-ancient-river-civilizations",
+    "name": "Grade 6 social studies with meaningful integration",
+    "profile": {
+      "role": "middle_school_teacher",
+      "planDetailPreference": "detailed",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "neutral",
+      "movementPreference": "neutral",
+      "differentiationPreference": "when_relevant"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Explain how river geography shaped settlement and trade in early civilizations.",
+      "subject_area": "social_studies",
+      "grade_levels": ["6"],
+      "duration_minutes": 50,
+      "class_size": 33,
+      "objective": "Students will make and defend a causal claim connecting river geography to one settlement or trade decision.",
+      "available_materials": ["textbook maps", "notebooks", "colored pencils", "whiteboard"],
+      "student_needs": "Students can locate rivers but need support moving from map observations to causal explanations. Reading levels vary widely.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 12,
+        "transition_minutes": 3,
+        "cleanup_minutes": 1,
+        "must_avoid": ["a decorative poster task", "writing unrelated paragraphs just to claim ELA integration"],
+        "other": "Any math, ELA, or art connection must deepen the geographic reasoning rather than become an add-on."
+      }
+    }
+  },
+  {
+    "id": "grade7-argument-evidence-no-devices",
+    "name": "Grade 7 argument writing without devices",
+    "profile": {
+      "role": "middle_school_teacher",
+      "planDetailPreference": "concise",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "limit",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Choose the strongest evidence for an argument and explain why it supports the claim.",
+      "subject_area": "ela",
+      "grade_levels": ["7"],
+      "duration_minutes": 42,
+      "class_size": 32,
+      "objective": "Students will select relevant evidence and write or orally rehearse reasoning that connects it to a claim.",
+      "available_materials": ["shared class novel", "notebooks", "pencils", "whiteboard"],
+      "student_needs": "Many students can quote text but struggle to explain relevance. Four students need a reduced writing load while preserving the reasoning goal.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 5,
+        "transition_minutes": 2,
+        "cleanup_minutes": 1,
+        "space_constraints": "Students must remain seated because another class is testing next door.",
+        "must_avoid": ["requiring a new passage", "lowering the reasoning demand for students who write less"],
+        "other": "The class has low energy immediately after lunch."
+      }
+    }
+  },
+  {
+    "id": "grade4-music-rhythm-limited-instruments",
+    "name": "Grade 4 music with limited instruments",
+    "profile": {
+      "role": "special_area",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "extra_attention",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "encourage",
+      "differentiationPreference": "when_relevant"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Compose, perform, and revise an eight-beat rhythm using quarter notes, paired eighth notes, and rests.",
+      "subject_area": "music",
+      "grade_levels": ["4"],
+      "duration_minutes": 35,
+      "class_size": 28,
+      "objective": "Students will create and perform an eight-beat rhythm, listen for accuracy, and revise one choice based on feedback.",
+      "available_materials": ["8 hand drums", "rhythm cards", "whiteboard", "pencils", "scrap paper"],
+      "student_needs": "Several students need a visual beat grid; some are uncomfortable performing alone; advanced students need a musical challenge that still fits eight beats.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 7,
+        "transition_minutes": 3,
+        "cleanup_minutes": 3,
+        "space_constraints": "Music room with chairs in a semicircle and no room for large-group movement.",
+        "must_avoid": ["one instrument per student", "solo performance requirement"],
+        "other": "Noise rises quickly during instrument distribution."
+      }
+    }
+  },
+  {
+    "id": "grade8-pe-shared-space",
+    "name": "Grade 8 PE in a shared gym",
+    "profile": {
+      "role": "special_area",
+      "planDetailPreference": "concise",
+      "transitionCleanupPreference": "extra_attention",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "encourage",
+      "differentiationPreference": "always_surface_options"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Use spacing, communication, and support to maintain possession in a small-sided invasion game.",
+      "subject_area": "pe",
+      "grade_levels": ["8"],
+      "duration_minutes": 38,
+      "class_size": 46,
+      "objective": "Students will create passing options off the ball and use specific communication during small-sided play.",
+      "available_materials": ["12 cones", "6 foam balls", "pinnies in four colors", "whistle"],
+      "student_needs": "The class includes students with varied mobility and endurance; several students avoid competitive play; directions need to be brief and visible through demonstration.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 6,
+        "transition_minutes": 5,
+        "cleanup_minutes": 3,
+        "space_constraints": "Half of a gym shared with another class; no wall space and noise is high.",
+        "must_avoid": ["elimination games", "public ability ranking", "long lines", "assuming every student moves in the same way"],
+        "other": "One teacher supervises all 46 students."
+      }
+    }
+  },
+  {
+    "id": "high-school-biology-cell-transport",
+    "name": "High school biology with no lab setup",
+    "profile": {
+      "role": "high_school_teacher",
+      "planDetailPreference": "balanced",
+      "transitionCleanupPreference": "standard",
+      "lowPrepPreference": "prefer",
+      "movementPreference": "neutral",
+      "differentiationPreference": "when_relevant"
+    },
+    "input": {
+      "workflow": "plan_tomorrow",
+      "topic": "Predict and explain passive transport across a cell membrane using concentration gradients.",
+      "subject_area": "science",
+      "grade_levels": ["9", "10"],
+      "duration_minutes": 50,
+      "class_size": 34,
+      "objective": "Students will predict the net movement of particles in unfamiliar scenarios and justify each prediction using concentration gradient and equilibrium.",
+      "available_materials": ["whiteboard", "notebooks", "colored pencils", "textbook diagrams"],
+      "student_needs": "Students know the vocabulary but often reverse the direction of net movement. Several benefit from diagrams before symbolic explanations.",
+      "constraints": {
+        "copy_access": "none",
+        "technology_access": "none",
+        "prep_time_minutes": 5,
+        "transition_minutes": 2,
+        "cleanup_minutes": 1,
+        "must_avoid": ["inventing lab materials", "a vocabulary-only review", "water-channel analogies that create scientific misconceptions"],
+        "other": "The final check must reveal whether students can transfer the idea to a new scenario."
+      }
+    }
+  }
+]

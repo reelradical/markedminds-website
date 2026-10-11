@@ -2,6 +2,10 @@ import "server-only";
 
 import type { PlanTomorrowInputSnapshotV1 } from "@/lib/planner/plan-contract";
 import type { TeacherProfileRecord } from "@/server/dal/profiles";
+import {
+  LEARNING_QUALITY_LAYER_VERSION,
+  learningQualityRules,
+} from "@/server/planning/quality/learning-quality-v1";
 
 const corePlanningRules = `
 You create practical, teacher-facing lesson plans for the class described.
@@ -47,7 +51,13 @@ export function buildPlanTomorrowPrompt(
     : "";
 
   return {
-    instructions: [corePlanningRules, planTomorrowMode, outputRules, timingCorrectionSection]
+    instructions: [
+      corePlanningRules,
+      `LEARNING QUALITY LAYER — ${LEARNING_QUALITY_LAYER_VERSION}\n${learningQualityRules}`,
+      planTomorrowMode,
+      outputRules,
+      timingCorrectionSection,
+    ]
       .filter(Boolean)
       .join("\n\n"),
     input: JSON.stringify({

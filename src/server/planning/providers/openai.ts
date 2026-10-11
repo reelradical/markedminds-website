@@ -11,7 +11,7 @@ import { ZodError } from "zod";
 
 import { PLANNER_MODEL_ALIAS } from "@/lib/planner/plan-contract";
 import { normalizeProviderPlanOutput, providerPlanOutputSchema } from "@/server/planning/output-schema";
-import { buildPlanTomorrowPrompt } from "@/server/planning/prompts/plan-tomorrow-v1";
+import { buildPlanTomorrowPrompt } from "@/server/planning/prompts/plan-tomorrow-v2";
 import {
   PlanningProviderError,
   type GeneratePlanRequest,

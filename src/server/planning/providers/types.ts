@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { GeneratedPlanOutputV1, PlanTomorrowInputSnapshotV1 } from "@/lib/planner/plan-contract";
-import type { PlanPromptContext } from "@/server/planning/prompts/plan-tomorrow-v1";
+import type { PlanPromptContext } from "@/server/planning/prompts/plan-tomorrow-v2";
 
 export type SafeGenerationErrorCategory =
   | "missing_configuration"

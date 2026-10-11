@@ -17,6 +17,8 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ pla
   }
 
   const output = plan.output;
+  const essentialPrep = output.before_students_arrive.filter((item) => item.essential);
+  const optionalPrep = output.before_students_arrive.filter((item) => !item.essential);
   return (
     <article className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <header className="border-b border-ink/8 pb-8">
@@ -27,8 +29,24 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ pla
       </header>
 
       <div className="mt-8 grid gap-6">
+        <PlanSection title="Teach this now">
+          <ol className="grid gap-3 sm:grid-cols-2">
+            {output.lesson_flow.map((step) => (
+              <li key={step.sequence} className="flex items-center justify-between gap-4 rounded-xl bg-mist px-4 py-3">
+                <span className="font-semibold text-ink">{step.sequence}. {step.activity_title}</span>
+                <span className="shrink-0 text-sm font-semibold text-brand-orange-dark">{step.duration_minutes} min</span>
+              </li>
+            ))}
+          </ol>
+        </PlanSection>
+
         <PlanSection title="Before students arrive">
-          {output.before_students_arrive.length ? <ol className="space-y-3">{output.before_students_arrive.map((item) => <li key={item.sequence} className="flex gap-3"><span className="font-semibold text-brand-orange-dark">{item.sequence}.</span><span>{item.task}{item.estimated_minutes !== undefined ? ` (${item.estimated_minutes} min)` : ""}{item.essential ? "" : " — optional"}</span></li>)}</ol> : <p>No advance preparation required.</p>}
+          {output.before_students_arrive.length ? (
+            <div className="grid gap-6 sm:grid-cols-2">
+              <PrepList title="Must do" items={essentialPrep} emptyText="No required advance preparation." />
+              <PrepList title="Nice if you have time" items={optionalPrep} emptyText="No optional preparation." />
+            </div>
+          ) : <p>No advance preparation required.</p>}
         </PlanSection>
 
         <PlanSection title="Materials">
@@ -59,6 +77,32 @@ function PlanSection({ title, children }: { title: string; children: React.React
 
 function PlanList({ title, items }: { title: string; items: string[] }) {
   return <div><h3 className="font-semibold text-ink">{title}</h3>{items.length ? <ul className="mt-2 list-disc space-y-2 pl-5 text-sm leading-6">{items.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p className="mt-2 text-sm text-charcoal/55">No additional suggestions.</p>}</div>;
+}
+
+function PrepList({
+  title,
+  items,
+  emptyText,
+}: {
+  title: string;
+  items: Array<{ sequence: number; task: string; estimated_minutes?: number }>;
+  emptyText: string;
+}) {
+  return (
+    <div>
+      <h3 className="font-semibold text-ink">{title}</h3>
+      {items.length ? (
+        <ol className="mt-3 space-y-3">
+          {items.map((item) => (
+            <li key={item.sequence} className="flex gap-3 text-sm leading-6">
+              <span className="font-semibold text-brand-orange-dark">{item.sequence}.</span>
+              <span>{item.task}{item.estimated_minutes !== undefined ? ` (${item.estimated_minutes} min)` : ""}</span>
+            </li>
+          ))}
+        </ol>
+      ) : <p className="mt-2 text-sm text-charcoal/55">{emptyText}</p>}
+    </div>
+  );
 }
 
 function Unavailable() {

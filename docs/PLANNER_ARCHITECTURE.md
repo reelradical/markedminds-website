@@ -81,6 +81,9 @@ deployments, and the main marketing hostname pass through unchanged, so
   Responses API with strict Structured Outputs and provider storage disabled.
 - Input, output, prompt, and model-alias versions are persisted as identifiers;
   full prompts and raw provider payloads are not stored.
+- `src/server/planning/quality/learning-quality-v1.ts` supplies a versioned,
+  provider-independent educational quality layer. Its product principles and
+  framework influences are documented in `docs/PLANNER_LEARNING_QUALITY.md`.
 - `src/server/dal/plans.ts` is the server-only persistence boundary. It derives
   ownership from the verified Supabase user and never accepts a client-supplied
   owner ID.
