@@ -1,15 +1,26 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
+import { GuidedRevisionForm } from "@/components/planner/guided-revision-form";
+import { guidedRevisionIntents, type GuidedRevisionIntent } from "@/lib/planner/plan-contract";
+import { reviseSavedPlan } from "@/server/actions/revision-actions";
 import { getCurrentUserPlan, PlanDataError } from "@/server/dal/plans";
 
 export const dynamic = "force-dynamic";
 
-export default async function PlanDetailPage({ params }: { params: Promise<{ planId: string }> }) {
+export default async function PlanDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ planId: string }>;
+  searchParams: Promise<{ revision?: string | string[] }>;
+}) {
   const { planId } = await params;
+  const query = await searchParams;
+  const selectedRevisionId = typeof query.revision === "string" ? query.revision : undefined;
   let plan;
   try {
-    plan = await getCurrentUserPlan(planId);
+    plan = await getCurrentUserPlan(planId, selectedRevisionId);
   } catch (error) {
     if (error instanceof PlanDataError && error.code === "unauthenticated") redirect("/login");
     if (error instanceof PlanDataError && error.code === "not_found") notFound();
@@ -19,16 +30,24 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ pla
   const output = plan.output;
   const essentialPrep = output.before_students_arrive.filter((item) => item.essential);
   const optionalPrep = output.before_students_arrive.filter((item) => !item.essential);
+  const revisionAction = reviseSavedPlan.bind(null, plan.id, plan.revisionId);
   return (
     <article className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <header className="border-b border-ink/8 pb-8">
         <div className="flex flex-wrap items-center justify-between gap-4"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">Plan Tomorrow</p><Link href="/planner/plans" className="text-sm font-semibold text-ink underline decoration-brand-orange decoration-2 underline-offset-4">All saved plans</Link></div>
         <h1 className="mt-4 text-balance font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{output.title}</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-charcoal/70">{output.goal}</p>
-        <p className="mt-4 text-sm text-charcoal/45">{plan.subjectArea.replaceAll("_", " ")} · Grades {plan.gradeLevels.join(", ")} · {plan.durationMinutes} minutes</p>
+        <p className="mt-4 text-sm text-charcoal/45">{plan.subjectArea.replaceAll("_", " ")} · Grades {plan.gradeLevels.join(", ")} · {plan.durationMinutes} minutes · Revision {plan.revisionNumber}{plan.isCurrentRevision ? " (current)" : ""}</p>
       </header>
 
       <div className="mt-8 grid gap-6">
+        <section className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm sm:p-8">
+          <GuidedRevisionForm
+            action={revisionAction}
+            branchingFromEarlierRevision={!plan.isCurrentRevision}
+          />
+        </section>
+
         <PlanSection title="Teach this now">
           <ol className="grid gap-3 sm:grid-cols-2">
             {output.lesson_flow.map((step) => (
@@ -66,9 +85,41 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ pla
         <PlanSection title="If things go sideways"><div className="space-y-4">{output.if_things_go_sideways.map((item, index) => <div key={index}><h3 className="font-semibold text-ink">{item.likely_issue}</h3>{item.signal ? <p className="mt-1 text-sm">Signal: {item.signal}</p> : null}<p className="mt-1 text-sm leading-6">Response: {item.response}</p>{item.time_adjustment ? <p className="mt-1 text-sm text-charcoal/60">Timing: {item.time_adjustment}</p> : null}</div>)}</div></PlanSection>
 
         <PlanSection title="What you need for tomorrow">{output.what_you_need_for_tomorrow.length ? <ul className="list-disc space-y-2 pl-5">{output.what_you_need_for_tomorrow.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Nothing else is required.</p>}</PlanSection>
+
+        <PlanSection title="Revision history">
+          <ol className="space-y-3">
+            {plan.revisions.map((revision) => {
+              const selected = revision.id === plan.revisionId;
+              const current = revision.id === plan.currentRevisionId;
+              return (
+                <li key={revision.id}>
+                  <Link
+                    href={current ? `/planner/plans/${plan.id}` : `/planner/plans/${plan.id}?revision=${revision.id}`}
+                    aria-current={selected ? "page" : undefined}
+                    className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm transition ${selected ? "border-brand-orange bg-brand-orange/5" : "border-ink/8 hover:border-brand-orange/40"}`}
+                  >
+                    <span>
+                      <span className="font-semibold text-ink">Revision {revision.revisionNumber}</span>
+                      <span className="ml-2 text-charcoal/55">
+                        {revision.revisionNumber === 1 ? "Original plan" : revisionIntentLabel(revision.revisionIntent)}
+                      </span>
+                    </span>
+                    <span className="text-xs text-charcoal/45">
+                      {current ? "Current · " : ""}{new Date(revision.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </PlanSection>
       </div>
     </article>
   );
+}
+
+function revisionIntentLabel(intent?: GuidedRevisionIntent) {
+  return guidedRevisionIntents.find((option) => option.value === intent)?.label ?? "Guided revision";
 }
 
 function PlanSection({ title, children }: { title: string; children: React.ReactNode }) {

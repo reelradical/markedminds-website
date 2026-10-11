@@ -2,9 +2,10 @@
 
 Phase 1A established the visual, routing, and analytics boundary. Phase 1C added
 Supabase authentication. Phase 1D added the authenticated profile and
-onboarding layer. Phase 1E adds one Plan Tomorrow generation and persistence
-path. It does not include revision actions, other planning modes, billing,
-organizations, sharing, or classroom integrations.
+onboarding layer. Phase 1E added Plan Tomorrow generation and persistence.
+Phase 1F adds teacher-guided immutable revisions. It does not include unrelated
+quick actions, other planning modes, billing, organizations, sharing, or
+classroom integrations.
 
 ## Route boundaries
 
@@ -90,6 +91,11 @@ deployments, and the main marketing hostname pass through unchanged, so
 - Provider work happens outside a long transaction. The final plan, immutable
   revision, successful run linkage, and current-revision pointer are committed
   atomically by `finalize_plan_tomorrow_generation(...)`.
+- Guided revision re-reads the selected owner-scoped revision on the server,
+  privacy-screens the teacher's direction, generates a complete replacement
+  output, and atomically appends it with
+  `finalize_guided_plan_revision(...)`. Earlier revisions remain immutable and
+  reopenable; revising an older selection creates a valid branch.
 - Setup and failure behavior are documented in
   `docs/PLANNER_GENERATION_SETUP.md`.
 
@@ -106,8 +112,8 @@ No DNS or Vercel project setting is changed by the repository code alone.
 
 ## Next implementation boundary
 
-After the Phase 1E migration, live provider generation, persistence, reopening,
-and two-account RLS verification pass in a target environment, a separately
-approved Phase 1F may add one revision behavior. Quick actions, additional
-planning modes/providers, billing, organizations, sharing, and broader product
-features remain separate implementation decisions.
+After the Phase 1F migration, guided revision, history reopening, failure
+preservation, and two-account RLS verification must pass in a target
+environment before private beta. Additional quick actions, planning modes,
+providers, billing, organizations, sharing, and broader product features remain
+separate implementation decisions.

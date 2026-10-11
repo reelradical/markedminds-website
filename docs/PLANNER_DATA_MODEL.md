@@ -1,8 +1,8 @@
 # Marked Minds Planner — V1 Data Model and Infrastructure Decision
 
-**Status:** Approved logical design with Phase 1D–1E Supabase implementation
-**Phase:** 1E
-**Last updated:** October 9, 2026
+**Status:** Approved logical design with Phase 1D–1F Supabase implementation
+**Phase:** 1F
+**Last updated:** October 11, 2026
 
 This document defines the provider-neutral V1 design. Phase 1D implemented the
 profile subset, and Phase 1E implements the first Plan Tomorrow persistence
@@ -13,6 +13,7 @@ Physical implementation details and setup live in:
 - `supabase/migrations/202610090001_maps_teacher_profiles.sql`
 - `supabase/migrations/202610090002_maps_plan_tomorrow.sql`
 - `supabase/migrations/202610110001_fix_maps_plan_finalize_ambiguity.sql`
+- `supabase/migrations/202610110002_maps_guided_revisions.sql`
 - `docs/PLANNER_PROFILE_SETUP.md`
 - `docs/PLANNER_GENERATION_SETUP.md`
 
@@ -36,17 +37,19 @@ current Supabase-authenticated V1:
   pending or failed. This lets MAPS retain safe failure metadata without
   creating an empty plan. A successful atomic finalize links the run, plan, and
   revision.
-- Phase 1E revisions use only `source_kind = initial_generation`, revision
-  number 1, and a null parent. The broader source enum remains a future schema
-  migration rather than inactive states in the current table.
+- Phase 1E revisions use `source_kind = initial_generation`, revision number 1,
+  and a null parent. Phase 1F adds `regeneration`, an explicit source revision
+  on the generation run, and an atomic append function. The guided request is
+  preserved in the versioned revision input snapshot rather than raw run
+  metadata.
 - Composite foreign keys enforce that current revisions, generation runs, and
   parent revisions cannot point across plan boundaries.
 - The application requires lesson-flow time within one minute of the requested
   duration and prompts for an exact match. Outputs outside that tolerance fail
   and receive at most one targeted timing retry.
 
-These implementation choices do not add organizations, shared ownership, or
-additional revision behaviors.
+These implementation choices do not add organizations, shared ownership,
+manual editing, format transforms, or a catalog of one-click quick actions.
 
 ## Modeling rules
 

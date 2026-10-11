@@ -1,7 +1,19 @@
 export const PLAN_TOMORROW_INPUT_SCHEMA_VERSION = "plan_tomorrow_input.v1";
 export const GENERATED_PLAN_OUTPUT_SCHEMA_VERSION = "generated_plan_output.v1";
 export const PLAN_TOMORROW_PROMPT_VERSION = "plan_tomorrow_prompt.v2";
+export const GUIDED_REVISION_INPUT_SCHEMA_VERSION = "guided_plan_revision_input.v1";
+export const GUIDED_REVISION_PROMPT_VERSION = "guided_plan_revision_prompt.v1";
 export const PLANNER_MODEL_ALIAS = "planner-primary";
+
+export const guidedRevisionIntents = [
+  { value: "fit_learners", label: "Fit my learners", description: "Make the grade-level expectations and access supports more specific." },
+  { value: "improve_pacing", label: "Improve pacing", description: "Make the sequence, transitions, and cleanup more executable." },
+  { value: "reduce_prep", label: "Reduce prep", description: "Lower the required setup or materials without weakening the goal." },
+  { value: "strengthen_evidence", label: "Strengthen evidence", description: "Improve checks for understanding and the teacher's next moves." },
+  { value: "increase_agency", label: "Increase student agency", description: "Add meaningful student decisions, explanation, or revision." },
+] as const;
+
+export type GuidedRevisionIntent = (typeof guidedRevisionIntents)[number]["value"];
 
 export const accessOptions = [
   { value: "unknown", label: "Not specified" },
@@ -61,6 +73,16 @@ export type PlanTomorrowProvenanceV1 = {
 export type PlanTomorrowInputSnapshotV1 = {
   input: PlanTomorrowInputV1;
   provenance: PlanTomorrowProvenanceV1;
+};
+
+export type GuidedRevisionRequestV1 = {
+  intent: GuidedRevisionIntent;
+  teacher_direction?: string;
+};
+
+export type GuidedRevisionInputSnapshotV1 = {
+  source_input: PlanTomorrowInputSnapshotV1;
+  revision_request: GuidedRevisionRequestV1;
 };
 
 export type GeneratedPlanOutputV1 = {
@@ -131,6 +153,18 @@ export type PlanTomorrowActionState = {
 };
 
 export const initialPlanTomorrowActionState: PlanTomorrowActionState = {
+  status: "idle",
+  message: "",
+  fieldErrors: {},
+};
+
+export type GuidedRevisionActionState = {
+  status: "idle" | "error";
+  message: string;
+  fieldErrors: Partial<Record<"intent" | "teacherDirection", string>>;
+};
+
+export const initialGuidedRevisionActionState: GuidedRevisionActionState = {
   status: "idle",
   message: "",
   fieldErrors: {},

@@ -1,15 +1,15 @@
-# MAPS — Phase 1E Plan Tomorrow Generation
+# MAPS — Plan Tomorrow Generation and Guided Revision
 
 **Status:** Repository implementation complete; migration and live provider
 validation are required per environment
 
-Phase 1E adds one vertical slice:
+Phase 1E added one vertical slice:
 
 > Teacher request → structured Plan Tomorrow generation → atomic save → reopen
 
-It does not add revisions beyond the initial generated version, quick actions,
-Emergency Plan, Fix My Lesson, Differentiate, sharing, organizations, billing,
-or classroom integrations.
+Phase 1F adds one guided revision behavior and version history. It does not add
+standalone quick actions, Emergency Plan, Fix My Lesson, Differentiate,
+sharing, organizations, billing, or classroom integrations.
 
 ## Dependencies
 
@@ -62,6 +62,8 @@ and [text generation guide](https://developers.openai.com/api/docs/guides/text).
 - Output: `generated_plan_output.v1`
 - Prompt: `plan_tomorrow_prompt.v2`
 - Learning quality layer: `learning_quality.v1`
+- Guided revision input: `guided_plan_revision_input.v1`
+- Guided revision prompt: `guided_plan_revision_prompt.v1`
 
 Prompt source lives in
 `src/server/planning/prompts/plan-tomorrow-v2.ts`. It is assembled from distinct
@@ -70,6 +72,12 @@ preferences, Plan Tomorrow behavior, the normalized request, constraints,
 timing correction, and output rules. The quality contract and framework
 influences are documented in `docs/PLANNER_LEARNING_QUALITY.md`. Rendered
 prompts and provider payloads are never stored.
+
+Guided revisions use `src/server/planning/prompts/guided-revision-v1.ts` and
+the same provider-independent planning service. The selected revision and
+teacher direction are re-read and validated server-side. A successful revision
+stores a complete immutable output; a failure leaves the current plan pointer
+unchanged.
 
 The immutable input snapshot contains normalized teacher input and provenance
 for defaultable values using `user`, `profile`, or `system`. The immutable
@@ -82,6 +90,7 @@ Apply:
 ```text
 supabase/migrations/202610090002_maps_plan_tomorrow.sql
 supabase/migrations/202610110001_fix_maps_plan_finalize_ambiguity.sql
+supabase/migrations/202610110002_maps_guided_revisions.sql
 ```
 
 The migration creates:
@@ -90,6 +99,7 @@ The migration creates:
 - `plan_revisions` — immutable versioned input/output snapshots
 - `generation_runs` — safe operational attempt metadata
 - `finalize_plan_tomorrow_generation(...)` — the short atomic finalize RPC
+- `finalize_guided_plan_revision(...)` — the owner-scoped atomic revision RPC
 
 It also adds ownership and lookup indexes, same-plan composite foreign keys,
 status/value checks, RLS policies, and explicit authenticated grants.

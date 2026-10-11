@@ -38,3 +38,7 @@ export function screenPlanTomorrowInput(input: PlanTomorrowInputV1) {
 export function containsObviousSensitiveText(values: string[]) {
   return values.some(appearsSensitive);
 }
+
+export function guidedRevisionPrivacyError(value: string | undefined) {
+  return appearsSensitive(value) ? privacyMessage : null;
+}

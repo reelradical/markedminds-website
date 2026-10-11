@@ -1,6 +1,10 @@
 import "server-only";
 
-import type { GeneratedPlanOutputV1, PlanTomorrowInputSnapshotV1 } from "@/lib/planner/plan-contract";
+import type {
+  GeneratedPlanOutputV1,
+  GuidedRevisionRequestV1,
+  PlanTomorrowInputSnapshotV1,
+} from "@/lib/planner/plan-contract";
 import type { PlanPromptContext } from "@/server/planning/prompts/plan-tomorrow-v2";
 
 export type SafeGenerationErrorCategory =
@@ -40,9 +44,18 @@ export type GeneratePlanRequest = {
   timingCorrection?: { requestedMinutes: number; priorMinutes: number };
 };
 
+export type RevisePlanRequest = {
+  input: PlanTomorrowInputSnapshotV1;
+  sourceOutput: GeneratedPlanOutputV1;
+  revision: GuidedRevisionRequestV1;
+  profile: PlanPromptContext;
+  timingCorrection?: { requestedMinutes: number; priorMinutes: number };
+};
+
 export interface PlanningProvider {
   readonly id: string;
   readonly modelAlias: string;
   readonly modelId: string;
   generatePlan(request: GeneratePlanRequest): Promise<PlanningProviderResult>;
+  revisePlan(request: RevisePlanRequest): Promise<PlanningProviderResult>;
 }

@@ -11,11 +11,13 @@ import { ZodError } from "zod";
 
 import { PLANNER_MODEL_ALIAS } from "@/lib/planner/plan-contract";
 import { normalizeProviderPlanOutput, providerPlanOutputSchema } from "@/server/planning/output-schema";
+import { buildGuidedRevisionPrompt } from "@/server/planning/prompts/guided-revision-v1";
 import { buildPlanTomorrowPrompt } from "@/server/planning/prompts/plan-tomorrow-v2";
 import {
   PlanningProviderError,
   type GeneratePlanRequest,
   type PlanningProvider,
+  type RevisePlanRequest,
 } from "@/server/planning/providers/types";
 
 const PROVIDER_ID = "openai";
@@ -48,9 +50,8 @@ export class OpenAIPlanningProvider implements PlanningProvider {
   readonly modelAlias = PLANNER_MODEL_ALIAS;
   readonly modelId = PROVIDER_MODEL_ID;
 
-  async generatePlan(request: GeneratePlanRequest) {
+  private async generateStructuredPlan(prompt: { instructions: string; input: string }) {
     const startedAt = Date.now();
-    const prompt = buildPlanTomorrowPrompt(request.input, request.profile, request.timingCorrection);
 
     try {
       const response = await configuredClient().responses.parse({
@@ -79,5 +80,23 @@ export class OpenAIPlanningProvider implements PlanningProvider {
     } catch (error) {
       throw safeProviderError(error);
     }
+  }
+
+  generatePlan(request: GeneratePlanRequest) {
+    return this.generateStructuredPlan(
+      buildPlanTomorrowPrompt(request.input, request.profile, request.timingCorrection),
+    );
+  }
+
+  revisePlan(request: RevisePlanRequest) {
+    return this.generateStructuredPlan(
+      buildGuidedRevisionPrompt(
+        request.input,
+        request.sourceOutput,
+        request.revision,
+        request.profile,
+        request.timingCorrection,
+      ),
+    );
   }
 }
