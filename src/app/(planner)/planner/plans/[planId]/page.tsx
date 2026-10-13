@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 
 import { GuidedRevisionForm } from "@/components/planner/guided-revision-form";
 import { guidedRevisionIntents, type GuidedRevisionIntent } from "@/lib/planner/plan-contract";
@@ -8,19 +10,48 @@ import { getCurrentUserPlan, PlanDataError } from "@/server/dal/plans";
 
 export const dynamic = "force-dynamic";
 
-export default async function PlanDetailPage({
-  params,
-  searchParams,
-}: {
+type PlanDetailPageProps = {
   params: Promise<{ planId: string }>;
   searchParams: Promise<{ revision?: string | string[] }>;
-}) {
+};
+
+const getPlanDetail = cache((planId: string, revisionId?: string) =>
+  getCurrentUserPlan(planId, revisionId),
+);
+
+function selectedRevision(searchParams: { revision?: string | string[] }) {
+  return typeof searchParams.revision === "string" ? searchParams.revision : undefined;
+}
+
+export async function generateMetadata({ params, searchParams }: PlanDetailPageProps): Promise<Metadata> {
+  const { planId } = await params;
+  const selectedRevisionId = selectedRevision(await searchParams);
+
+  try {
+    const plan = await getPlanDetail(planId, selectedRevisionId);
+    const revisionLabel = plan.revisionNumber > 1 ? ` — Revision ${plan.revisionNumber}` : "";
+
+    return {
+      title: {
+        absolute: `${plan.output.title}${revisionLabel} — MAPS Lesson Plan`,
+      },
+    };
+  } catch {
+    return {
+      title: {
+        absolute: "Saved lesson plan — MAPS",
+      },
+    };
+  }
+}
+
+export default async function PlanDetailPage({ params, searchParams }: PlanDetailPageProps) {
   const { planId } = await params;
   const query = await searchParams;
-  const selectedRevisionId = typeof query.revision === "string" ? query.revision : undefined;
+  const selectedRevisionId = selectedRevision(query);
   let plan;
   try {
-    plan = await getCurrentUserPlan(planId, selectedRevisionId);
+    plan = await getPlanDetail(planId, selectedRevisionId);
   } catch (error) {
     if (error instanceof PlanDataError && error.code === "unauthenticated") redirect("/login");
     if (error instanceof PlanDataError && error.code === "not_found") notFound();
