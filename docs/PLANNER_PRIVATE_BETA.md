@@ -19,9 +19,12 @@ Do not send invitations until all of these pass on the production hostname:
 - one real account completes sign-in, profile loading, generation, saving,
   reopening, guided revision, history reopening, sign-out, and sign-in again
 - a second account cannot read or revise the first account's plans
+- feedback on original and revised plans saves only for the authenticated owner
+  and remains isolated from the second account
 - Planner and auth pages remain free of marketing analytics, navigation, and
   footer components
 - the guided-revision migration is present in the production Supabase project
+- the plan-feedback migration is present in the production Supabase project
 
 ## Cohort shape
 
@@ -80,7 +83,10 @@ Marked Minds
 5. Open it from **Saved Plans**.
 6. Use **Revise this plan** for the mismatch that matters most.
 7. Open the original and revised versions from revision history.
-8. Sign out and back in, then confirm the plan and revision remain available.
+8. Answer **Could you teach this tomorrow?** on both the original and revised
+   versions, adding only plan-level feedback with no student information.
+9. Sign out and back in, then confirm the plan, revision history, and feedback
+   remain available.
 
 ## Feedback questions
 
@@ -125,6 +131,8 @@ metrics:
 - at least 5 teachers complete a saved plan
 - at least 4 reopen that plan later
 - at least 3 create and compare a guided revision
+- most participants answer the in-product teachability prompt on at least one
+  revision
 - no cross-account access, privacy, or data-loss incident
 - most participants describe at least one constraint MAPS handled correctly
 - the strongest repeated unmet need determines the next product slice

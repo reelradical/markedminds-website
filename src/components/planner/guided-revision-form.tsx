@@ -23,7 +23,7 @@ export function GuidedRevisionForm({
   const [state, formAction, pending] = useActionState(action, initialGuidedRevisionActionState);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} aria-busy={pending} className="space-y-6">
       <div>
         <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">
           Revise this plan
@@ -89,6 +89,13 @@ export function GuidedRevisionForm({
         {state.fieldErrors.teacherDirection ? <p role="alert" className="mt-2 text-sm text-red-700">{state.fieldErrors.teacherDirection}</p> : null}
       </div>
 
+      {pending ? (
+        <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-orange/25 bg-brand-orange/5 px-5 py-4 text-sm leading-6 text-charcoal/70">
+          <span aria-hidden="true" className="mt-1 size-4 shrink-0 animate-spin rounded-full border-2 border-brand-orange/25 border-t-brand-orange" />
+          <span><strong className="text-ink">MAPS is drafting a new revision.</strong> This usually takes 15–30 seconds. Your current plan and every earlier version remain safely available.</span>
+        </div>
+      ) : null}
+
       <div className="flex flex-col gap-3 border-t border-ink/8 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-xl text-sm leading-6 text-charcoal/55">
           The current and earlier versions remain available. A failed revision never replaces them.
@@ -96,8 +103,9 @@ export function GuidedRevisionForm({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex min-h-12 items-center justify-center rounded-xl bg-ink px-7 py-3 text-sm font-semibold text-white transition hover:bg-charcoal disabled:cursor-wait disabled:opacity-60"
+          className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-ink px-7 py-3 text-sm font-semibold text-white transition hover:bg-charcoal disabled:cursor-wait disabled:opacity-60"
         >
+          {pending ? <span aria-hidden="true" className="size-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : null}
           {pending ? "Revising your plan…" : "Create revision"}
         </button>
       </div>

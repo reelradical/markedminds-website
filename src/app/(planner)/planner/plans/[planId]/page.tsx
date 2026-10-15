@@ -4,8 +4,11 @@ import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 
 import { GuidedRevisionForm } from "@/components/planner/guided-revision-form";
+import { PlanFeedbackForm } from "@/components/planner/plan-feedback-form";
 import { guidedRevisionIntents, type GuidedRevisionIntent } from "@/lib/planner/plan-contract";
+import { savePlanFeedback } from "@/server/actions/feedback-actions";
 import { reviseSavedPlan } from "@/server/actions/revision-actions";
+import { getCurrentUserPlanFeedback, PlanFeedbackDataError } from "@/server/dal/feedback";
 import { getCurrentUserPlan, PlanDataError } from "@/server/dal/plans";
 
 export const dynamic = "force-dynamic";
@@ -62,6 +65,16 @@ export default async function PlanDetailPage({ params, searchParams }: PlanDetai
   const essentialPrep = output.before_students_arrive.filter((item) => item.essential);
   const optionalPrep = output.before_students_arrive.filter((item) => !item.essential);
   const revisionAction = reviseSavedPlan.bind(null, plan.id, plan.revisionId);
+  const feedbackAction = savePlanFeedback.bind(null, plan.id, plan.revisionId);
+  let feedback = null;
+  let feedbackAvailable = true;
+  try {
+    feedback = await getCurrentUserPlanFeedback(plan.id, plan.revisionId);
+  } catch (error) {
+    if (error instanceof PlanFeedbackDataError && error.code === "unauthenticated") redirect("/login");
+    feedbackAvailable = false;
+  }
+
   return (
     <article className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <header className="border-b border-ink/8 pb-8">
@@ -116,6 +129,22 @@ export default async function PlanDetailPage({ params, searchParams }: PlanDetai
         <PlanSection title="If things go sideways"><div className="space-y-4">{output.if_things_go_sideways.map((item, index) => <div key={index}><h3 className="font-semibold text-ink">{item.likely_issue}</h3>{item.signal ? <p className="mt-1 text-sm">Signal: {item.signal}</p> : null}<p className="mt-1 text-sm leading-6">Response: {item.response}</p>{item.time_adjustment ? <p className="mt-1 text-sm text-charcoal/60">Timing: {item.time_adjustment}</p> : null}</div>)}</div></PlanSection>
 
         <PlanSection title="What you need for tomorrow">{output.what_you_need_for_tomorrow.length ? <ul className="list-disc space-y-2 pl-5">{output.what_you_need_for_tomorrow.map((item, index) => <li key={index}>{item}</li>)}</ul> : <p>Nothing else is required.</p>}</PlanSection>
+
+        <section className="rounded-3xl border border-brand-orange/20 bg-white p-6 shadow-sm sm:p-8">
+          {feedbackAvailable ? (
+            <PlanFeedbackForm
+              key={plan.revisionId}
+              action={feedbackAction}
+              initialFeedback={feedback}
+            />
+          ) : (
+            <div role="status">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange-dark">Private beta feedback</p>
+              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-ink">Feedback is temporarily unavailable.</h2>
+              <p className="mt-2 text-sm leading-6 text-charcoal/60">Your saved plan and revision history are unaffected. Please refresh and try again later.</p>
+            </div>
+          )}
+        </section>
 
         <PlanSection title="Revision history">
           <ol className="space-y-3">

@@ -30,7 +30,7 @@ export function PlanTomorrowForm({ action, defaults }: PlanTomorrowFormProps) {
   const [state, formAction, pending] = useActionState(action, initialPlanTomorrowActionState);
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form action={formAction} aria-busy={pending} className="space-y-8">
       {state.status === "error" ? (
         <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm leading-6 text-red-800">
           {state.message}
@@ -188,9 +188,17 @@ export function PlanTomorrowForm({ action, defaults }: PlanTomorrowFormProps) {
         <FieldError id="additional-notes-error" message={state.fieldErrors.additionalNotes} />
       </section>
 
+      {pending ? (
+        <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-orange/25 bg-brand-orange/5 px-5 py-4 text-sm leading-6 text-charcoal/70">
+          <span aria-hidden="true" className="mt-1 size-4 shrink-0 animate-spin rounded-full border-2 border-brand-orange/25 border-t-brand-orange" />
+          <span><strong className="text-ink">MAPS is building your plan.</strong> This usually takes 15–30 seconds. Complex timing adjustments may take a little longer; keep this tab open.</span>
+        </div>
+      ) : null}
+
       <div className="flex flex-col-reverse items-stretch justify-between gap-4 sm:flex-row sm:items-center">
         <p className="max-w-xl text-sm leading-6 text-charcoal/55">MAPS sends this request to the configured planning provider only when you generate. Invalid requests are not saved as plans.</p>
-        <button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-ink px-7 py-3 text-sm font-semibold text-white transition hover:bg-charcoal disabled:cursor-wait disabled:opacity-60">
+        <button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-ink px-7 py-3 text-sm font-semibold text-white transition hover:bg-charcoal disabled:cursor-wait disabled:opacity-60">
+          {pending ? <span aria-hidden="true" className="size-4 animate-spin rounded-full border-2 border-white/35 border-t-white" /> : null}
           {pending ? "Building your plan…" : "Generate lesson plan"}
         </button>
       </div>

@@ -42,3 +42,7 @@ export function containsObviousSensitiveText(values: string[]) {
 export function guidedRevisionPrivacyError(value: string | undefined) {
   return appearsSensitive(value) ? privacyMessage : null;
 }
+
+export function planningFeedbackPrivacyError(value: string | undefined) {
+  return appearsSensitive(value) ? privacyMessage : null;
+}

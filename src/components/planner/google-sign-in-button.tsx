@@ -26,6 +26,9 @@ export function GoogleSignInButton() {
         provider: "google",
         options: {
           redirectTo: callbackUrl.toString(),
+          queryParams: {
+            prompt: "select_account",
+          },
         },
       });
 
