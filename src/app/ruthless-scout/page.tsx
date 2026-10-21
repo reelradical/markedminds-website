@@ -29,6 +29,14 @@ export const metadata: Metadata = {
     title: "Ruthless Scout by Marked Minds",
     description: "Your next move should fit your life—not just your résumé.",
     url: "/ruthless-scout",
+    type: "website",
+    images: [{ url: "https://markedminds.com/ruthless-scout/opengraph-image", width: 1200, height: 630, alt: "Ruthless Scout by Marked Minds — Your next move should fit your life." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ruthless Scout by Marked Minds",
+    description: "Your next move should fit your life—not just your résumé.",
+    images: ["https://markedminds.com/ruthless-scout/opengraph-image"],
   },
 };
 
