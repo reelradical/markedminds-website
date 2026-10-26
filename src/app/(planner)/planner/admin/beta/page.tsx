@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { guidedRevisionIntents } from "@/lib/planner/plan-contract";
@@ -55,11 +56,17 @@ function formatCost(value: number) {
   }).format(value);
 }
 
-export default async function BetaInsightsPage() {
+export default async function BetaInsightsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string | string[] }>;
+}) {
+  const requestedView = (await searchParams).view;
+  const includeInternal = requestedView === "all";
   let insights: MapsBetaInsightsView;
 
   try {
-    insights = await getMapsBetaInsights();
+    insights = await getMapsBetaInsights(includeInternal);
   } catch (error) {
     if (error instanceof BetaInsightsDataError && error.code === "unauthenticated") {
       redirect("/login");
@@ -94,6 +101,34 @@ export default async function BetaInsightsPage() {
         <p className="mt-4 max-w-3xl text-base leading-7 text-charcoal/65">
           Product-usage signals from persisted MAPS actions. These metrics describe adoption and workflow behavior—not instructional quality or student outcomes.
         </p>
+        <div className="mt-6 inline-flex flex-col gap-2 rounded-2xl border border-ink/10 bg-white p-2 shadow-sm sm:flex-row" role="group" aria-label="Beta insights audience">
+          <Link
+            href="/planner/admin/beta"
+            aria-current={includeInternal ? undefined : "page"}
+            className={includeInternal
+              ? "rounded-xl px-4 py-2 text-sm font-medium text-charcoal/55 hover:bg-mist hover:text-ink"
+              : "rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-white"}
+          >
+            External beta only
+          </Link>
+          <Link
+            href="/planner/admin/beta?view=all"
+            aria-current={includeInternal ? "page" : undefined}
+            className={includeInternal
+              ? "rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-white"
+              : "rounded-xl px-4 py-2 text-sm font-medium text-charcoal/55 hover:bg-mist hover:text-ink"}
+          >
+            Include internal/test activity
+          </Link>
+        </div>
+        <div className="mt-4 max-w-3xl rounded-2xl border border-brand-orange/20 bg-brand-orange/8 px-4 py-3 text-sm leading-6 text-charcoal/70">
+          <span className="font-semibold text-ink">
+            Viewing {includeInternal ? "all beta activity" : "External Beta only"}.
+          </span>{" "}
+          {includeInternal
+            ? "Internal/test accounts are included in every metric and labeled in the user summary."
+            : "Internal/test accounts and all of their activity are excluded from every metric."}
+        </div>
         <p className="mt-3 text-xs text-charcoal/45">
           Generated {formatDate(insights.generated_at)} · UTC activity days
         </p>
@@ -225,7 +260,14 @@ export default async function BetaInsightsPage() {
                 {insights.users.map((user) => (
                   <tr key={user.beta_id}>
                     <th scope="row" className="px-5 py-4">
-                      <span className="block font-medium text-ink">{user.display_name ?? "Unnamed beta user"}</span>
+                      <span className="flex flex-wrap items-center gap-2 font-medium text-ink">
+                        {user.display_name ?? "Unnamed beta user"}
+                        {user.is_internal_test ? (
+                          <span className="rounded-full border border-ink/10 bg-mist px-2 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide text-charcoal/55">
+                            Internal/test
+                          </span>
+                        ) : null}
+                      </span>
                       <span className="mt-1 block font-mono text-xs text-charcoal/40">{user.beta_id}</span>
                     </th>
                     <td className="px-5 py-4 text-charcoal/65">{formatDate(user.first_activity)}</td>
@@ -245,6 +287,7 @@ export default async function BetaInsightsPage() {
       <section aria-labelledby="definitions-heading" className="border-t border-ink/8 py-9">
         <SectionHeading id="definitions-heading" eyebrow="Interpretation" title="Metric definitions" />
         <dl className="mt-5 grid gap-4 md:grid-cols-2">
+          <Definition term="External beta">A completed-onboarding user who is not marked as an internal/test account. This is the default analytical view.</Definition>
           <Definition term="Active user">A completed-onboarding user with at least one persisted plan, guided revision, or feedback action.</Definition>
           <Definition term="Active day">A UTC date containing at least one qualifying persisted action.</Definition>
           <Definition term="Returning user">A user with another qualifying persisted action on a different UTC day—not merely another login or page reopen.</Definition>

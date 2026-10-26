@@ -24,6 +24,25 @@ Migration `202610150001_maps_beta_insights.sql` adds:
 - `public.maps_beta_admins`, a UUID-only allowlist keyed to `auth.users.id`
 - `public.get_maps_beta_insights()`, a `SECURITY DEFINER` aggregate RPC
 
+Migration `202610240001_maps_beta_internal_activity.sql` adds:
+
+- `public.maps_beta_internal_users`, a second UUID-only allowlist for internal
+  and test accounts
+- an `include_internal` argument on `public.get_maps_beta_insights()` that
+  defaults to `false`
+
+Migration `202610240002_maps_beta_insights_legacy_rpc.sql` preserves the
+no-argument External Beta response shape used by the previously deployed
+dashboard during rollout. It delegates to the filtered RPC, so the same admin
+authorization check still runs. The refined dashboard calls the boolean RPC
+overload explicitly.
+
+Migration `202610240003_maps_beta_insights_rpc_overload_fix.sql` removes the
+boolean argument's database default so PostgREST can resolve an empty RPC call
+to the legacy wrapper without ambiguity. External Beta remains the application
+default because the refined dashboard always sends `include_internal: false`
+unless an administrator deliberately selects the all-user view.
+
 The allowlist stores no email address or other PII. Direct access is revoked
 from `public`, `anon`, and `authenticated`, and it has no client RLS policies.
 The RPC uses an empty `search_path`, checks `auth.uid()` against the allowlist
@@ -38,6 +57,14 @@ opaque identifier derived from the UUID.
 
 No service-role key or new environment variable is required. The dashboard
 uses the existing authenticated Supabase cookie and public server client.
+
+The dashboard defaults to **External Beta**, which excludes every plan,
+revision, feedback response, generation record, active day, and user-summary
+row owned by an account listed in `maps_beta_internal_users`. An administrator
+can deliberately switch to **Include internal/test activity** to restore the
+full historical totals. This classification changes analytics only: it does not
+change application access, RLS ownership, or any stored profile, plan,
+revision, generation, or feedback record.
 
 ## Manual administrator seed
 
@@ -56,11 +83,37 @@ on conflict (user_id) do nothing;
 Never grant allowlist access to `authenticated`. To remove an administrator,
 delete that UUID manually as `postgres`.
 
+## Manual internal/test-account seed
+
+Find each internal or test account UUID under Supabase **Authentication →
+Users**. Do not paste UUIDs into source control or chat. In a Supabase SQL
+Editor query running as `postgres`, execute once per account:
+
+```sql
+reset role;
+
+insert into public.maps_beta_internal_users (user_id)
+values ('PASTE-THE-COMPLETE-USER-UUID-HERE'::uuid)
+on conflict (user_id) do nothing;
+```
+
+The table stores UUIDs only—never email addresses or profile information. Never
+grant direct table access to `authenticated`. Removing a UUID restores that
+account to External Beta analytics without changing or deleting its data.
+
 ## Metric definitions
 
-### Beta user
+### External beta
 
-A user whose `profiles.onboarding_completed` value is true.
+A user whose `profiles.onboarding_completed` value is true and whose UUID is
+not present in `maps_beta_internal_users`. External Beta is the default view
+and the basis for adoption reporting.
+
+### All beta users
+
+A user whose `profiles.onboarding_completed` value is true, including accounts
+marked internal/test. This view is available only through the deliberate admin
+toggle.
 
 ### Active user
 
@@ -157,8 +210,13 @@ Before release:
 1. An allowlisted administrator can load `/planner/admin/beta`.
 2. An ordinary authenticated account receives a non-disclosing 404.
 3. Anonymous callers cannot read `maps_beta_admins` or execute the RPC.
-4. Aggregate totals match read-only direct database checks.
-5. The default response and rendered page contain no lesson snapshots, student-
+4. External Beta is the default and excludes seeded internal/test accounts from
+   every aggregate, generation/cost rollup, daily row, and user summary.
+5. Include Internal/Test restores the full totals and labels internal/test user
+   summaries.
+6. Aggregate totals in both views match read-only direct database checks.
+7. The default response and rendered page contain no lesson snapshots, student-
    needs text, teacher notes, revision directions, feedback comments, emails, or
    raw user UUIDs.
-6. Existing teacher-owned RLS tests continue to pass.
+8. Existing teacher-owned RLS tests continue to pass, and internal/test
+   classification does not alter application access or stored data.

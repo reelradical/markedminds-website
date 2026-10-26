@@ -41,6 +41,10 @@ const modelTokenRollupSchema = z.object({
 
 export const mapsBetaInsightsSchema = z.object({
   generated_at: timestamp,
+  audience: z.object({
+    key: z.enum(["external_beta", "all_users"]),
+    includes_internal_test: z.boolean(),
+  }).strict(),
   summary: z.object({
     total_beta_users: nonNegativeInteger,
     users_with_saved_plan: nonNegativeInteger,
@@ -92,6 +96,7 @@ export const mapsBetaInsightsSchema = z.object({
   users: z.array(z.object({
     beta_id: z.string().regex(/^[A-F0-9]{10}$/),
     display_name: z.string().trim().min(1).max(80).nullable(),
+    is_internal_test: z.boolean(),
     first_activity: nullableTimestamp,
     last_activity: nullableTimestamp,
     plans_created: nonNegativeInteger,

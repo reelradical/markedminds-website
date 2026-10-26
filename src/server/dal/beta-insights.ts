@@ -78,7 +78,7 @@ function estimateGenerationCost(insights: MapsBetaInsights): CostEstimate {
   };
 }
 
-export async function getMapsBetaInsights(): Promise<MapsBetaInsightsView> {
+export async function getMapsBetaInsights(includeInternal = false): Promise<MapsBetaInsightsView> {
   const supabase = await createServerSupabaseClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
@@ -86,7 +86,9 @@ export async function getMapsBetaInsights(): Promise<MapsBetaInsightsView> {
     throw new BetaInsightsDataError("unauthenticated");
   }
 
-  const { data, error } = await supabase.rpc("get_maps_beta_insights");
+  const { data, error } = await supabase.rpc("get_maps_beta_insights", {
+    include_internal: includeInternal,
+  });
 
   if (error?.code === "42501") {
     throw new BetaInsightsDataError("forbidden");
@@ -97,6 +99,14 @@ export async function getMapsBetaInsights(): Promise<MapsBetaInsightsView> {
 
   const parsed = mapsBetaInsightsSchema.safeParse(data);
   if (!parsed.success) {
+    throw new BetaInsightsDataError("unavailable");
+  }
+  const expectedAudience = includeInternal ? "all_users" : "external_beta";
+  if (
+    parsed.data.audience.includes_internal_test !== includeInternal
+    || parsed.data.audience.key !== expectedAudience
+    || (!includeInternal && parsed.data.users.some((user) => user.is_internal_test))
+  ) {
     throw new BetaInsightsDataError("unavailable");
   }
 
