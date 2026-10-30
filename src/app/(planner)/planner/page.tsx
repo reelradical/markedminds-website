@@ -1,4 +1,4 @@
-import { AlertTriangle, CalendarDays, Clock3, SlidersHorizontal, Sparkles } from "lucide-react";
+import { AlertTriangle, CalendarDays, Clock3, FileText, SlidersHorizontal, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -14,6 +14,14 @@ const planningModes = [
     icon: CalendarDays,
     featured: true,
     href: "/planner/plans/new/tomorrow",
+  },
+  {
+    title: "K–5 Rotation Plan",
+    description: "Build a county-format Visual Art rotation with distinct plans for every selected grade.",
+    status: "Ready",
+    icon: FileText,
+    featured: true,
+    href: "/planner/plans/new/template",
   },
   {
     title: "Fix My Lesson",

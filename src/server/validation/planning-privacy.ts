@@ -1,6 +1,10 @@
 import "server-only";
 
 import type { PlanTomorrowField, PlanTomorrowInputV1 } from "@/lib/planner/plan-contract";
+import type {
+  RotationPlanField,
+  RotationPlanInputV1,
+} from "@/lib/planner/rotation-plan-contract";
 
 const privacyMessage =
   "This may include information that identifies a student. Remove names, IDs, diagnoses, medical details, and text copied from an IEP or 504 plan. Describe the need at a group level, then try again.";
@@ -45,4 +49,23 @@ export function guidedRevisionPrivacyError(value: string | undefined) {
 
 export function planningFeedbackPrivacyError(value: string | undefined) {
   return appearsSensitive(value) ? privacyMessage : null;
+}
+
+export function screenRotationPlanInput(input: RotationPlanInputV1) {
+  const fieldErrors: Partial<Record<RotationPlanField, string>> = {};
+  const fields: Array<[RotationPlanField, string | undefined]> = [
+    ["topicUnitConcept", input.topic_unit_concept],
+    ["sharedObjective", input.shared_objective],
+    ["aggregateLearnerNeeds", input.aggregate_learner_needs],
+    ["constraints", input.constraints.space_constraints],
+    ["constraints", input.constraints.other],
+    ["constraints", input.constraints.must_avoid.join(" ")],
+    ["additionalNotes", input.additional_notes],
+  ];
+
+  for (const [field, value] of fields) {
+    if (appearsSensitive(value)) fieldErrors[field] = privacyMessage;
+  }
+
+  return fieldErrors;
 }

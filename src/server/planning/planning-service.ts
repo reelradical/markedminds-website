@@ -2,7 +2,11 @@ import "server-only";
 
 import { PLANNER_MODEL_ALIAS } from "@/lib/planner/plan-contract";
 import { resolvePlanningProvider } from "@/server/planning/providers/registry";
-import type { GeneratePlanRequest, RevisePlanRequest } from "@/server/planning/providers/types";
+import type {
+  GeneratePlanRequest,
+  GenerateRotationPlanRequest,
+  RevisePlanRequest,
+} from "@/server/planning/providers/types";
 
 export const PlanningService = {
   descriptor() {
@@ -15,6 +19,9 @@ export const PlanningService = {
   },
   generatePlan(request: GeneratePlanRequest) {
     return resolvePlanningProvider(PLANNER_MODEL_ALIAS).generatePlan(request);
+  },
+  generateRotationPlan(request: GenerateRotationPlanRequest) {
+    return resolvePlanningProvider(PLANNER_MODEL_ALIAS).generateRotationPlan(request);
   },
   revisePlan(request: RevisePlanRequest) {
     return resolvePlanningProvider(PLANNER_MODEL_ALIAS).revisePlan(request);

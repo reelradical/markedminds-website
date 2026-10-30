@@ -11,7 +11,7 @@ import { site } from "@/lib/data/site";
 export function PlannerAppShell({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="min-h-screen bg-mist text-ink">
-      <header className="flex h-20 items-center justify-between border-b border-ink/8 bg-white px-5 md:hidden">
+      <header className="flex h-20 items-center justify-between border-b border-ink/8 bg-white px-5 print:hidden md:hidden">
         <div className="flex items-center gap-3">
           <PlannerBrand />
           <BetaBadge />
@@ -19,7 +19,7 @@ export function PlannerAppShell({ children }: Readonly<{ children: React.ReactNo
         <Link href={`${site.url}/plan`} className="text-sm font-medium text-charcoal/60">About</Link>
       </header>
 
-      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-ink/8 bg-white p-6 md:flex md:flex-col">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-ink/8 bg-white p-6 print:hidden md:flex md:flex-col">
         <div className="flex items-start justify-between gap-3">
           <PlannerBrand />
           <BetaBadge />
@@ -35,8 +35,8 @@ export function PlannerAppShell({ children }: Readonly<{ children: React.ReactNo
         </div>
       </aside>
 
-      <main id="main-content" className="pb-28 md:ml-64 md:pb-0">{children}</main>
-      <PlannerMobileNavigation />
+      <main id="main-content" className="pb-28 print:ml-0 print:bg-white print:pb-0 md:ml-64 md:pb-0">{children}</main>
+      <div className="print:hidden"><PlannerMobileNavigation /></div>
     </div>
   );
 }

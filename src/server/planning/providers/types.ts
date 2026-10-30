@@ -5,6 +5,10 @@ import type {
   GuidedRevisionRequestV1,
   PlanTomorrowInputSnapshotV1,
 } from "@/lib/planner/plan-contract";
+import type {
+  RotationPlanInputSnapshotV1,
+  RotationPlanOutputV1,
+} from "@/lib/planner/rotation-plan-contract";
 import type { PlanPromptContext } from "@/server/planning/prompts/plan-tomorrow-v2";
 
 export type SafeGenerationErrorCategory =
@@ -38,6 +42,10 @@ export type PlanningProviderResult = {
   };
 };
 
+export type RotationPlanProviderResult = Omit<PlanningProviderResult, "output"> & {
+  output: RotationPlanOutputV1;
+};
+
 export type GeneratePlanRequest = {
   input: PlanTomorrowInputSnapshotV1;
   profile: PlanPromptContext;
@@ -52,10 +60,16 @@ export type RevisePlanRequest = {
   timingCorrection?: { requestedMinutes: number; priorMinutes: number };
 };
 
+export type GenerateRotationPlanRequest = {
+  input: RotationPlanInputSnapshotV1;
+  profile: PlanPromptContext;
+};
+
 export interface PlanningProvider {
   readonly id: string;
   readonly modelAlias: string;
   readonly modelId: string;
   generatePlan(request: GeneratePlanRequest): Promise<PlanningProviderResult>;
+  generateRotationPlan(request: GenerateRotationPlanRequest): Promise<RotationPlanProviderResult>;
   revisePlan(request: RevisePlanRequest): Promise<PlanningProviderResult>;
 }

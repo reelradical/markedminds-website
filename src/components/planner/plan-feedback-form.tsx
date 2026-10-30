@@ -15,9 +15,18 @@ type PlanFeedbackFormProps = {
     formData: FormData,
   ) => Promise<PlanFeedbackActionState>;
   initialFeedback: SavedPlanFeedback | null;
+  prompt?: string;
+  commentPrompt?: string;
+  commentPlaceholder?: string;
 };
 
-export function PlanFeedbackForm({ action, initialFeedback }: PlanFeedbackFormProps) {
+export function PlanFeedbackForm({
+  action,
+  initialFeedback,
+  prompt = "Could you teach this tomorrow?",
+  commentPrompt = "What would make this more teachable?",
+  commentPlaceholder = "Example: The pacing works, but I would simplify the closing reflection.",
+}: PlanFeedbackFormProps) {
   const [state, formAction, pending] = useActionState(action, initialPlanFeedbackActionState);
 
   return (
@@ -27,7 +36,7 @@ export function PlanFeedbackForm({ action, initialFeedback }: PlanFeedbackFormPr
           Private beta feedback
         </p>
         <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-ink">
-          Could you teach this tomorrow?
+          {prompt}
         </h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-charcoal/60">
           A quick answer helps MAPS improve the planning experience. Your response applies only to this revision.
@@ -46,7 +55,7 @@ export function PlanFeedbackForm({ action, initialFeedback }: PlanFeedbackFormPr
       ) : null}
 
       <fieldset>
-        <legend className="sr-only">Could you teach this tomorrow?</legend>
+        <legend className="sr-only">{prompt}</legend>
         <div className="grid grid-cols-3 gap-3 sm:max-w-md">
           {planFeedbackResponses.map((option) => (
             <label
@@ -72,7 +81,7 @@ export function PlanFeedbackForm({ action, initialFeedback }: PlanFeedbackFormPr
 
       <div>
         <label htmlFor="feedback-comment" className="text-sm font-semibold text-ink">
-          What would make this more teachable? <span className="font-normal text-charcoal/45">(optional)</span>
+          {commentPrompt} <span className="font-normal text-charcoal/45">(optional)</span>
         </label>
         <textarea
           id="feedback-comment"
@@ -82,7 +91,7 @@ export function PlanFeedbackForm({ action, initialFeedback }: PlanFeedbackFormPr
           defaultValue={initialFeedback?.comment ?? ""}
           aria-describedby="feedback-comment-privacy"
           className="mt-2 w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-base text-ink outline-none transition placeholder:text-charcoal/35 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20"
-          placeholder="Example: The pacing works, but I would simplify the closing reflection."
+          placeholder={commentPlaceholder}
         />
         <p id="feedback-comment-privacy" className="mt-2 text-xs leading-5 text-charcoal/50">
           Keep feedback about the plan. Do not include student names, IDs, diagnoses, medical details, or copied records.
