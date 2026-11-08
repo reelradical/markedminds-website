@@ -137,7 +137,7 @@ fixture-only standards with verified teacher-supplied standards.
 
 ## Migration status
 
-`202610250001_maps_rotation_plan_workflow.sql` is drafted and dry-runs cleanly.
-It expands the existing workflow constraint and adds an authenticated,
-owner-scoped atomic finalization function. It must not be applied without
-explicit approval.
+`202610250001_maps_rotation_plan_workflow.sql` is included in the committed
+rotation checkpoint (`a4ab35d`). Prior linked-project migration checks reported
+it applied. Recheck the linked migration list before release; this document does
+not establish the current production database state.
