@@ -75,7 +75,7 @@ export async function reviseSavedPlan(
   formData: FormData,
 ): Promise<GuidedRevisionActionState> {
   let currentRunId: string | null = null;
-  let redirectDestination: "/login" | "/onboarding" | null = null;
+  let redirectDestination: "/login" | "/onboarding?context=school" | null = null;
   let completedRevisionId: string | null = null;
 
   try {
@@ -89,7 +89,7 @@ export async function reviseSavedPlan(
 
     const bundle = await getCurrentProfileBundle();
     if (!bundle.profile?.onboardingCompleted || !bundle.teacherProfile) {
-      redirectDestination = "/onboarding";
+      redirectDestination = "/onboarding?context=school";
     } else {
       const source = await getCurrentUserPlan(planId, sourceRevisionId);
       const descriptor = PlanningService.descriptor();

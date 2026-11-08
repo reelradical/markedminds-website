@@ -1,4 +1,4 @@
-import { AlertTriangle, CalendarDays, Clock3, FileText, SlidersHorizontal, Sparkles } from "lucide-react";
+import { AlertTriangle, CalendarDays, Clock3, FileText, SlidersHorizontal, Sparkles, Video } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -6,7 +6,7 @@ import { getAuthenticatedUser } from "@/lib/supabase/auth";
 import { SupabaseConfigurationError } from "@/lib/supabase/config";
 import { getCurrentProfileBundle, ProfileDataError } from "@/server/dal/profiles";
 
-const planningModes = [
+const schoolPlanningModes = [
   {
     title: "Plan Tomorrow",
     description: "Turn tomorrow's objective and real classroom conditions into a workable plan.",
@@ -49,6 +49,17 @@ const planningModes = [
   },
 ];
 
+const creatorPlanningModes = [
+  {
+    title: "Creator Lesson",
+    description: "Plan a filmable adult technology or AI lesson around audience knowledge, motivation, outcome, and video time.",
+    status: "Ready",
+    icon: Video,
+    featured: true,
+    href: "/planner/plans/new/creator",
+  },
+];
+
 export const dynamic = "force-dynamic";
 
 type PlannerDashboardPageProps = {
@@ -80,7 +91,13 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
     return <ProfileUnavailable />;
   }
 
-  if (!profileBundle.profile?.onboardingCompleted || !profileBundle.teacherProfile) {
+  if (
+    !profileBundle.profile?.onboardingCompleted
+    || (
+      profileBundle.profile.planningContext === "school_classroom"
+      && !profileBundle.teacherProfile
+    )
+  ) {
     redirect("/onboarding");
   }
 
@@ -99,7 +116,7 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
             What do you need to plan?
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-charcoal/65">
-            Build a practical lesson around the students, time, materials, and constraints you actually have.
+            Choose a planning context, then build around the learners, time, tools, and constraints you actually have.
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:items-end">
@@ -129,14 +146,18 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
         </p>
       ) : null}
 
-      <section aria-labelledby="planning-modes" className="py-10">
-        <h2 id="planning-modes" className="sr-only">Planning modes</h2>
+      <section aria-labelledby="school-planning-modes" className="py-10">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/45">Planning context</p><h2 id="school-planning-modes" className="mt-2 font-display text-2xl font-semibold text-ink">School / Classroom</h2></div>
+          {!profileBundle.teacherProfile ? <Link href="/onboarding?context=school" className="text-sm font-semibold text-ink underline decoration-brand-orange decoration-2 underline-offset-4">Set up classroom planning</Link> : null}
+        </div>
         <div className="grid gap-5 sm:grid-cols-2">
-          {planningModes.map(({ title, description, status, icon: Icon, featured, href }) => {
+          {schoolPlanningModes.map(({ title, description, status, icon: Icon, featured, href }) => {
+            const availableHref = profileBundle.teacherProfile ? href : featured ? "/onboarding?context=school" : null;
             const card = (
             <article
               key={title}
-              data-disabled={href ? undefined : "true"}
+              data-disabled={availableHref ? undefined : "true"}
               className={
                 featured
                   ? "relative overflow-hidden rounded-2xl border border-brand-orange/35 bg-white p-6 shadow-sm sm:p-7"
@@ -155,12 +176,29 @@ export default async function PlannerDashboardPage({ searchParams }: PlannerDash
               <h3 className="mt-8 text-2xl font-semibold tracking-tight text-ink">{title}</h3>
               <p className="mt-3 max-w-md text-sm leading-6 text-charcoal/65">{description}</p>
               <div className={featured ? "mt-7 border-t border-ink/8 pt-4 text-sm font-semibold text-ink" : "mt-7 border-t border-ink/8 pt-4 text-sm font-medium text-charcoal/40"}>
-                {featured ? "Start planning →" : "Not available yet"}
+                {featured ? (profileBundle.teacherProfile ? "Start planning →" : "Set up classroom profile →") : "Not available yet"}
               </div>
             </article>
             );
-            return href ? <Link key={title} href={href} className="block">{card}</Link> : card;
+            return availableHref ? <Link key={title} href={availableHref} className="block">{card}</Link> : card;
           })}
+        </div>
+      </section>
+
+      <section aria-labelledby="creator-planning-modes" className="border-t border-ink/8 py-10">
+        <div className="mb-5"><p className="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/45">Planning context</p><h2 id="creator-planning-modes" className="mt-2 font-display text-2xl font-semibold text-ink">Adult / Creator</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-charcoal/60">For independent educators teaching adults through asynchronous video. Subject, audience, and delivery format stay distinct.</p></div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {creatorPlanningModes.map(({ title, description, status, icon: Icon, href }) => (
+            <Link key={title} href={href} className="block">
+              <article className="relative overflow-hidden rounded-2xl border border-brand-orange/35 bg-white p-6 shadow-sm sm:p-7">
+                <div aria-hidden="true" className="absolute inset-y-0 left-0 w-1 bg-brand-orange" />
+                <div className="flex items-start justify-between gap-5"><div className="flex size-12 items-center justify-center rounded-xl bg-ink text-white"><Icon className="size-5" aria-hidden="true" /></div><span className="rounded-full bg-brand-orange/12 px-3 py-1 text-xs font-semibold text-brand-orange-dark">{status}</span></div>
+                <h3 className="mt-8 text-2xl font-semibold tracking-tight text-ink">{title}</h3>
+                <p className="mt-3 max-w-md text-sm leading-6 text-charcoal/65">{description}</p>
+                <div className="mt-7 border-t border-ink/8 pt-4 text-sm font-semibold text-ink">Start planning →</div>
+              </article>
+            </Link>
+          ))}
         </div>
       </section>
     </div>

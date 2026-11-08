@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { CreatorProfileForm } from "@/components/planner/creator-profile-form";
 import { TeacherProfileForm } from "@/components/planner/teacher-profile-form";
 import type { TeacherProfileInput } from "@/lib/planner/profile-options";
-import { saveProfileSettings } from "@/server/actions/profile-actions";
+import {
+  saveCreatorProfileSettings,
+  saveProfileSettings,
+} from "@/server/actions/profile-actions";
 import { getCurrentProfileBundle, getProfileVersion, ProfileDataError } from "@/server/dal/profiles";
 
 export const dynamic = "force-dynamic";
@@ -21,12 +25,13 @@ export default async function ProfileSettingsPage({ searchParams }: ProfileSetti
     return <ProfileUnavailable />;
   }
 
-  if (!bundle.profile?.onboardingCompleted || !bundle.teacherProfile) redirect("/onboarding");
+  if (!bundle.profile?.onboardingCompleted) redirect("/onboarding");
+  const creatorContext = bundle.profile.planningContext === "adult_creator";
+  if (!creatorContext && !bundle.teacherProfile) redirect("/onboarding?context=school");
 
-  const initialValues: TeacherProfileInput = {
-    ...bundle.teacherProfile,
-    displayName: bundle.profile.displayName ?? "",
-  };
+  const initialValues: TeacherProfileInput | null = bundle.teacherProfile
+    ? { ...bundle.teacherProfile, displayName: bundle.profile.displayName ?? "" }
+    : null;
   const { saved } = await searchParams;
   const savedValue = Array.isArray(saved) ? saved[0] : saved;
 
@@ -34,9 +39,11 @@ export default async function ProfileSettingsPage({ searchParams }: ProfileSetti
     <div className="mx-auto max-w-4xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <div className="mb-10 border-b border-ink/8 pb-8">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">MAPS settings</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Teacher profile</h1>
+        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{creatorContext ? "Creator profile" : "Teacher profile"}</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-charcoal/65">
-          Update the defaults MAPS remembers when you return.
+          {creatorContext
+            ? "Update the account name MAPS uses in your creator workspace. Lesson-specific audience and tool context stay with each plan."
+            : "Update the classroom defaults MAPS remembers when you return."}
         </p>
       </div>
 
@@ -46,12 +53,21 @@ export default async function ProfileSettingsPage({ searchParams }: ProfileSetti
         </p>
       ) : null}
 
-      <TeacherProfileForm
-        action={saveProfileSettings}
-        initialValues={initialValues}
-        profileVersion={getProfileVersion(bundle)}
-        submitLabel="Save profile"
-      />
+      {creatorContext ? (
+        <CreatorProfileForm
+          action={saveCreatorProfileSettings}
+          displayName={bundle.profile.displayName ?? ""}
+          profileVersion={getProfileVersion(bundle)}
+          submitLabel="Save profile"
+        />
+      ) : initialValues ? (
+        <TeacherProfileForm
+          action={saveProfileSettings}
+          initialValues={initialValues}
+          profileVersion={getProfileVersion(bundle)}
+          submitLabel="Save profile"
+        />
+      ) : null}
 
       <div className="mt-8">
         <Link href="/planner" className="text-sm font-semibold text-ink underline decoration-brand-orange decoration-2 underline-offset-4">

@@ -17,7 +17,7 @@ export default async function PlanTomorrowPage() {
     return <Unavailable />;
   }
 
-  if (!bundle.profile?.onboardingCompleted || !bundle.teacherProfile) redirect("/onboarding");
+  if (!bundle.profile?.onboardingCompleted || !bundle.teacherProfile) redirect("/onboarding?context=school");
   const profile = bundle.teacherProfile;
   const defaults: PlanTomorrowFormDefaults = {
     subjectArea: profile.subjectAreas.length === 1 ? profile.subjectAreas[0] : "",

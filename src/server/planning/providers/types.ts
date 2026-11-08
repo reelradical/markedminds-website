@@ -1,6 +1,12 @@
 import "server-only";
 
 import type {
+  CreatorLessonInputSnapshotV1,
+  CreatorLessonOutputV1,
+  CreatorRevisionRequestV1,
+} from "@/lib/planner/creator-lesson-contract";
+import type { CreatorTimingBudget } from "@/lib/planner/creator-timing-budget";
+import type {
   GeneratedPlanOutputV1,
   GuidedRevisionRequestV1,
   PlanTomorrowInputSnapshotV1,
@@ -46,6 +52,10 @@ export type RotationPlanProviderResult = Omit<PlanningProviderResult, "output"> 
   output: RotationPlanOutputV1;
 };
 
+export type CreatorLessonProviderResult = Omit<PlanningProviderResult, "output"> & {
+  output: CreatorLessonOutputV1;
+};
+
 export type GeneratePlanRequest = {
   input: PlanTomorrowInputSnapshotV1;
   profile: PlanPromptContext;
@@ -65,11 +75,25 @@ export type GenerateRotationPlanRequest = {
   profile: PlanPromptContext;
 };
 
+export type GenerateCreatorLessonRequest = {
+  input: CreatorLessonInputSnapshotV1;
+  timingBudget: CreatorTimingBudget;
+};
+
+export type ReviseCreatorLessonRequest = {
+  input: CreatorLessonInputSnapshotV1;
+  sourceOutput: CreatorLessonOutputV1;
+  revision: CreatorRevisionRequestV1;
+  timingBudget: CreatorTimingBudget;
+};
+
 export interface PlanningProvider {
   readonly id: string;
   readonly modelAlias: string;
   readonly modelId: string;
   generatePlan(request: GeneratePlanRequest): Promise<PlanningProviderResult>;
   generateRotationPlan(request: GenerateRotationPlanRequest): Promise<RotationPlanProviderResult>;
+  generateCreatorLesson(request: GenerateCreatorLessonRequest): Promise<CreatorLessonProviderResult>;
+  reviseCreatorLesson(request: ReviseCreatorLessonRequest): Promise<CreatorLessonProviderResult>;
   revisePlan(request: RevisePlanRequest): Promise<PlanningProviderResult>;
 }

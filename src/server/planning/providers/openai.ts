@@ -11,6 +11,11 @@ import { ZodError } from "zod";
 
 import { PLANNER_MODEL_ALIAS } from "@/lib/planner/plan-contract";
 import {
+  CreatorLessonOutputValidationError,
+  assembleProviderCreatorLessonOutput,
+  providerCreatorLessonContentSchema,
+} from "@/lib/planner/creator-lesson-schema";
+import {
   normalizeProviderRotationPlanOutput,
   providerRotationPlanOutputSchema,
   RotationPlanOutputValidationError,
@@ -18,13 +23,19 @@ import {
 } from "@/lib/planner/rotation-plan-schema";
 import { normalizeProviderPlanOutput, providerPlanOutputSchema } from "@/server/planning/output-schema";
 import { buildGuidedRevisionPrompt } from "@/server/planning/prompts/guided-revision-v1";
+import {
+  buildCreatorLessonPrompt,
+  buildCreatorRevisionPrompt,
+} from "@/server/planning/prompts/creator-lesson-v1";
 import { buildPlanTomorrowPrompt } from "@/server/planning/prompts/plan-tomorrow-v2";
 import { buildRotationPlanPrompt } from "@/server/planning/prompts/rotation-plan-v1";
 import {
   PlanningProviderError,
+  type GenerateCreatorLessonRequest,
   type GeneratePlanRequest,
   type GenerateRotationPlanRequest,
   type PlanningProvider,
+  type ReviseCreatorLessonRequest,
   type RevisePlanRequest,
 } from "@/server/planning/providers/types";
 
@@ -45,6 +56,9 @@ function safeProviderError(error: unknown) {
   if (error instanceof APIConnectionError) return new PlanningProviderError("provider_unavailable");
   if (error instanceof ZodError) return new PlanningProviderError("structured_output_invalid");
   if (error instanceof RotationPlanOutputValidationError) {
+    return new PlanningProviderError("structured_output_invalid");
+  }
+  if (error instanceof CreatorLessonOutputValidationError) {
     return new PlanningProviderError("structured_output_invalid");
   }
   if (error instanceof APIError) {
@@ -134,6 +148,67 @@ export class OpenAIPlanningProvider implements PlanningProvider {
     } catch (error) {
       throw safeProviderError(error);
     }
+  }
+
+  private async generateStructuredCreatorLesson(
+    request: GenerateCreatorLessonRequest,
+    prompt: { instructions: string; input: string },
+  ) {
+    const startedAt = Date.now();
+
+    try {
+      if (request.timingBudget.requested_total_minutes !== request.input.input.duration_minutes) {
+        throw new PlanningProviderError("duration_validation_failed");
+      }
+      const response = await configuredClient().responses.parse({
+        model: this.modelId,
+        store: false,
+        instructions: prompt.instructions,
+        input: prompt.input,
+        text: {
+          format: zodTextFormat(
+            providerCreatorLessonContentSchema(request.timingBudget.lesson_beats.length),
+            "maps_creator_lesson_content_v1",
+          ),
+        },
+      });
+
+      if (!response.output_parsed) throw new PlanningProviderError("structured_output_invalid");
+      const output = assembleProviderCreatorLessonOutput(response.output_parsed, request.timingBudget);
+
+      return {
+        output,
+        provider: this.id,
+        providerModelId: response.model ?? this.modelId,
+        latencyMs: Date.now() - startedAt,
+        usage: {
+          inputTokens: response.usage?.input_tokens ?? null,
+          outputTokens: response.usage?.output_tokens ?? null,
+          totalTokens: response.usage?.total_tokens ?? null,
+        },
+      };
+    } catch (error) {
+      throw safeProviderError(error);
+    }
+  }
+
+  generateCreatorLesson(request: GenerateCreatorLessonRequest) {
+    return this.generateStructuredCreatorLesson(
+      request,
+      buildCreatorLessonPrompt(request.input, request.timingBudget),
+    );
+  }
+
+  reviseCreatorLesson(request: ReviseCreatorLessonRequest) {
+    return this.generateStructuredCreatorLesson(
+      request,
+      buildCreatorRevisionPrompt(
+        request.input,
+        request.sourceOutput,
+        request.revision,
+        request.timingBudget,
+      ),
+    );
   }
 
   revisePlan(request: RevisePlanRequest) {

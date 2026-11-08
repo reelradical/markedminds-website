@@ -4,7 +4,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import type { ProfileActionState } from "@/lib/planner/profile-action-state";
-import { completeOnboarding, ProfileDataError, updateCurrentTeacherProfile } from "@/server/dal/profiles";
+import {
+  completeCreatorOnboarding,
+  completeOnboarding,
+  ProfileDataError,
+  updateCurrentCreatorProfile,
+  updateCurrentTeacherProfile,
+} from "@/server/dal/profiles";
 import {
   parseTeacherProfileForm,
   ProfileValidationError,
@@ -20,6 +26,67 @@ function validationState(error: ProfileValidationError): ProfileActionState {
 
 function saveErrorState(message = "MAPS could not save your profile. Please try again."): ProfileActionState {
   return { status: "error", message, fieldErrors: {} };
+}
+
+function creatorDisplayName(formData: FormData) {
+  const value = formData.get("display_name");
+  const displayName = typeof value === "string" ? value.trim() : "";
+  if (!displayName || displayName.length > 80) {
+    return { error: "Enter a display name of 80 characters or fewer." } as const;
+  }
+  return { displayName } as const;
+}
+
+export async function saveCreatorOnboardingProfile(
+  _previousState: ProfileActionState,
+  formData: FormData,
+): Promise<ProfileActionState> {
+  const parsed = creatorDisplayName(formData);
+  if ("error" in parsed) {
+    return { status: "error", message: "Review your profile details.", fieldErrors: { displayName: parsed.error } };
+  }
+
+  try {
+    await completeCreatorOnboarding(parsed.displayName);
+  } catch (error) {
+    if (error instanceof ProfileDataError && error.code === "unauthenticated") redirect("/login");
+    return saveErrorState();
+  }
+
+  revalidatePath("/planner");
+  revalidatePath("/onboarding");
+  redirect("/planner");
+}
+
+export async function saveCreatorProfileSettings(
+  _previousState: ProfileActionState,
+  formData: FormData,
+): Promise<ProfileActionState> {
+  const parsed = creatorDisplayName(formData);
+  if ("error" in parsed) {
+    return { status: "error", message: "Review your profile details.", fieldErrors: { displayName: parsed.error } };
+  }
+  const version = formData.get("profile_version");
+
+  try {
+    await updateCurrentCreatorProfile(
+      parsed.displayName,
+      typeof version === "string" ? version : "",
+    );
+  } catch (error) {
+    if (error instanceof ProfileDataError) {
+      if (error.code === "unauthenticated") redirect("/login");
+      if (error.code === "incomplete") redirect("/onboarding");
+      if (error.code === "conflict") {
+        return saveErrorState("Your profile changed in another session. Reload this page before saving again.");
+      }
+    }
+    return saveErrorState();
+  }
+
+  revalidatePath("/planner");
+  revalidatePath("/settings/profile");
+  redirect("/settings/profile?saved=1");
 }
 
 export async function saveOnboardingProfile(

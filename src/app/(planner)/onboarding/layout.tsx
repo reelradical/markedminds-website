@@ -4,7 +4,7 @@ import { PlannerAppShell } from "@/components/planner/planner-app-shell";
 
 export const metadata: Metadata = {
   title: "Set up your profile | MAPS by Marked Minds",
-  description: "Set the teaching defaults MAPS will remember for your account.",
+  description: "Choose and configure the planning context MAPS will remember for your account.",
   robots: { index: false, follow: false, nocache: true },
 };
 

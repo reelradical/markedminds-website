@@ -25,20 +25,20 @@ export default async function SavedPlansPage() {
   return (
     <div className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14 lg:px-12">
       <header className="flex flex-col gap-6 border-b border-ink/8 pb-8 sm:flex-row sm:items-end sm:justify-between">
-        <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">MAPS library</p><h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Saved plans</h1><p className="mt-4 text-base leading-7 text-charcoal/65">Your Plan Tomorrow and template-aware lessons, newest first.</p></div>
-        <div className="flex flex-col gap-2 sm:flex-row"><Link href="/planner/plans/new/tomorrow" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink">Plan tomorrow</Link><Link href="/planner/plans/new/template" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white">K–5 rotation plan</Link></div>
+        <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange-dark">MAPS library</p><h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Saved plans</h1><p className="mt-4 text-base leading-7 text-charcoal/65">Your classroom, template-aware, and adult/creator lessons, newest first.</p></div>
+        <div className="flex flex-col gap-2 sm:flex-row"><Link href="/planner/plans/new" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink">Choose context</Link><Link href="/planner/plans/new/creator" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white">Creator lesson</Link></div>
       </header>
 
       {plans.length ? (
         <div className="mt-8 grid gap-4">
           {plans.map((plan) => (
             <Link key={plan.id} href={planHref(plan)} className="rounded-2xl border border-ink/8 bg-white p-6 shadow-sm transition hover:border-brand-orange/40">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><span className="rounded-full bg-mist px-3 py-1 text-xs font-semibold text-charcoal/55">{planLabel(plan.workflowType)}</span><h2 className="mt-3 font-display text-2xl font-semibold text-ink">{plan.title}</h2><p className="mt-2 text-sm text-charcoal/60">{plan.subjectArea.replaceAll("_", " ")} · Grades {plan.gradeLevels.join(", ")} · {plan.durationMinutes} minutes</p></div><time dateTime={plan.createdAt} className="text-sm text-charcoal/45">{new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(plan.createdAt))}</time></div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><span className="rounded-full bg-mist px-3 py-1 text-xs font-semibold text-charcoal/55">{planLabel(plan.workflowType)}</span><h2 className="mt-3 font-display text-2xl font-semibold text-ink">{plan.title}</h2><p className="mt-2 text-sm text-charcoal/60">{planSummary(plan)}</p></div><time dateTime={plan.createdAt} className="text-sm text-charcoal/45">{new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(plan.createdAt))}</time></div>
             </Link>
           ))}
         </div>
       ) : (
-        <div className="mt-8 rounded-3xl border border-dashed border-ink/15 bg-white p-10 text-center"><h2 className="font-display text-2xl font-semibold text-ink">No saved plans yet</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-charcoal/60">Create a Plan Tomorrow or K–5 rotation lesson and it will appear here.</p></div>
+        <div className="mt-8 rounded-3xl border border-dashed border-ink/15 bg-white p-10 text-center"><h2 className="font-display text-2xl font-semibold text-ink">No saved plans yet</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-charcoal/60">Create a classroom or creator lesson and it will appear here.</p></div>
       )}
     </div>
   );
@@ -48,11 +48,21 @@ type SavedPlan = Awaited<ReturnType<typeof listCurrentUserPlans>>[number];
 
 function planHref(plan: SavedPlan) {
   if (plan.workflowType === "rotation_plan_template") return `/planner/plans/${plan.id}/template`;
+  if (plan.workflowType === "creator_lesson") return `/planner/plans/${plan.id}/creator`;
   return `/planner/plans/${plan.id}`;
 }
 
 function planLabel(workflowType: SavedPlan["workflowType"]) {
-  return workflowType === "rotation_plan_template" ? "K–5 rotation template" : "Plan Tomorrow";
+  if (workflowType === "rotation_plan_template") return "K–5 rotation template";
+  if (workflowType === "creator_lesson") return "Adult / Creator lesson";
+  return "Plan Tomorrow";
+}
+
+function planSummary(plan: SavedPlan) {
+  if (plan.workflowType === "creator_lesson") {
+    return `${plan.subject} · ${plan.audience} · ${plan.durationMinutes} minutes`;
+  }
+  return `${plan.subjectArea.replaceAll("_", " ")} · Grades ${plan.gradeLevels.join(", ")} · ${plan.durationMinutes} minutes`;
 }
 
 function Unavailable() {

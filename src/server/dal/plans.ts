@@ -3,6 +3,21 @@ import "server-only";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 import {
+  CREATOR_LESSON_INPUT_SCHEMA_VERSION,
+  CREATOR_LESSON_OUTPUT_SCHEMA_VERSION,
+  CREATOR_LESSON_PROMPT_VERSION,
+  CREATOR_REVISION_INPUT_SCHEMA_VERSION,
+  CREATOR_REVISION_PROMPT_VERSION,
+  type CreatorLessonInputSnapshotV1,
+  type CreatorLessonOutputV1,
+  type CreatorRevisionInputSnapshotV1,
+} from "@/lib/planner/creator-lesson-contract";
+import {
+  creatorLessonDuration,
+  parseStoredCreatorLessonOutput,
+  validateCreatorLessonAgainstInput,
+} from "@/lib/planner/creator-lesson-schema";
+import {
   GENERATED_PLAN_OUTPUT_SCHEMA_VERSION,
   GUIDED_REVISION_INPUT_SCHEMA_VERSION,
   GUIDED_REVISION_PROMPT_VERSION,
@@ -26,6 +41,10 @@ import {
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { lessonFlowDuration, parseStoredPlanOutput } from "@/server/planning/output-schema";
 import type { SafeGenerationErrorCategory } from "@/server/planning/providers/types";
+import {
+  parseStoredCreatorLessonInput,
+  parseStoredCreatorRevisionInput,
+} from "@/server/validation/creator-lesson";
 import { parseStoredGuidedRevisionInput } from "@/server/validation/guided-revision";
 import { parseStoredInputSnapshot } from "@/server/validation/plan-tomorrow";
 import { parseStoredRotationPlanInput } from "@/server/validation/rotation-plan";
@@ -47,7 +66,7 @@ type AuthenticatedContext = {
 type PlanRow = {
   id: string;
   title: string;
-  workflow_type: "plan_tomorrow" | "rotation_plan_template";
+  workflow_type: "plan_tomorrow" | "rotation_plan_template" | "creator_lesson";
   current_revision_id: string | null;
   created_at: string;
 };
@@ -71,6 +90,14 @@ export type SavedPlanRevisionSummary = {
   createdAt: string;
 };
 
+export type SavedCreatorPlanRevisionSummary = {
+  id: string;
+  revisionNumber: number;
+  sourceKind: "initial_generation" | "regeneration";
+  revisionIntent?: CreatorRevisionInputSnapshotV1["revision_request"]["intent"];
+  createdAt: string;
+};
+
 type SavedPlanTomorrowSummary = {
   id: string;
   title: string;
@@ -85,7 +112,19 @@ type SavedRotationPlanSummary = Omit<SavedPlanTomorrowSummary, "workflowType"> &
   workflowType: "rotation_plan_template";
 };
 
-export type SavedPlanSummary = SavedPlanTomorrowSummary | SavedRotationPlanSummary;
+type SavedSchoolPlanSummary = SavedPlanTomorrowSummary | SavedRotationPlanSummary;
+
+export type SavedCreatorPlanSummary = {
+  id: string;
+  title: string;
+  workflowType: "creator_lesson";
+  subject: string;
+  audience: string;
+  durationMinutes: number;
+  createdAt: string;
+};
+
+export type SavedPlanSummary = SavedSchoolPlanSummary | SavedCreatorPlanSummary;
 
 export type SavedRotationPlanDetail = SavedRotationPlanSummary & {
   currentRevisionId: string;
@@ -106,6 +145,18 @@ export type SavedPlanDetail = SavedPlanTomorrowSummary & {
   output: GeneratedPlanOutputV1;
   revisionCreatedAt: string;
   revisions: SavedPlanRevisionSummary[];
+};
+
+export type SavedCreatorPlanDetail = SavedCreatorPlanSummary & {
+  currentRevisionId: string;
+  revisionId: string;
+  revisionNumber: number;
+  isCurrentRevision: boolean;
+  revisionIntent?: CreatorRevisionInputSnapshotV1["revision_request"]["intent"];
+  input: CreatorLessonInputSnapshotV1;
+  output: CreatorLessonOutputV1;
+  revisionCreatedAt: string;
+  revisions: SavedCreatorPlanRevisionSummary[];
 };
 
 async function requireAuthenticatedContext(): Promise<AuthenticatedContext> {
@@ -129,8 +180,34 @@ function parseRevisionInput(revision: RevisionRow) {
   throw new PlanDataError("invalid_data");
 }
 
+function parseCreatorRevisionInput(revision: RevisionRow) {
+  if (revision.input_schema_version === CREATOR_LESSON_INPUT_SCHEMA_VERSION) {
+    return { input: parseStoredCreatorLessonInput(revision.input_snapshot) };
+  }
+  if (revision.input_schema_version === CREATOR_REVISION_INPUT_SCHEMA_VERSION) {
+    const guided = parseStoredCreatorRevisionInput(revision.input_snapshot);
+    return {
+      input: guided.source_input,
+      revisionIntent: guided.revision_request.intent,
+    };
+  }
+  throw new PlanDataError("invalid_data");
+}
+
 function mapSummary(plan: PlanRow, revision: RevisionRow): SavedPlanSummary {
   try {
+    if (plan.workflow_type === "creator_lesson") {
+      const snapshot = parseCreatorRevisionInput(revision).input;
+      return {
+        id: plan.id,
+        title: plan.title,
+        workflowType: "creator_lesson",
+        subject: snapshot.input.subject,
+        audience: snapshot.input.audience,
+        durationMinutes: snapshot.input.duration_minutes,
+        createdAt: plan.created_at,
+      };
+    }
     if (
       plan.workflow_type === "rotation_plan_template"
       && revision.input_schema_version === ROTATION_PLAN_INPUT_SCHEMA_VERSION
@@ -139,7 +216,7 @@ function mapSummary(plan: PlanRow, revision: RevisionRow): SavedPlanSummary {
       return {
         id: plan.id,
         title: plan.title,
-        workflowType: "rotation_plan_template",
+        workflowType: plan.workflow_type,
         subjectArea: snapshot.input.content,
         gradeLevels: snapshot.input.grades,
         durationMinutes: snapshot.input.duration_minutes,
@@ -353,6 +430,126 @@ export async function createRotationPlanRun({
   });
 }
 
+export async function createCreatorLessonRun({
+  provider,
+  modelAlias,
+  retryOfRunId,
+}: {
+  provider: string;
+  modelAlias: string;
+  retryOfRunId?: string;
+}) {
+  return createGenerationRun({
+    provider,
+    modelAlias,
+    retryOfRunId,
+    promptVersion: CREATOR_LESSON_PROMPT_VERSION,
+    inputSchemaVersion: CREATOR_LESSON_INPUT_SCHEMA_VERSION,
+    outputSchemaVersion: CREATOR_LESSON_OUTPUT_SCHEMA_VERSION,
+  });
+}
+
+export async function finalizeCreatorLesson({
+  runId,
+  input,
+  output,
+  providerModelId,
+  latencyMs,
+  usage,
+}: {
+  runId: string;
+  input: CreatorLessonInputSnapshotV1;
+  output: CreatorLessonOutputV1;
+  providerModelId: string;
+  latencyMs: number;
+  usage: { inputTokens: number | null; outputTokens: number | null; totalTokens: number | null };
+}) {
+  const { supabase } = await requireAuthenticatedContext();
+  const planId = crypto.randomUUID();
+  const revisionId = crypto.randomUUID();
+  const { data, error } = await supabase.rpc("finalize_creator_lesson_generation", {
+    run_id: runId,
+    plan_id: planId,
+    revision_id: revisionId,
+    plan_title: output.title,
+    input_snapshot: input,
+    output_snapshot: output,
+    provider_model_id: providerModelId,
+    latency_ms: latencyMs,
+    input_tokens: usage.inputTokens,
+    output_tokens: usage.outputTokens,
+    total_tokens: usage.totalTokens,
+  });
+
+  if (error || data !== planId) throw new PlanDataError("unavailable");
+  return planId;
+}
+
+export async function createCreatorRevisionRun({
+  provider,
+  modelAlias,
+  planId,
+  sourceRevisionId,
+  retryOfRunId,
+}: {
+  provider: string;
+  modelAlias: string;
+  planId: string;
+  sourceRevisionId: string;
+  retryOfRunId?: string;
+}) {
+  return createGenerationRun({
+    provider,
+    modelAlias,
+    planId,
+    sourceRevisionId,
+    retryOfRunId,
+    promptVersion: CREATOR_REVISION_PROMPT_VERSION,
+    inputSchemaVersion: CREATOR_REVISION_INPUT_SCHEMA_VERSION,
+    outputSchemaVersion: CREATOR_LESSON_OUTPUT_SCHEMA_VERSION,
+  });
+}
+
+export async function finalizeCreatorRevision({
+  runId,
+  planId,
+  sourceRevisionId,
+  input,
+  output,
+  providerModelId,
+  latencyMs,
+  usage,
+}: {
+  runId: string;
+  planId: string;
+  sourceRevisionId: string;
+  input: CreatorRevisionInputSnapshotV1;
+  output: CreatorLessonOutputV1;
+  providerModelId: string;
+  latencyMs: number;
+  usage: { inputTokens: number | null; outputTokens: number | null; totalTokens: number | null };
+}) {
+  const { supabase } = await requireAuthenticatedContext();
+  const revisionId = crypto.randomUUID();
+  const { data, error } = await supabase.rpc("finalize_guided_plan_revision", {
+    run_id: runId,
+    plan_id: planId,
+    source_revision_id: sourceRevisionId,
+    revision_id: revisionId,
+    plan_title: output.title,
+    input_snapshot: input,
+    output_snapshot: output,
+    provider_model_id: providerModelId,
+    latency_ms: latencyMs,
+    input_tokens: usage.inputTokens,
+    output_tokens: usage.outputTokens,
+    total_tokens: usage.totalTokens,
+  });
+
+  if (error || data !== revisionId) throw new PlanDataError("unavailable");
+  return revisionId;
+}
+
 export async function finalizeGuidedRevision({
   runId,
   planId,
@@ -481,6 +678,86 @@ export async function getCurrentUserPlan(
       revisionCreatedAt: revision.created_at,
       revisions: revisions.map((item) => {
         const parsed = parseRevisionInput(item);
+        return {
+          id: item.id,
+          revisionNumber: item.revision_number,
+          sourceKind: item.source_kind,
+          revisionIntent: parsed.revisionIntent,
+          createdAt: item.created_at,
+        };
+      }),
+    };
+  } catch (error) {
+    if (error instanceof PlanDataError) throw error;
+    throw new PlanDataError("invalid_data");
+  }
+}
+
+export async function getCurrentUserCreatorPlan(
+  planId: string,
+  selectedRevisionId?: string,
+): Promise<SavedCreatorPlanDetail> {
+  const { supabase, user } = await requireAuthenticatedContext();
+  const { data: planData, error: planError } = await supabase
+    .from("plans")
+    .select("id, title, workflow_type, current_revision_id, created_at")
+    .eq("id", planId)
+    .eq("owner_user_id", user.id)
+    .eq("workflow_type", "creator_lesson")
+    .maybeSingle();
+
+  if (planError) throw new PlanDataError("unavailable");
+  if (!planData) throw new PlanDataError("not_found");
+  const plan = planData as PlanRow;
+  if (!plan.current_revision_id) throw new PlanDataError("invalid_data");
+
+  const revisionId = selectedRevisionId ?? plan.current_revision_id;
+  const { data: revisionData, error: revisionError } = await supabase
+    .from("plan_revisions")
+    .select("id, revision_number, source_kind, input_schema_version, output_schema_version, input_snapshot, output_snapshot, created_at")
+    .eq("id", revisionId)
+    .eq("plan_id", plan.id)
+    .maybeSingle();
+
+  if (revisionError) throw new PlanDataError("unavailable");
+  if (!revisionData) throw new PlanDataError("not_found");
+  const revision = revisionData as RevisionRow;
+
+  const { data: revisionsData, error: revisionsError } = await supabase
+    .from("plan_revisions")
+    .select("id, revision_number, source_kind, input_schema_version, output_schema_version, input_snapshot, output_snapshot, created_at")
+    .eq("plan_id", plan.id)
+    .order("revision_number", { ascending: false });
+
+  if (revisionsError) throw new PlanDataError("unavailable");
+  const revisions = (revisionsData ?? []) as RevisionRow[];
+
+  try {
+    if (revision.output_schema_version !== CREATOR_LESSON_OUTPUT_SCHEMA_VERSION) {
+      throw new PlanDataError("invalid_data");
+    }
+    const parsedInput = parseCreatorRevisionInput(revision);
+    const input = parsedInput.input;
+    const output = parseStoredCreatorLessonOutput(revision.output_snapshot);
+    validateCreatorLessonAgainstInput(output, input);
+    if (creatorLessonDuration(output) !== input.input.duration_minutes) {
+      throw new PlanDataError("invalid_data");
+    }
+    const summary = mapSummary(plan, revision);
+    if (summary.workflowType !== "creator_lesson") throw new PlanDataError("invalid_data");
+
+    return {
+      ...summary,
+      currentRevisionId: plan.current_revision_id,
+      revisionId: revision.id,
+      revisionNumber: revision.revision_number,
+      isCurrentRevision: revision.id === plan.current_revision_id,
+      revisionIntent: parsedInput.revisionIntent,
+      input,
+      output,
+      revisionCreatedAt: revision.created_at,
+      revisions: revisions.map((item) => {
+        const parsed = parseCreatorRevisionInput(item);
         return {
           id: item.id,
           revisionNumber: item.revision_number,

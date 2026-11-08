@@ -63,13 +63,13 @@ export async function generatePlanTomorrow(
   formData: FormData,
 ): Promise<PlanTomorrowActionState> {
   let currentRunId: string | null = null;
-  let redirectDestination: "/login" | "/onboarding" | null = null;
+  let redirectDestination: "/login" | "/onboarding?context=school" | null = null;
   let completedPlanId: string | null = null;
 
   try {
     const bundle = await getCurrentProfileBundle();
     if (!bundle.profile?.onboardingCompleted || !bundle.teacherProfile) {
-      redirectDestination = "/onboarding";
+      redirectDestination = "/onboarding?context=school";
     } else {
       const profile = bundle.teacherProfile;
       const profileDefaults: PlanTomorrowFormDefaults = {

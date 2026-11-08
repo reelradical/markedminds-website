@@ -1,5 +1,9 @@
 import "server-only";
 
+import type {
+  CreatorLessonField,
+  CreatorLessonInputV1,
+} from "@/lib/planner/creator-lesson-contract";
 import type { PlanTomorrowField, PlanTomorrowInputV1 } from "@/lib/planner/plan-contract";
 import type {
   RotationPlanField,
@@ -49,6 +53,31 @@ export function guidedRevisionPrivacyError(value: string | undefined) {
 
 export function planningFeedbackPrivacyError(value: string | undefined) {
   return appearsSensitive(value) ? privacyMessage : null;
+}
+
+export function creatorRevisionPrivacyError(value: string | undefined) {
+  return appearsSensitive(value) ? privacyMessage : null;
+}
+
+export function screenCreatorLessonInput(input: CreatorLessonInputV1) {
+  const fieldErrors: Partial<Record<CreatorLessonField, string>> = {};
+  const fields: Array<[CreatorLessonField, string | undefined]> = [
+    ["topicOrWorkingTitle", input.topic_or_working_title],
+    ["audience", input.audience],
+    ["priorKnowledge", input.prior_knowledge],
+    ["learnerGoal", input.learner_goal],
+    ["learningOutcome", input.learning_outcome],
+    ["sourceNotes", input.source_notes],
+    ["toolsVersionContext", input.tools_version_context],
+    ["materialsResources", input.materials_resources.join(" ")],
+    ["additionalNotes", input.additional_notes],
+  ];
+
+  for (const [field, value] of fields) {
+    if (appearsSensitive(value)) fieldErrors[field] = privacyMessage;
+  }
+
+  return fieldErrors;
 }
 
 export function screenRotationPlanInput(input: RotationPlanInputV1) {

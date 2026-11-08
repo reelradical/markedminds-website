@@ -3,12 +3,14 @@ import "server-only";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 import type { TeacherProfileInput } from "@/lib/planner/profile-options";
+import type { PlanningContext } from "@/lib/planner/planning-context";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export type ProfileRecord = {
   userId: string;
   displayName: string | null;
   onboardingCompleted: boolean;
+  planningContext: PlanningContext;
   createdAt: string;
   updatedAt: string;
 };
@@ -37,6 +39,7 @@ type ProfileRow = {
   user_id: string;
   display_name: string | null;
   onboarding_completed: boolean;
+  planning_context: PlanningContext;
   created_at: string;
   updated_at: string;
 };
@@ -64,7 +67,7 @@ type AuthenticatedContext = {
   user: User;
 };
 
-const profileColumns = "user_id, display_name, onboarding_completed, created_at, updated_at";
+const profileColumns = "user_id, display_name, onboarding_completed, planning_context, created_at, updated_at";
 const teacherProfileColumns =
   "user_id, role, subject_areas, grade_levels, typical_class_duration_minutes, typical_class_size, common_materials, teaching_context_notes, plan_detail_preference, transition_cleanup_preference, low_prep_preference, movement_preference, differentiation_preference, created_at, updated_at";
 
@@ -81,6 +84,7 @@ function mapProfile(row: ProfileRow): ProfileRecord {
     userId: row.user_id,
     displayName: row.display_name,
     onboardingCompleted: row.onboarding_completed,
+    planningContext: row.planning_context,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -202,12 +206,15 @@ export async function getCurrentProfileBundle() {
 
 export async function checkOnboardingCompletion() {
   const { profile, teacherProfile } = await getCurrentProfileBundle();
-  return Boolean(profile?.onboardingCompleted && teacherProfile);
+  return Boolean(
+    profile?.onboardingCompleted
+    && (profile.planningContext === "adult_creator" || teacherProfile),
+  );
 }
 
 export function getProfileVersion(bundle: CurrentProfileBundle) {
-  if (!bundle.profile || !bundle.teacherProfile) return "";
-  return `${bundle.profile.updatedAt}|${bundle.teacherProfile.updatedAt}`;
+  if (!bundle.profile) return "";
+  return `${bundle.profile.updatedAt}|${bundle.teacherProfile?.updatedAt ?? "creator"}`;
 }
 
 export async function completeOnboarding(input: TeacherProfileInput) {
@@ -217,6 +224,7 @@ export async function completeOnboarding(input: TeacherProfileInput) {
       user_id: context.user.id,
       display_name: input.displayName,
       onboarding_completed: false,
+      planning_context: "school_classroom",
     },
     { onConflict: "user_id" },
   );
@@ -231,10 +239,48 @@ export async function completeOnboarding(input: TeacherProfileInput) {
 
   const { error: completionError } = await context.supabase
     .from("profiles")
-    .update({ display_name: input.displayName, onboarding_completed: true })
+    .update({
+      display_name: input.displayName,
+      onboarding_completed: true,
+      planning_context: "school_classroom",
+    })
     .eq("user_id", context.user.id);
 
   if (completionError) throw new ProfileDataError("unavailable");
+}
+
+export async function completeCreatorOnboarding(displayName: string) {
+  const context = await requireAuthenticatedContext();
+  const { error } = await context.supabase.from("profiles").upsert(
+    {
+      user_id: context.user.id,
+      display_name: displayName,
+      onboarding_completed: true,
+      planning_context: "adult_creator",
+    },
+    { onConflict: "user_id" },
+  );
+
+  if (error) throw new ProfileDataError("unavailable");
+}
+
+export async function updateCurrentCreatorProfile(displayName: string, expectedVersion: string) {
+  const context = await requireAuthenticatedContext();
+  const bundle = await readBundle(context);
+
+  if (!bundle.profile?.onboardingCompleted || bundle.profile.planningContext !== "adult_creator") {
+    throw new ProfileDataError("incomplete");
+  }
+  if (!expectedVersion || getProfileVersion(bundle) !== expectedVersion) {
+    throw new ProfileDataError("conflict");
+  }
+
+  const { error } = await context.supabase
+    .from("profiles")
+    .update({ display_name: displayName })
+    .eq("user_id", context.user.id);
+
+  if (error) throw new ProfileDataError("unavailable");
 }
 
 export async function updateCurrentTeacherProfile(input: TeacherProfileInput, expectedVersion: string) {

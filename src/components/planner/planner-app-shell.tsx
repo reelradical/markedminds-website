@@ -27,7 +27,7 @@ export function PlannerAppShell({ children }: Readonly<{ children: React.ReactNo
         <PlannerDesktopNavigation />
         <div className="mt-auto rounded-2xl bg-mist p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-charcoal/45">Private beta</p>
-          <p className="mt-2 text-sm leading-5 text-charcoal/70">MAPS is being tested with a small group of teachers. Your feedback improves the planning experience.</p>
+          <p className="mt-2 text-sm leading-5 text-charcoal/70">MAPS is being tested with a small group of educators. Your feedback improves the planning experience.</p>
           <Link href={`${site.url}/plan`} className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-ink">
             About MAPS
             <ArrowUpRight className="size-3.5" aria-hidden="true" />
